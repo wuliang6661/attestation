@@ -66,6 +66,13 @@ public class AppManager {
         }
     }
 
+    public void recreateAllOtherActivity(Activity activity) {
+        for (int i = 0, size = activityStack.size(); i < size; i++) {
+            if (null != activityStack.get(i) && activityStack.get(i) != activity) {
+                activityStack.get(i).recreate();
+            }
+        }
+    }
 
 
 

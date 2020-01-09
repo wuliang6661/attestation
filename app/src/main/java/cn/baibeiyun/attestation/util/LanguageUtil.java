@@ -28,19 +28,20 @@ public class LanguageUtil {
      */
     public static final Locale LOCALE_ENGLISH = Locale.ENGLISH;
     /**
-     * 俄文
+     * 越南文
      */
-    public static final Locale LOCALE_RUSSIAN = new Locale("ru");
+    public static final Locale LOCALE_RUSSIAN = new Locale("vi");
 
     private static final String LOCALE_SP = "LOCALE_SP";
     private static final String LOCALE_SP_KEY = "LOCALE_SP_KEY";
 
 
-
-
+    /**
+     * 默认中文
+     */
     public static Locale getLocale(Context context) {
         SharedPreferences spLocale = context.getSharedPreferences(LOCALE_SP, Context.MODE_PRIVATE);
-        String localeJson = spLocale.getString(LOCALE_SP_KEY, "");
+        String localeJson = spLocale.getString(LOCALE_SP_KEY, new Gson().toJson(LOCALE_CHINESE));
         Gson gson = new Gson();
         return gson.fromJson(localeJson, Locale.class);
     }
@@ -74,6 +75,7 @@ public class LanguageUtil {
     public static boolean needUpdateLocale(Context pContext, Locale newUserLocale) {
         return newUserLocale != null && !getCurrentLocale(pContext).equals(newUserLocale);
     }
+
     public static Locale getCurrentLocale(Context context) {
         Locale locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //7.0有多语言设置获取顶部的语言

@@ -2,12 +2,16 @@ package cn.baibeiyun.attestation.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
 
+import java.util.Locale;
+
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
+import cn.baibeiyun.attestation.util.LanguageUtil;
 
 /**
  * 作者 by wuliang 时间 16/10/26.
@@ -36,6 +40,7 @@ public class MyApplication extends Application {
 //        Fragmentation.getDefault().setMode(Fragmentation.BUBBLE);
 
         registerActivityLifecycleCallbacks(new AppLifecycleHandler());
+        languageWork();
     }
 
 
@@ -47,4 +52,17 @@ public class MyApplication extends Application {
         MultiDex.install(this);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        languageWork();
+    }
+
+
+
+    private void languageWork() {
+        //自己写的工具包（如下）
+        Locale locale = LanguageUtil.getLocale(this);
+        LanguageUtil.updateLocale(this, locale);
+    }
 }

@@ -4,22 +4,26 @@ package cn.baibeiyun.attestation.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.support.annotation.Nullable;
-import android.view.View;
+import android.support.annotation.RequiresApi;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.article.oa_article.R;
-import com.article.oa_article.util.AppManager;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.gyf.barlibrary.ImmersionBar;
 
+import java.util.Locale;
+
 import butterknife.ButterKnife;
+import cn.baibeiyun.attestation.util.AppManager;
+import cn.baibeiyun.attestation.util.LanguageUtil;
 import me.yokeyword.fragmentation.SupportActivity;
 
 /**
@@ -106,29 +110,65 @@ public abstract class BaseActivity extends SupportActivity {
         stopProgress();
     }
 
-    /**
-     * 设置返回
-     */
-    protected void goBack() {
-        LinearLayout imageView = findViewById(R.id.back);
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
+//    /**
+//     * 设置返回
+//     */
+//    protected void goBack() {
+//        LinearLayout imageView = findViewById(R.id.back);
+//        imageView.setVisibility(View.VISIBLE);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+//    }
+//
+//    /**
+//     * 设置标题
+//     *
+//     * @param title
+//     */
+//    protected void setTitleText(String title) {
+//        TextView titleTex = findViewById(R.id.title_text);
+//        titleTex.setText(title);
+//    }
 
-    /**
-     * 设置标题
-     *
-     * @param title
-     */
-    protected void setTitleText(String title) {
-        TextView titleTex = findViewById(R.id.title_text);
-        titleTex.setText(title);
-    }
+
+
+//    public void onClick(View view) {
+//        boolean need = false;
+//        switch (view.getId()) {
+//            case R.id.chinese:
+//                need = LanguageUtil.updateLocale(this, LanguageUtil.LOCALE_CHINESE);
+//                if (need) {
+//                    //自己写的常用activity管理工具
+//                    ActivityManager.getInstance().recreateAllOtherActivity(this);
+//                    Toast.makeText(this, "change to chinese", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, "no need", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case R.id.english:
+//                need = LanguageUtil.updateLocale(this, LanguageUtil.LOCALE_ENGLISH);
+//                if (need) {
+//                    ActivityManager.getInstance().recreateAllOtherActivity(this);
+//                    Toast.makeText(this, "change to english", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, "no need", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case R.id.russian:
+//                need = LanguageUtil.updateLocale(this, LanguageUtil.LOCALE_RUSSIAN);
+//                if (need) {
+//                    ActivityManager.getInstance().recreateAllOtherActivity(this);
+//                    Toast.makeText(this, "change to russian", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, "no need", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//        }
+//    }
 
 
     protected void showToast(String message) {
@@ -155,5 +195,35 @@ public abstract class BaseActivity extends SupportActivity {
 
     public void onRequestEnd() {
 
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Context context = languageWork(newBase);
+        super.attachBaseContext(context);
+
+    }
+
+    private Context languageWork(Context context) {
+        // 8.0及以上使用createConfigurationContext设置configuration
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return updateResources(context);
+        } else {
+            return context;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Context updateResources(Context context) {
+        Resources resources = context.getResources();
+        Locale locale = LanguageUtil.getLocale(context);
+        if (locale==null) {
+            return context;
+        }
+        Configuration configuration = resources.getConfiguration();
+        configuration.setLocale(locale);
+        configuration.setLocales(new LocaleList(locale));
+        return context.createConfigurationContext(configuration);
     }
 }
