@@ -30,7 +30,7 @@ public class LanguageUtil {
     /**
      * 越南文
      */
-    public static final Locale LOCALE_RUSSIAN = new Locale("vi");
+    public static final Locale LOCALE_RUSSIAN = new Locale("vi_VN");
 
     private static final String LOCALE_SP = "LOCALE_SP";
     private static final String LOCALE_SP_KEY = "LOCALE_SP_KEY";
@@ -41,7 +41,7 @@ public class LanguageUtil {
      */
     public static Locale getLocale(Context context) {
         SharedPreferences spLocale = context.getSharedPreferences(LOCALE_SP, Context.MODE_PRIVATE);
-        String localeJson = spLocale.getString(LOCALE_SP_KEY, new Gson().toJson(LOCALE_CHINESE));
+        String localeJson = spLocale.getString(LOCALE_SP_KEY, new Gson().toJson(LOCALE_RUSSIAN));
         Gson gson = new Gson();
         return gson.fromJson(localeJson, Locale.class);
     }

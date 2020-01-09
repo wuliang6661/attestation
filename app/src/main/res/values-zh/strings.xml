@@ -3,4 +3,6 @@
 
     <string name="app_name">attestation</string>
 
+    <string name="hello">中文</string>
+
 </resources>

@@ -4,13 +4,8 @@ package cn.baibeiyun.attestation.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.LocaleList;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -19,11 +14,10 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.gyf.barlibrary.ImmersionBar;
 
-import java.util.Locale;
-
 import butterknife.ButterKnife;
+import cn.baibeiyun.attestation.config.IConstant;
 import cn.baibeiyun.attestation.util.AppManager;
-import cn.baibeiyun.attestation.util.LanguageUtil;
+import cn.baibeiyun.attestation.util.language.LanguageUtil;
 import me.yokeyword.fragmentation.SupportActivity;
 
 /**
@@ -136,38 +130,36 @@ public abstract class BaseActivity extends SupportActivity {
 
 
 
-//    public void onClick(View view) {
-//        boolean need = false;
-//        switch (view.getId()) {
-//            case R.id.chinese:
-//                need = LanguageUtil.updateLocale(this, LanguageUtil.LOCALE_CHINESE);
-//                if (need) {
-//                    //自己写的常用activity管理工具
-//                    ActivityManager.getInstance().recreateAllOtherActivity(this);
-//                    Toast.makeText(this, "change to chinese", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(this, "no need", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//            case R.id.english:
-//                need = LanguageUtil.updateLocale(this, LanguageUtil.LOCALE_ENGLISH);
-//                if (need) {
-//                    ActivityManager.getInstance().recreateAllOtherActivity(this);
-//                    Toast.makeText(this, "change to english", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(this, "no need", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//            case R.id.russian:
-//                need = LanguageUtil.updateLocale(this, LanguageUtil.LOCALE_RUSSIAN);
-//                if (need) {
-//                    ActivityManager.getInstance().recreateAllOtherActivity(this);
-//                    Toast.makeText(this, "change to russian", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(this, "no need", Toast.LENGTH_SHORT).show();
-//                }
-//                break;
+    /**
+     * 设置语言
+     */
+//    private void switchLanguage() {
+//        String local = null;
+//        if (checkPosition.equals(LanguageType.CHINESE.getLanguage())) {
+////            ChangeLanguageUtils.updateLocale(this, Locale.CHINESE);
+//            local = LanguageType.CHINESE.getLanguage();
+//        } else if (checkPosition.equals(LanguageType.ENGLISH.getLanguage())) {
+////            ChangeLanguageUtils.updateLocale(this, Locale.ENGLISH);
+//            local = LanguageType.ENGLISH.getLanguage();
+//        } else if (checkPosition.equals(LanguageType.THAILAND.getLanguage())) {
+//            //ChangeLanguageUtils.updateLocale(this, Locale.ENGLISH);
+//            local = LanguageType.THAILAND.getLanguage();
+////            ChangeLanguageUtils.updateLocale(this, new Locale("es", "ES"));
 //        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+//            LanguageUtil.changeAppLanguage(Utils.getApp(), local);
+//        }
+//        SpUtils.put(IConstant.LANGUAGE_TYPE, local);
+//        //清空任务栈确保当前打开activity为前台任务栈栈顶
+//        Intent it = null;
+//        if (changeType == 1) {
+//            it = new Intent(ChangeLanguageActivity.this, LoginActivity.class);
+//        } else {
+//            it = new Intent(ChangeLanguageActivity.this, MainActivity.class);
+//        }
+//        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        startActivity(it);
+//        finish();
 //    }
 
 
@@ -198,32 +190,19 @@ public abstract class BaseActivity extends SupportActivity {
     }
 
 
+    /**
+     * 此方法先于 onCreate()方法执行
+     *
+     * @param newBase
+     */
     @Override
     protected void attachBaseContext(Context newBase) {
-        Context context = languageWork(newBase);
-        super.attachBaseContext(context);
-
-    }
-
-    private Context languageWork(Context context) {
-        // 8.0及以上使用createConfigurationContext设置configuration
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return updateResources(context);
-        } else {
-            return context;
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private Context updateResources(Context context) {
-        Resources resources = context.getResources();
-        Locale locale = LanguageUtil.getLocale(context);
-        if (locale==null) {
-            return context;
-        }
-        Configuration configuration = resources.getConfiguration();
-        configuration.setLocale(locale);
-        configuration.setLocales(new LocaleList(locale));
-        return context.createConfigurationContext(configuration);
+        //获取我们存储的语言环境 比如 "en","zh",等等
+        //获取我们存储的语言环境 比如 "en","zh",等等
+        String language = MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, "");
+        /**
+         * attach对应语言环境下的context
+         */
+        super.attachBaseContext(LanguageUtil.attachBaseContext(newBase, language));
     }
 }
