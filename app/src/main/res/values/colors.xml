@@ -5,4 +5,12 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="white">#ffffff</color>
+
+
+    <color name="dialog_bg">#70100e0e</color>
+
+    <color name="pop_bg">#1D1D1D</color>
+
+    <color name="black">#000000</color>
+    <color name="line_default_color">#2b2b2b</color>
 </resources>

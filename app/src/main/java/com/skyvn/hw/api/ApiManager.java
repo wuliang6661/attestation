@@ -3,6 +3,8 @@ package com.skyvn.hw.api;
 import android.util.Log;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.util.MD5;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -10,7 +12,6 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
-import com.skyvn.hw.util.MD5;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -37,8 +38,7 @@ public class ApiManager {
     private static final String TAG = "ApiManager";
     private Retrofit mRetrofit;
     private static final int DEFAULT_TIMEOUT = 60;
-    OkHttpClient.Builder builder;
-
+    private OkHttpClient.Builder builder;
 
     /**
      * 初始化请求体
@@ -53,7 +53,7 @@ public class ApiManager {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.i(TAG, "log: " + message));
         loggingInterceptor.setLevel(level);
         builder.addInterceptor(loggingInterceptor);
-        // builder.addNetworkInterceptor(mNetInterceptor);  //添加网络拦截器
+        builder.addInterceptor(headerInterceptor);
     }
 
     private static class SingletonHolder {
@@ -124,13 +124,17 @@ public class ApiManager {
 
 
     /**
-     * 获取rxjava实例对象，进行网络请求
+     * 所有请求头统一处理
      */
-
-//    public Observable<List<HYClassify>> getHYClassify(){
-//        if (mHuYaService==null) mHuYaService=configRetrofit(HuYaService.class,HuYaService.URL);
-//        return mHuYaService.getClassify()
-//                .compose(RxResultHelper.<List<HYClassify>>huyaResult());
-//    }
+    private Interceptor headerInterceptor = chain -> {
+        if (StringUtils.isEmpty(MyApplication.token)) {
+            return chain.proceed(chain.request());
+        }
+        // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
+        Request request = chain.request().newBuilder()
+                .addHeader("Authorization", MyApplication.token)
+                .build();
+        return chain.proceed(request);
+    };
 
 }
