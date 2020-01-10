@@ -13,4 +13,7 @@
 
     <color name="black">#000000</color>
     <color name="line_default_color">#2b2b2b</color>
+
+    <!--主蓝色-->
+    <color name="blue_color">#0077EA</color>
 </resources>
