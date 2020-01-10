@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import java.util.Stack;
 
-import com.skyvn.hw.MainActivity;
+import com.skyvn.hw.view.main.MainActivity;
 
 /**
  * 作者 by wuliang 时间 16/10/31.

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
-import com.skyvn.hw.MainActivity;
+import com.skyvn.hw.view.main.MainActivity;
 import com.skyvn.hw.R;
 import com.skyvn.hw.base.BaseActivity;
 

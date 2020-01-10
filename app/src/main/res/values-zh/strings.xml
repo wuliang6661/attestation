@@ -13,6 +13,10 @@
     <string name="no_to_students">不向学生提供服务</string>
 
     <string name="input_phone_error">请输入正确的手机号</string>
-    <string name="input_image_verfication_error">请输入正确的手机号</string>
-    <string name="input_verfication_error">请输入正确的手机号</string>
+    <string name="input_image_verfication_error">请输入正确的图形验证码</string>
+    <string name="input_verfication_error">请输入正确的验证码</string>
+
+    <string name="home">首页</string>
+    <string name="order">订单</string>
+    <string name="mine">我的</string>
 </resources>
