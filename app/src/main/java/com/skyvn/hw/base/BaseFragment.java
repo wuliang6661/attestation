@@ -9,6 +9,7 @@ import android.view.View;
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.blankj.utilcode.util.ToastUtils;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.skyvn.hw.R;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -93,5 +94,33 @@ public abstract class BaseFragment extends SupportFragment {
 
     public void onRequestEnd() {
 
+    }
+
+
+    /**
+     * 设置fragment沉浸式
+     */
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        //请在onSupportVisible实现沉浸式
+        if (isImmersionBarEnabled()) {
+            initImmersionBar();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
+
+    public void initImmersionBar() {
+        ImmersionBar.with(this).statusBarColor(R.color.blue_color)
+                .statusBarDarkFont(true).keyboardEnable(true).init();   //解决虚拟按键与状态栏沉浸冲突
+    }
+
+    private boolean isImmersionBarEnabled() {
+        return true;
     }
 }

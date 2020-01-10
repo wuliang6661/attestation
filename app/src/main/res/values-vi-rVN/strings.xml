@@ -19,4 +19,11 @@
     <string name="home">首页</string>
     <string name="order">订单</string>
     <string name="mine">我的</string>
+
+    <string name="setting">设置</string>
+
+    <string name="my_yinghangka">我的银行卡</string>
+    <string name="my_ziliao">资料补充</string>
+    <string name="my_kefu">客服</string>
+    <string name="my_fankui">反馈</string>
 </resources>

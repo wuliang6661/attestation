@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.skyvn.hw.R;
+import com.skyvn.hw.view.main.mine.MineFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -28,9 +29,9 @@ public class NoneFragment3 extends SupportFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        if (findChildFragment(MessageFragment.class) == null) {
-//            loadRootFragment(R.id.fl_first_container, new MessageFragment());
-//        }
+        if (findChildFragment(MineFragment.class) == null) {
+            loadRootFragment(R.id.fl_first_container, new MineFragment());
+        }
     }
 
     @Override
