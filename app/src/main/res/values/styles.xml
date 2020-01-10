@@ -20,4 +20,14 @@
     </style>
 
 
+    <style name="HintError" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#cccccc</item>
+    </style>
+
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#eeeeee</item>
+        <item name="colorControlActivated">@color/blue_color</item>
+    </style>
+
 </resources>

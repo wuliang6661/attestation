@@ -4,5 +4,15 @@
 
 
     <string name="hello">yuenanwen</string>
+    <string name="login_txt">登录</string>
+    <string name="image_verification">图形验证码</string>
+    <string name="photo_hint">手机号</string>
+    <string name="verification">验证码</string>
+    <string name="get_verification">获取验证码</string>
+    <string name="new_user">新用户自动注册</string>
+    <string name="no_to_students">不向学生提供服务</string>
 
+    <string name="input_phone_error">请输入正确的手机号</string>
+    <string name="input_image_verfication_error">请输入正确的手机号</string>
+    <string name="input_verfication_error">请输入正确的手机号</string>
 </resources>
