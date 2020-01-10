@@ -136,7 +136,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.bt_login)
     public void login() {
-        gotoActivity(MainActivity.class, false);
+        gotoActivity(MainActivity.class, true);
     }
 
 }

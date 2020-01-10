@@ -38,10 +38,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:xyzIcon="@drawable/main1"
+            app:xyzIcon="@drawable/main2"
             app:xyzIconHeight="20dp"
             app:xyzIconWidth="20dp"
-            app:xyzSelectIcon="@drawable/main1_xz"
+            app:xyzSelectIcon="@drawable/main2_xz"
             app:xyzTitle="@string/order"
             app:xyzTitleColor="#888888"
             app:xyzTitleSelectColor="@color/blue_color"
@@ -69,11 +69,19 @@
     </LinearLayout>
 
 
+    <View
+        android:id="@+id/line_buttom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/buttom_tab"
+        android:background="#DDDDDD" />
+
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttom_tab"
+        android:layout_above="@+id/line_buttom"
         android:fitsSystemWindows="true" />
 
 
