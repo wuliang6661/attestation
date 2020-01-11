@@ -59,17 +59,15 @@
             android:visibility="gone" />
 
 
-        <TextView
-            android:id="@+id/order_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title_text"
-            android:layout_marginBottom="6dp"
-            android:gravity="center"
-            android:textColor="#6E6C81"
-            android:textSize="13sp"
-            android:visibility="gone"
-            tools:text="Dh15155" />
+        <ImageView
+            android:id="@+id/right_img"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/right_img"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

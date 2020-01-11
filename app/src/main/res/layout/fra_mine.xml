@@ -68,6 +68,7 @@
 
 
             <TextView
+                android:id="@+id/go_attention"
                 android:layout_width="110dp"
                 android:layout_height="28dp"
                 android:background="@drawable/attestation_bg"
@@ -78,6 +79,7 @@
 
 
             <TextView
+                android:id="@+id/user_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -99,6 +101,7 @@
 
 
     <LinearLayout
+        android:id="@+id/layout_yinghangka"
         android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_marginLeft="15dp"
@@ -138,6 +141,7 @@
         android:background="#EEEEEE" />
 
     <LinearLayout
+        android:id="@+id/layout_ziliao"
         android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_marginLeft="15dp"
@@ -176,6 +180,7 @@
         android:background="#EEEEEE" />
 
     <LinearLayout
+        android:id="@+id/layout_kefu"
         android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_marginLeft="15dp"
@@ -214,6 +219,7 @@
         android:background="#EEEEEE" />
 
     <LinearLayout
+        android:id="@+id/layout_fankui"
         android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_marginLeft="15dp"

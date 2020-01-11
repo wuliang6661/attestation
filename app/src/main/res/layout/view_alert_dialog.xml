@@ -14,7 +14,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:gravity="center"
-        android:textColor="#FDFDFD"
+        android:textColor="#000000"
         android:textSize="18sp" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_marginRight="15dp"
         android:gravity="center"
         android:lineSpacingMultiplier="1.2"
-        android:textColor="#FDFDFD"
+        android:textColor="#000000"
         android:textSize="16sp" />
 
     <ImageView
@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:background="@drawable/alert_dialog_left_selector"
             android:gravity="center"
-            android:textColor="#8D8C91"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
         <ImageView
@@ -64,7 +64,7 @@
             android:layout_weight="1"
             android:background="@drawable/alert_dialog_right_selector"
             android:gravity="center"
-            android:textColor="#5678FF"
+            android:textColor="@color/blue_color"
             android:textSize="16sp" />
     </LinearLayout>
 

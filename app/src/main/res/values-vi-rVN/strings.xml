@@ -26,4 +26,46 @@
     <string name="my_ziliao">资料补充</string>
     <string name="my_kefu">客服</string>
     <string name="my_fankui">反馈</string>
+
+    <string name="zaixiankefu">在线客服</string>
+    <string name="zaixiankefu_hint">如果有问题\n请随时通过下面的方式联系我们</string>
+    <string name="kefudianhua1">客户电话1</string>
+    <string name="kefudianhua2">客户电话2</string>
+    <string name="zalo">Zalo</string>
+    <string name="facebook">Facebook</string>
+
+    <string name="kefudianhua">客服电话</string>
+
+    <string name="cancle">取消</string>
+    <string name="call">呼叫</string>
+    <string name="copy">复制</string>
+    <string name="commit">确定</string>
+
+    <string name="copy_sourss">复制成功！</string>
+
+    <string name="switch_card">更换银行卡</string>
+    <string name="add_card">添加银行卡</string>
+
+    <string name="no_card">您还未绑定银行卡，请绑定银行卡</string>
+
+    <string name="yinghangka">银行卡</string>
+
+    <string name="email">邮箱</string>
+    <string name="email_hint">提供您的邮箱，可以方便我们联系您</string>
+    <string name="message">内容</string>
+    <string name="message_hint">请输入您要反馈的内容</string>
+    <string name="tijiao">提交</string>
+
+    <string name="delete_img">是否删除图片？</string>
+
+    <string name="switch_langnger">语言选择</string>
+    <string name="logout">退出登录</string>
+
+    <string name="wancheng">完成</string>
+
+    <string name="china">中文</string>
+    <string name="yuelanwen">越南文</string>
+
+    <string name="tishi">提示</string>
+    <string name="is_logout">确认退出当前账号？</string>
 </resources>
