@@ -64,6 +64,7 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
 
         goBack();
         setTitleText(getResources().getString(R.string.my_fankui));
+        rightButton();
 
         getPermission();
         cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +

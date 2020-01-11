@@ -48,5 +48,6 @@ public class MyBankCardActivity extends BaseActivity {
 
         goBack();
         setTitleText(getResources().getString(R.string.yinghangka));
+        rightButton();
     }
 }

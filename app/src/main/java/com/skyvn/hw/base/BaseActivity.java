@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.language.LanguageUtil;
+import com.skyvn.hw.view.KefuActivity;
 
 import butterknife.ButterKnife;
 import me.yokeyword.fragmentation.SupportActivity;
@@ -132,6 +134,15 @@ public abstract class BaseActivity extends SupportActivity {
         titleTex.setText(title);
     }
 
+
+    /**
+     * 标题栏右图标显示并设置监听
+     */
+    protected void rightButton() {
+        ImageView imageView = findViewById(R.id.right_img);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(v -> gotoActivity(KefuActivity.class,false));
+    }
 
 
     /**

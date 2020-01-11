@@ -16,6 +16,7 @@ import com.skyvn.hw.view.FanKuiActivity;
 import com.skyvn.hw.view.KefuActivity;
 import com.skyvn.hw.view.MyBankCardActivity;
 import com.skyvn.hw.view.SettingActivity;
+import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +63,7 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
                 gotoActivity(MyBankCardActivity.class, false);
                 break;
             case R.id.layout_ziliao:    //资料补充
-
+                gotoActivity(AttentionZiliaoActivity.class, false);
                 break;
             case R.id.layout_kefu:    //客服
                 gotoActivity(KefuActivity.class, false);

@@ -54,6 +54,12 @@
         <!--设置-->
         <activity android:name=".view.SettingActivity" />
 
+        <!--个人资料-->
+        <activity android:name=".view.attentionziliao.AttentionZiliaoActivity" />
+
+        <!--绑定银行卡-->
+        <activity android:name=".view.bindbankcard.BindBankCardActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.skyvn.hw.fileprovider"

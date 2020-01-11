@@ -68,4 +68,19 @@
 
     <string name="tishi">提示</string>
     <string name="is_logout">确认退出当前账号？</string>
+
+    <string name="shimingrenzheng">实名认证</string>
+    <string name="gerenziliao">个人资料</string>
+    <string name="xiaoshipin">小视频</string>
+    <string name="shuanianrenzheng">刷脸认证</string>
+    <string name="jingjilianxiren">紧急联系人</string>
+    <string name="gongsixinxi">公司信息</string>
+    <string name="bangdingyinghangka">绑定银行卡</string>
+    <string name="duanxin1414">短信1414</string>
+    <string name="jiazhao">驾照上传</string>
+
+    <string name="renzhengziliao">认证资料</string>
+
+    <string name="yiwancheng">已完成</string>
+    <string name="weiwancheng">未完成</string>
 </resources>
