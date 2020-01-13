@@ -8,8 +8,15 @@ import android.widget.TextView;
 
 import com.skyvn.hw.R;
 import com.skyvn.hw.mvp.MVPBaseActivity;
+import com.skyvn.hw.view.CommonMsgActivity;
+import com.skyvn.hw.view.JiaZhaoActivity;
+import com.skyvn.hw.view.Msg14Activity;
+import com.skyvn.hw.view.PersonMsgActivity;
+import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
+import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -70,5 +77,36 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
         setTitleText(getResources().getString(R.string.renzhengziliao));
         rightButton();
 
+    }
+
+
+    @OnClick(R.id.yinghangka_layout)
+    public void clickYinghangka() {
+        gotoActivity(BindBankCardActivity.class, false);
+    }
+
+    @OnClick(R.id.lianxiren_layout)
+    public void clickLianxiren() {
+        gotoActivity(EmergencyContactActivity.class, false);
+    }
+
+    @OnClick(R.id.ziliao_layout)
+    public void clickZiliao() {
+        gotoActivity(PersonMsgActivity.class, false);
+    }
+
+    @OnClick(R.id.gongsi_layout)
+    public void clickGongsi() {
+        gotoActivity(CommonMsgActivity.class, false);
+    }
+
+    @OnClick(R.id.duanxin_layout)
+    public void clickDuanxin() {
+        gotoActivity(Msg14Activity.class, false);
+    }
+
+    @OnClick(R.id.jiazhao_layout)
+    public void clickJiazhao() {
+        gotoActivity(JiaZhaoActivity.class, false);
     }
 }

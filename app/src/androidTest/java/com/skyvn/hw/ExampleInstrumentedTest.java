@@ -1,4 +1,4 @@
-package cn.baibeiyun.attestation;
+package com.skyvn.hw;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

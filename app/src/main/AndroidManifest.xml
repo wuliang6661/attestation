@@ -17,6 +17,8 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name="com.skyvn.hw.base.MyApplication"
         android:allowBackup="true"
@@ -59,6 +61,27 @@
 
         <!--绑定银行卡-->
         <activity android:name=".view.bindbankcard.BindBankCardActivity" />
+
+        <!--紧急联系人-->
+        <activity android:name=".view.emergencycontact.EmergencyContactActivity" />
+
+        <!--通讯录-->
+        <activity android:name=".view.contact.ContactActivity" />
+
+        <!--个人资料-->
+        <activity android:name=".view.PersonMsgActivity" />
+
+        <!--公司信息-->
+        <activity android:name=".view.CommonMsgActivity" />
+
+        <!--短信1414-->
+        <activity android:name=".view.Msg14Activity" />
+
+        <!--驾照-->
+        <activity android:name=".view.JiaZhaoActivity" />
+
+        <!--小视频-->
+        <activity android:name=".view.VideoActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

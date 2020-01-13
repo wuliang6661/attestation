@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">attestation</string>
 
-
-    <string name="hello">yuenanwen</string>
+    <string name="hello">中文</string>
     <string name="login_txt">登录</string>
-    <string name="image_verification">图形验证码</string>
     <string name="photo_hint">手机号</string>
+    <string name="image_verification">图形验证码</string>
     <string name="verification">验证码</string>
     <string name="get_verification">获取验证码</string>
     <string name="new_user">新用户自动注册</string>
@@ -62,7 +60,6 @@
     <string name="logout">退出登录</string>
 
     <string name="wancheng">完成</string>
-
     <string name="china">中文</string>
     <string name="yuelanwen">越南文</string>
 

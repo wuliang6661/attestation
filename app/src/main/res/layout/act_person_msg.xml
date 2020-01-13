@@ -2,97 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#F6F6F6"
     android:orientation="vertical">
-
 
     <include layout="@layout/layout_title_bar" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="#FF3B30"
-            android:textSize="16sp" />
-
-
-        <EditText
-            android:id="@+id/edit_user_name"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="6dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/zhanghaoxingming"
-            android:singleLine="true"
-            android:textColor="#000000"
-            android:textColorHint="#888888"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#dddddd" />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="#FF3B30"
-            android:textSize="16sp" />
-
-
-        <EditText
-            android:id="@+id/edit_yinghang_num"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="6dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/yinghangkahao"
-            android:singleLine="true"
-            android:textColor="#000000"
-            android:textColorHint="#888888"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#dddddd" />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
@@ -108,14 +26,14 @@
 
 
         <TextView
-            android:id="@+id/edit_yinghang_name"
+            android:id="@+id/edit_xueli"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="@string/yinghangmingcheng"
+            android:hint="@string/xueli"
             android:singleLine="true"
             android:textColor="#000000"
             android:textColorHint="#888888"
@@ -140,6 +58,150 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textColor="#FF3B30"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/edit_hunyin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/hunyinzhuangkuang"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/next_img" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dddddd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textColor="#FF3B30"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/edit_zinv_num"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/zinvshuliang"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/next_img" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dddddd" />
+
+    <LinearLayout
+        android:id="@+id/one_phone_layout"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textColor="#FF3B30"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/edit_juzhu_time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/juzhushichang"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/next_img" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dddddd" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
@@ -155,14 +217,14 @@
 
 
         <EditText
-            android:id="@+id/edit_suoshuzhihang"
+            android:id="@+id/edit_address"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="@string/suoshuzhihang"
+            android:hint="@string/dangqianjuzhudizhi"
             android:singleLine="true"
             android:textColor="#000000"
             android:textColorHint="#888888"
@@ -176,6 +238,29 @@
         android:layout_height="1px"
         android:background="#dddddd" />
 
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:hint="@string/zalo_num"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
+        android:textSize="15sp" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:hint="@string/facebook_num"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -80,4 +80,51 @@
 
     <string name="yiwancheng">已完成</string>
     <string name="weiwancheng">未完成</string>
+
+    <string name="zhanghaoxingming">账号姓名</string>
+    <string name="yinghangkahao">银行卡号</string>
+    <string name="yinghangmingcheng">银行名称</string>
+    <string name="suoshuzhihang">所属支行</string>
+
+    <string name="next">下一步</string>
+    <string name="one_contact">第一联系人</string>
+    <string name="two_contact">第二联系人</string>
+
+    <string name="guanxi">关系</string>
+    <string name="dianhuahaoma">电话号码</string>
+    <string name="xingming">姓名</string>
+
+    <string name="contact_hint">当联系不到我本人时，我授权以上紧急联系人</string>
+    <string name="contact">通讯录</string>
+
+    <string name="xueli">学历</string>
+    <string name="hunyinzhuangkuang">婚姻状况</string>
+    <string name="zinvshuliang">子女数量</string>
+    <string name="juzhushichang">居住时长</string>
+    <string name="dangqianjuzhudizhi">当前居住地址</string>
+
+    <string name="zalo_num">Zalo账号</string>
+    <string name="facebook_num">Facebook账号</string>
+
+
+    <string name="gongsimingcheng">公司名称</string>
+    <string name="xiangxidizhi">详细地址</string>
+    <string name="lianxidianhua">联系电话</string>
+
+    <string name="zhicheng_title">职称/收入</string>
+    <string name="zhicheng">职称</string>
+    <string name="shuiqianshouru">税前收入</string>
+    <string name="gongzuoshichang">工作时长</string>
+
+    <string name="tiaoguo">跳过</string>
+
+    <string name="add_img_hint">请拍摄清晰的照片，这会加快你的认证速度</string>
+    <string name="msg_warning_hint">请上传清晰的截图，这会加快您的认证速度</string>
+
+    <string name="msg_title">请上传您的1414认证截图</string>
+    <string name="msg_remark">备注：短信内容TTTB寄出1414</string>
+
+    <string name="jiazhaozhengmian">驾照正面</string>
+    <string name="jiazhaofanmian">驾照反面</string>
+
 </resources>
