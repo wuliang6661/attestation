@@ -127,4 +127,18 @@
     <string name="jiazhaozhengmian">驾照正面</string>
     <string name="jiazhaofanmian">驾照反面</string>
 
+    <string name="video_hint">请拍摄手持身份证小视频，保持手机平稳，不要抖动</string>
+
+    <string name="video_title">手持身份证小视频</string>
+
+    <string name="jibenxinxi">基本信息</string>
+    <string name="shenfenzhenghaoma">身份证号码</string>
+    <string name="chushengriqi">出生日期</string>
+    <string name="xingbie">性别</string>
+
+    <string name="shenfenzhengzhaopian">身份证照片</string>
+
+    <string name="shenfenzhengzhengmian">身份证正面</string>
+    <string name="shenfenzhengfangmian">身份证反面</string>
+
 </resources>

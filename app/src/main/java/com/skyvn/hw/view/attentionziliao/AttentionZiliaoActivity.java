@@ -12,6 +12,8 @@ import com.skyvn.hw.view.CommonMsgActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.Msg14Activity;
 import com.skyvn.hw.view.PersonMsgActivity;
+import com.skyvn.hw.view.ShiMingActivity;
+import com.skyvn.hw.view.VideoActivity;
 import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
 
@@ -108,5 +110,15 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
     @OnClick(R.id.jiazhao_layout)
     public void clickJiazhao() {
         gotoActivity(JiaZhaoActivity.class, false);
+    }
+
+    @OnClick(R.id.shipin_layout)
+    public void clickShiPin() {
+        gotoActivity(VideoActivity.class, false);
+    }
+
+    @OnClick(R.id.shiming_layout)
+    public void clickShiming() {
+        gotoActivity(ShiMingActivity.class, false);
     }
 }

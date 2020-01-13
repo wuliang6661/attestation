@@ -83,6 +83,9 @@
         <!--小视频-->
         <activity android:name=".view.VideoActivity" />
 
+        <!--实名认证-->
+        <activity android:name=".view.ShiMingActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.skyvn.hw.fileprovider"
