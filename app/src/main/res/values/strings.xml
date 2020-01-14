@@ -141,4 +141,11 @@
     <string name="shenfenzhengzhengmian">身份证正面</string>
     <string name="shenfenzhengfangmian">身份证反面</string>
 
+    <string name="live_auth">刷个帅气美丽的脸，马上就可以借款啦</string>
+    <string name="wenxintishi">温馨提示</string>
+    <string name="live_hint1">1、请将脸放在指定范围内</string>
+    <string name="live_hint2">2、请保持正对手机，光线明亮</string>
+    <string name="live_hint3">3、请按照系统提示进行操作</string>
+    <string name="live_hint4">4、请保持良好的网络环境</string>
+    <string name="go_live">去刷脸</string>
 </resources>

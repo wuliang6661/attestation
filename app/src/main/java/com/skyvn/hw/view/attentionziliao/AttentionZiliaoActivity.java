@@ -10,6 +10,7 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.mvp.MVPBaseActivity;
 import com.skyvn.hw.view.CommonMsgActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
+import com.skyvn.hw.view.LiveAttentionActivity;
 import com.skyvn.hw.view.Msg14Activity;
 import com.skyvn.hw.view.PersonMsgActivity;
 import com.skyvn.hw.view.ShiMingActivity;
@@ -26,7 +27,8 @@ import butterknife.OnClick;
  * 邮箱 784787081@qq.com
  */
 
-public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoContract.View, AttentionZiliaoPresenter> implements AttentionZiliaoContract.View {
+public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoContract.View,
+        AttentionZiliaoPresenter> implements AttentionZiliaoContract.View {
 
     @BindView(R.id.shiming_type)
     TextView shimingType;
@@ -120,5 +122,11 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
     @OnClick(R.id.shiming_layout)
     public void clickShiming() {
         gotoActivity(ShiMingActivity.class, false);
+    }
+
+
+    @OnClick(R.id.shuanian_layout)
+    public void clickShuaLian() {
+        gotoActivity(LiveAttentionActivity.class, false);
     }
 }

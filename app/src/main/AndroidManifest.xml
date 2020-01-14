@@ -86,6 +86,11 @@
         <!--实名认证-->
         <activity android:name=".view.ShiMingActivity" />
 
+        <!--开始人脸识别预备页面-->
+        <activity android:name=".view.LiveAttentionActivity" />
+
+        <!--人脸识别页面-->
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.skyvn.hw.fileprovider"
