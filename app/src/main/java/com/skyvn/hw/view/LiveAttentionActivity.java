@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import com.skyvn.hw.R;
 import com.skyvn.hw.base.BaseActivity;
 
+import ai.advance.liveness.lib.LivenessResult;
 import ai.advance.liveness.sdk.activity.LivenessActivity;
 import ai.advance.liveness.sdk.activity.ResultActivity;
 import butterknife.OnClick;
@@ -66,11 +68,11 @@ public class LiveAttentionActivity extends BaseActivity {
             case REQUEST_CODE_LIVENESS:
                 if (resultCode == RESULT_OK) {
 //                    Call the following methods to get results
-//                    String livenessId = LivenessResult.getLivenessId();
-//                    Bitmap livenessBitmap = LivenessResult.getLivenessBitmap();
-//                    String transactionId = LivenessResult.getTransactionId();
-//                    boolean success = LivenessResult.isSuccess();
-//                    String errorMsg = LivenessResult.getErrorMsg();
+                    String livenessId = LivenessResult.getLivenessId();
+                    String livenessBitmap = LivenessResult.getLivenessBase64Str();
+                    String transactionId = LivenessResult.getTransactionId();
+                    boolean success = LivenessResult.isSuccess();
+                    String errorMsg = LivenessResult.getErrorMsg();
                     startActivityForResult(new Intent(this, ResultActivity.class), REQUEST_CODE_RESULT_PAGE);
                 }
                 break;
