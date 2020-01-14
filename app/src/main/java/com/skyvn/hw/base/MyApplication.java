@@ -13,6 +13,8 @@ import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.language.LanguageType;
 import com.skyvn.hw.util.language.LanguageUtil;
 
+import ai.advance.liveness.lib.GuardianLivenessDetectionSDK;
+import ai.advance.liveness.lib.Market;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
 /**
@@ -40,6 +42,8 @@ public class MyApplication extends Application {
             spUtils.put(IConstant.LANGUAGE_TYPE, LanguageType.THAILAND.getLanguage());
         }
         setLanguage();
+        GuardianLivenessDetectionSDK.init(this, IConstant.LIVE_KEY, IConstant.Secret_Key,
+                Market.Vietnam);
     }
 
 
