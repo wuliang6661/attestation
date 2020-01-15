@@ -35,8 +35,15 @@ public class LiveAuthSouressActivity extends BaseActivity {
         goBack();
         setTitleText(getResources().getString(R.string.shuanianrenzheng));
         rightButton();
+
+        timer.start();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
 
     CountDownTimer timer = new CountDownTimer(1000, 3000) {
         @Override

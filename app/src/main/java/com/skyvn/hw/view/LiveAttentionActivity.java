@@ -74,10 +74,10 @@ public class LiveAttentionActivity extends BaseActivity {
                     boolean success = LivenessResult.isSuccess();
                     String errorMsg = LivenessResult.getErrorMsg();
                     if (success) {
-                        gotoActivity(LiveAuthSouressActivity.class, false);
+                        gotoActivity(LiveAuthSouressActivity.class, true);
                     } else {
 //                        startActivityForResult(new Intent(this, ResultActivity.class), REQUEST_CODE_RESULT_PAGE);
-                        gotoActivity(LiveAuthErrorActivity.class, false);
+                        gotoActivity(LiveAuthErrorActivity.class, true);
                     }
                 }
                 break;

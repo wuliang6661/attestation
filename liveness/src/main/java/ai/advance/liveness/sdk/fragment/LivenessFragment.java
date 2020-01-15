@@ -29,8 +29,6 @@ import ai.advance.liveness.lib.impl.LivenessCallback;
 import ai.advance.liveness.lib.impl.LivenessGetFaceDataCallback;
 import ai.advance.liveness.sdk.R;
 
-import static ai.advance.liveness.lib.Detector.DetectionType.POS_YAW;
-
 /**
  * fragment of liveness detection
  * 活体检测功能页面
