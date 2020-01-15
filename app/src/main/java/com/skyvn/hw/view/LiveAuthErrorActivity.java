@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,17 +16,16 @@ import com.skyvn.hw.base.BaseActivity;
 
 import ai.advance.liveness.lib.LivenessResult;
 import ai.advance.liveness.sdk.activity.LivenessActivity;
-import ai.advance.liveness.sdk.activity.ResultActivity;
 import butterknife.OnClick;
 
 /**
  * author : wuliang
  * e-mail : wuliang6661@163.com
- * date   : 2020/1/1411:04
- * desc   : 开始人脸扫描界面
+ * date   : 2020/1/1510:28
+ * desc   : 人脸检测失败
  * version: 1.0
  */
-public class LiveAttentionActivity extends BaseActivity {
+public class LiveAuthErrorActivity extends BaseActivity {
 
     static final int REQUEST_CODE_LIVENESS = 1000;
     static final int REQUEST_CODE_RESULT_PAGE = 1001;
@@ -36,7 +34,7 @@ public class LiveAttentionActivity extends BaseActivity {
 
     @Override
     protected int getLayout() {
-        return R.layout.act_live_attention;
+        return R.layout.act_live_auth_error;
     }
 
 
@@ -51,7 +49,7 @@ public class LiveAttentionActivity extends BaseActivity {
 
 
     @OnClick(R.id.bt_login)
-    public void goLive() {
+    public void clickChongShi(){
         checkPermissions();
     }
 
@@ -74,10 +72,9 @@ public class LiveAttentionActivity extends BaseActivity {
                     boolean success = LivenessResult.isSuccess();
                     String errorMsg = LivenessResult.getErrorMsg();
                     if (success) {
-                        gotoActivity(LiveAuthSouressActivity.class, false);
+                        gotoActivity(LiveAuthSouressActivity.class, true);
                     } else {
-//                        startActivityForResult(new Intent(this, ResultActivity.class), REQUEST_CODE_RESULT_PAGE);
-                        gotoActivity(LiveAuthErrorActivity.class, false);
+                        gotoActivity(LiveAuthErrorActivity.class, true);
                     }
                 }
                 break;

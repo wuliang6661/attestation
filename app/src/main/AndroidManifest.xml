@@ -91,7 +91,11 @@
         <!--开始人脸识别预备页面-->
         <activity android:name=".view.LiveAttentionActivity" />
 
-        <!--人脸识别页面-->
+        <!--人脸识别成功页面-->
+        <activity android:name=".view.LiveAuthSouressActivity" />
+
+        <!--人脸识别失败页面-->
+        <activity android:name=".view.LiveAuthErrorActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -148,4 +148,9 @@
     <string name="live_hint3">3、请按照系统提示进行操作</string>
     <string name="live_hint4">4、请保持良好的网络环境</string>
     <string name="go_live">去刷脸</string>
+
+    <string name="live_sourss">检测成功</string>
+    <string name="live_error">检测失败</string>
+
+    <string name="chongshi">重试</string>
 </resources>
