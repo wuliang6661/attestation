@@ -1,12 +1,8 @@
 package com.skyvn.hw.api;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
-
 import com.blankj.utilcode.util.DeviceUtils;
-import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.Utils;
+import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.util.EquipmentUtil;
@@ -75,10 +71,11 @@ public class HttpServerImpl {
     /**
      * 提交反馈
      */
-    public static Observable<String> addOperateApplicationFeedback(String content, String contact) {
+    public static Observable<String> addOperateApplicationFeedback(String content, String contact, String images) {
         Map<String, Object> params = new HashMap<>();
         params.put("content", content);
         params.put("contact", contact);
+        params.put("imageOssUrl", images);
         return getService().addOperateApplicationFeedback(params).compose(RxResultHelper.httpRusult());
     }
 
@@ -86,7 +83,7 @@ public class HttpServerImpl {
     /**
      * 获取银行卡
      */
-    public static Observable<String> getBankCard() {
+    public static Observable<BankCardBO> getBankCard() {
         return getService().getBankCard().compose(RxResultHelper.httpRusult());
     }
 

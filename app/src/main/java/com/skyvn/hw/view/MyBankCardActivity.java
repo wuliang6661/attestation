@@ -3,6 +3,7 @@ package com.skyvn.hw.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -13,6 +14,8 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.BankCardBO;
+import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,8 +42,6 @@ public class MyBankCardActivity extends BaseActivity {
     @BindView(R.id.btn_layout)
     LinearLayout btnLayout;
 
-    private String strBankCardNum;   //我的银行卡号
-
 
     @Override
     protected int getLayout() {
@@ -64,10 +65,20 @@ public class MyBankCardActivity extends BaseActivity {
      * 获取我的银行卡
      */
     private void getBankCard() {
-        HttpServerImpl.getBankCard().subscribe(new HttpResultSubscriber<String>() {
+        HttpServerImpl.getBankCard().subscribe(new HttpResultSubscriber<BankCardBO>() {
             @Override
-            public void onSuccess(String s) {
-
+            public void onSuccess(BankCardBO s) {
+                if (s == null) {
+                    cardLayout.setVisibility(View.GONE);
+                    noCardLayout.setVisibility(View.VISIBLE);
+                    btImg.setImageResource(R.drawable.add_card);
+                    btName.setText(getResources().getString(R.string.add_card));
+                } else {
+                    cardLayout.setVisibility(View.VISIBLE);
+                    noCardLayout.setVisibility(View.GONE);
+                    btImg.setImageResource(R.drawable.switch_card);
+                    btName.setText(getResources().getString(R.string.switch_card));
+                }
             }
 
             @Override
@@ -79,7 +90,6 @@ public class MyBankCardActivity extends BaseActivity {
 
     @OnClick(R.id.btn_layout)
     public void clickBankCard() {
-
+        gotoActivity(BindBankCardActivity.class, false);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.skyvn.hw.api;
 
+import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.LoginSuressBO;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -61,8 +63,8 @@ public interface HttpService {
     /**
      * 获取银行卡
      */
-    @POST("/clientUserBankCard/getBankCard")
-    Observable<BaseResult<String>> getBankCard();
+    @GET("/clientUserBankCard/getBankCard")
+    Observable<BaseResult<BankCardBO>> getBankCard();
 
     /**
      * 上传文件

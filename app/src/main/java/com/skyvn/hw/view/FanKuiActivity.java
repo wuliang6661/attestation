@@ -211,6 +211,10 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
             @Override
             public void onSuccess(String s) {
                 stopProgress();
+                ImageBO imageBO = new ImageBO();
+                imageBO.url = s;
+                imageBOS.add(imageBO);
+                setImageAdapter();
             }
 
             @Override
@@ -228,15 +232,19 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
     private void commitFanKui() {
         String strContact = editEmail.getText().toString().trim();
         String strContent = editMessage.getText().toString().trim();
-        if (StringUtils.isEmpty(strContact)) {
-            showToast(getResources().getString(R.string.email_hint_toast));
-            return;
-        }
         if (StringUtils.isEmpty(strContent)) {
             showToast(getResources().getString(R.string.content_hint_toast));
             return;
         }
-        HttpServerImpl.addOperateApplicationFeedback(strContent, strContact)
+        StringBuilder images = new StringBuilder();
+        String strImages = null;
+        for (ImageBO imageBO : imageBOS) {
+            images.append(imageBO.url).append(",");
+        }
+        if (images.length() > 0) {
+            strImages = images.substring(0, images.length() - 1);
+        }
+        HttpServerImpl.addOperateApplicationFeedback(strContent, strContact, strImages)
                 .subscribe(new HttpResultSubscriber<String>() {
                     @Override
                     public void onSuccess(String s) {
