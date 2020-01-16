@@ -18,8 +18,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.guoqi.actionsheet.ActionSheet;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.ImageBO;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
@@ -31,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 反馈页面
@@ -49,7 +53,6 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
     private File cameraSavePath;//拍照照片路径
     private Uri uri;
     private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
 
     List<ImageBO> imageBOS;      //添加的图片列表
 
@@ -77,6 +80,12 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
 
         imageBOS = new ArrayList<>();
         setImageAdapter();
+    }
+
+
+    @OnClick(R.id.bt_login)
+    public void commit() {
+        commitFanKui();
     }
 
 
@@ -166,11 +175,11 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
             }
             Log.d("拍照返回图片路径:", photoPath);
             showProgress();
-//            mPresenter.updateImage(new File(Objects.requireNonNull(photoPath)));
+            updateFile(new File(Objects.requireNonNull(photoPath)));
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             photoPath = PhotoFromPhotoAlbum.getRealPathFromUri(this, data.getData());
             showProgress();
-//            mPresenter.updateImage(new File(photoPath));
+            updateFile(new File(photoPath));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -191,4 +200,55 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
                 break;
         }
     }
+
+
+    /**
+     * 上传文件
+     */
+    private void updateFile(File file) {
+        showProgress();
+        HttpServerImpl.updateFile(file).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                stopProgress();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 提交反馈
+     */
+    private void commitFanKui() {
+        String strContact = editEmail.getText().toString().trim();
+        String strContent = editMessage.getText().toString().trim();
+        if (StringUtils.isEmpty(strContact)) {
+            showToast(getResources().getString(R.string.email_hint_toast));
+            return;
+        }
+        if (StringUtils.isEmpty(strContent)) {
+            showToast(getResources().getString(R.string.content_hint_toast));
+            return;
+        }
+        HttpServerImpl.addOperateApplicationFeedback(strContent, strContact)
+                .subscribe(new HttpResultSubscriber<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        showToast(getResources().getString(R.string.commit_sourss_toast));
+                        finish();
+                    }
+
+                    @Override
+                    public void onFiled(String message) {
+                        showToast(message);
+                    }
+                });
+    }
+
 }

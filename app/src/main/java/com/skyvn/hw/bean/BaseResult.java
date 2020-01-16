@@ -22,7 +22,6 @@ public class BaseResult<T> {
 
     private T data;
 
-
     public boolean surcess() {
         return code == 200;
     }

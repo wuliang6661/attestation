@@ -1,8 +1,18 @@
 package com.skyvn.hw.view;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
@@ -11,9 +21,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
-import com.skyvn.hw.view.main.MainActivity;
+import com.blankj.utilcode.util.Utils;
+import com.skyvn.hw.BuildConfig;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.LoginSuressBO;
+import com.skyvn.hw.util.BitmapUtil;
+import com.skyvn.hw.view.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -46,6 +64,8 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.bt_login)
     Button btLogin;
 
+    private CodeImgBO codeImgBO;
+
     @Override
     protected int getLayout() {
         return R.layout.act_login;
@@ -61,6 +81,15 @@ public class LoginActivity extends BaseActivity {
         inputLayoutImageVerification.setErrorEnabled(false);
         inputLayoutVerfication.setErrorEnabled(false);
         setListener();
+
+        requestPermission();
+        getCodeImg();
+        if (BuildConfig.DEBUG) {
+            etPhoto.setText("15151977426");
+            // 15726818192
+            etVerfication.setText("111111");
+            etImageVerfication.setText("ffff");
+        }
     }
 
 
@@ -136,7 +165,186 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.bt_login)
     public void login() {
-        gotoActivity(MainActivity.class, true);
+        synLogin();
     }
 
+
+    @OnClick(R.id.image_verfication)
+    public void clickImage() {
+        getCodeImg();
+    }
+
+    @OnClick(R.id.get_verfication)
+    public void get_verfication() {
+        getVersionCode();
+    }
+
+
+    private void requestPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    }, 1);
+
+        }
+    }
+
+
+    /**
+     * 获取图片验证码
+     */
+    private void getCodeImg() {
+        HttpServerImpl.getCodeImg().subscribe(new HttpResultSubscriber<CodeImgBO>() {
+            @Override
+            public void onSuccess(CodeImgBO s) {
+                codeImgBO = s;
+                imageVerfication.setImageBitmap(BitmapUtil.base64ToBitMap(s.getImgString()));
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 获取短线验证码
+     */
+    private void getVersionCode() {
+        String strPhone = etPhoto.getText().toString().trim();
+        String strCodeImg = etImageVerfication.getText().toString().trim();
+        if (StringUtils.isEmpty(strPhone) || (strPhone.length() != 10 && strPhone.length() != 11)) {
+            inputLayoutPhone.setError(getResources().getString(R.string.input_phone_error));
+            inputLayoutPhone.setErrorEnabled(true);
+            return;
+        }
+        if (StringUtils.isEmpty(strCodeImg) || strCodeImg.length() != 4) {
+            inputLayoutImageVerification.setError(getResources().getString(R.string.input_image_verfication_error));
+            inputLayoutImageVerification.setErrorEnabled(true);
+            return;
+        }
+        if (codeImgBO == null) {
+            getCodeImg();
+            showToast(getResources().getString(R.string.login_hint));
+            return;
+        }
+        HttpServerImpl.getVerificationCode(codeImgBO.getKey(), strPhone, strCodeImg)
+                .subscribe(new HttpResultSubscriber<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        getVerfication.setEnabled(false);
+                        timer.start();
+                    }
+
+                    @Override
+                    public void onFiled(String message) {
+                        showToast(message);
+                    }
+                });
+    }
+
+
+    CountDownTimer timer = new CountDownTimer(60000, 1000) {
+        @Override
+        public void onTick(long l) {
+            getVerfication.setText((l / 1000) + "S");
+        }
+
+        @Override
+        public void onFinish() {
+            getVerfication.setEnabled(true);
+            getVerfication.setText(getResources().getString(R.string.reset_get_verification));
+        }
+    };
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
+
+    /**
+     * 登录请求
+     */
+    private void synLogin() {
+        String strPhone = etPhoto.getText().toString().trim();
+        String strCodeImg = etImageVerfication.getText().toString().trim();
+        String strVersition = etVerfication.getText().toString().trim();
+        if (StringUtils.isEmpty(strPhone) || (strPhone.length() != 10 && strPhone.length() != 11)) {
+            inputLayoutPhone.setError(getResources().getString(R.string.input_phone_error));
+            inputLayoutPhone.setErrorEnabled(true);
+            return;
+        }
+        if (StringUtils.isEmpty(strCodeImg) || strCodeImg.length() != 4) {
+            inputLayoutImageVerification.setError(getResources().getString(R.string.input_image_verfication_error));
+            inputLayoutImageVerification.setErrorEnabled(true);
+            return;
+        }
+        if (StringUtils.isEmpty(strVersition) || strVersition.length() != 6) {
+            inputLayoutVerfication.setError(getResources().getString(R.string.input_verfication_error));
+            inputLayoutVerfication.setErrorEnabled(true);
+        }
+        checkPermissions();
+        HttpServerImpl.loginUser(loginLatitude, loginLongitude, strPhone, strVersition).subscribe(new HttpResultSubscriber<LoginSuressBO>() {
+            @Override
+            public void onSuccess(LoginSuressBO s) {
+                MyApplication.token = s.getToken();
+                gotoActivity(MainActivity.class, true);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+    private double loginLatitude;
+    private double loginLongitude;
+
+    /**
+     * Detect camera authorization
+     */
+    public void checkPermissions() {
+        if (allPermissionsGranted()) {
+            LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
+            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            loginLatitude = mLocation.getLatitude();
+            loginLongitude = mLocation.getLongitude();
+        } else {
+            loginLatitude = 0;
+            loginLongitude = 0;
+        }
+    }
+
+    public String[] getRequiredPermissions() {
+        return new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    }
+
+
+    private boolean allPermissionsGranted() {
+        for (String permission : getRequiredPermissions()) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.IOException;
@@ -113,5 +114,19 @@ public class BitmapUtil {
         return bitmap;
     }
 
+
+    /**
+     * base64转bitmap
+     */
+    public static Bitmap base64ToBitMap(String code) {
+        Bitmap bitmap = null;
+        try {
+            byte[] bitmapByte = Base64.decode(code, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bitmapByte, 0, bitmapByte.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
 
 }

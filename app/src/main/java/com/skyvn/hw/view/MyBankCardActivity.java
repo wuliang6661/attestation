@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 我的银行卡页面
@@ -36,6 +39,9 @@ public class MyBankCardActivity extends BaseActivity {
     @BindView(R.id.btn_layout)
     LinearLayout btnLayout;
 
+    private String strBankCardNum;   //我的银行卡号
+
+
     @Override
     protected int getLayout() {
         return R.layout.act_bank_card;
@@ -49,5 +55,31 @@ public class MyBankCardActivity extends BaseActivity {
         goBack();
         setTitleText(getResources().getString(R.string.yinghangka));
         rightButton();
+
+        getBankCard();
     }
+
+
+    /**
+     * 获取我的银行卡
+     */
+    private void getBankCard() {
+        HttpServerImpl.getBankCard().subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+    @OnClick(R.id.btn_layout)
+    public void clickBankCard() {
+
+    }
+
 }

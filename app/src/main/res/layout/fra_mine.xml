@@ -55,7 +55,7 @@
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:scaleType="fitXY"
-            android:src="@drawable/main2"
+            android:src="@drawable/user_img_defalt"
             app:riv_corner_radius="360dp" />
 
 

@@ -20,6 +20,8 @@ import ai.advance.liveness.sdk.R;
 import ai.advance.liveness.sdk.fragment.LivenessFragment;
 
 public class LivenessActivity extends AppCompatActivity {
+
+
     private static final int PERMISSIONS_REQUEST_CODE = 1001;
     private LivenessFragment mLivenessFragment;
 

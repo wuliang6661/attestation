@@ -127,13 +127,23 @@ public class ApiManager {
      * 所有请求头统一处理
      */
     private Interceptor headerInterceptor = chain -> {
+        Request request;
         if (StringUtils.isEmpty(MyApplication.token)) {
-            return chain.proceed(chain.request());
+            // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
+            request = chain.request().newBuilder()
+                    .addHeader("applicationId", "1")
+                    .addHeader("tenantId", "0")
+                    .addHeader("language", "zh")
+                    .build();
+        } else {
+            // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
+            request = chain.request().newBuilder()
+                    .addHeader("Authorization", MyApplication.token)
+                    .addHeader("applicationId", "1")
+                    .addHeader("tenantId", "0")
+                    .addHeader("language", "zh")
+                    .build();
         }
-        // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
-        Request request = chain.request().newBuilder()
-                .addHeader("Authorization", MyApplication.token)
-                .build();
         return chain.proceed(request);
     };
 

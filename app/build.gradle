@@ -28,6 +28,7 @@ android {
         exclude 'META-INF/BenchmarkList'
         exclude 'META-INF/io.netty.versions.properties'
         exclude 'META-INF/CompilerHints'
+        exclude 'META-INF/rxjava.properties'
     }
     sourceSets {
         main {
@@ -89,4 +90,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.guoqi.widget:actionsheet:1.0'
     implementation project(':liveness')
+    implementation 'id.zelory:compressor:2.1.0'
 }

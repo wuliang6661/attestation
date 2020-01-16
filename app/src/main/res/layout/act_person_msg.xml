@@ -8,6 +8,7 @@
     <include layout="@layout/layout_title_bar" />
 
     <LinearLayout
+        android:id="@+id/xueli_layout"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/white"
@@ -56,6 +57,7 @@
 
 
     <LinearLayout
+        android:id="@+id/hunyin_layout"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/white"
@@ -103,6 +105,7 @@
         android:background="#dddddd" />
 
     <LinearLayout
+        android:id="@+id/zinv_num_layout"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/white"
@@ -150,7 +153,7 @@
         android:background="#dddddd" />
 
     <LinearLayout
-        android:id="@+id/one_phone_layout"
+        android:id="@+id/juzhu_time_layout"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/white"
@@ -240,6 +243,7 @@
 
 
     <EditText
+        android:id="@+id/edit_zalo"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:layout_marginTop="15dp"
@@ -252,6 +256,7 @@
 
 
     <EditText
+        android:id="@+id/edit_facebook"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:layout_marginTop="1dp"
