@@ -21,6 +21,15 @@ public class LoginSuressBO {
     private String phone;
     private int status;
     private String token;
+    private String headPortrait;
+
+    public String getHeadPortrait() {
+        return headPortrait;
+    }
+
+    public void setHeadPortrait(String headPortrait) {
+        this.headPortrait = headPortrait;
+    }
 
     public String getId() {
         return id;

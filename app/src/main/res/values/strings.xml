@@ -160,4 +160,24 @@
     <string name="content_hint_toast">请输入反馈的内容！</string>
 
     <string name="commit_sourss_toast">提交成功！</string>
+
+    <string name="user_name_toast">请输入账号姓名！</string>
+    <string name="bank_num_toast">请输入银行卡号！</string>
+    <string name="yinghang_name_toast">请选择银行名称！</string>
+    <string name="suoshuzhihang_toast">请输入所属支行！</string>
+
+    <string name="hunyin1">未婚</string>
+    <string name="hunyin2">已婚</string>
+    <string name="hunyin3">离异</string>
+    <string name="hunyin4">丧偶</string>
+
+    <string name="xueli_toast">请选择学历！</string>
+    <string name="hunyin_toast">请选择婚姻状况！</string>
+    <string name="zinv_num_toast">请选择子女数量！</string>
+    <string name="juzhu_time_toast">请选择居住时长！</string>
+    <string name="juzhudizhi_toast">请输入当前居住地址！</string>
+
+    <string name="common_name_toast">请输入公司名称！</string>
+    <string name="common_address_toast">请输入详细地址！</string>
+
 </resources>

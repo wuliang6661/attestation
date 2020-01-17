@@ -303,6 +303,7 @@ public class LoginActivity extends BaseActivity {
         HttpServerImpl.loginUser(loginLatitude, loginLongitude, strPhone, strVersition).subscribe(new HttpResultSubscriber<LoginSuressBO>() {
             @Override
             public void onSuccess(LoginSuressBO s) {
+                MyApplication.userBO = s;
                 MyApplication.token = s.getToken();
                 gotoActivity(MainActivity.class, true);
             }

@@ -2,13 +2,22 @@ package com.skyvn.hw.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.LablesBO;
+import com.skyvn.hw.widget.PopXingZhi;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,6 +56,8 @@ public class PersonMsgActivity extends BaseActivity {
     @BindView(R.id.bt_login)
     Button btLogin;
 
+    private int selectHunyin = 0;
+
     @Override
     protected int getLayout() {
         return R.layout.act_person_msg;
@@ -61,8 +72,131 @@ public class PersonMsgActivity extends BaseActivity {
         rightButton();
     }
 
-    @OnClick(R.id.xueli_layout)
-    public void selectXueli() {
-
+    @OnClick({R.id.xueli_layout, R.id.zinv_num_layout, R.id.juzhu_time_layout, R.id.hunyin_layout})
+    public void selectXueli(View view) {
+        switch (view.getId()) {
+            case R.id.xueli_layout:
+                getLables(4);
+                break;
+            case R.id.zinv_num_layout:
+                getLables(5);
+                break;
+            case R.id.juzhu_time_layout:
+                getLables(6);
+                break;
+            case R.id.hunyin_layout:
+                switchHunYin();
+                break;
+        }
     }
+
+    /**
+     * 获取标签
+     */
+    private void getLables(int parentId) {
+        showProgress();
+        HttpServerImpl.getSysLables(parentId).subscribe(new HttpResultSubscriber<List<LablesBO>>() {
+            @Override
+            public void onSuccess(List<LablesBO> s) {
+                stopProgress();
+                switchBanks(s, parentId);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 选择标签
+     */
+    private void switchBanks(List<LablesBO> s, int parentIds) {
+        List<String> list = new ArrayList<>();
+        for (LablesBO bankBO : s) {
+            list.add(bankBO.getContent());
+        }
+        PopXingZhi popXingZhi = new PopXingZhi(this, "", list);
+        popXingZhi.setListener((position, item) -> {
+            switch (parentIds) {
+                case 4:
+                    editXueli.setText(item);
+                    break;
+                case 5:
+                    editZinvNum.setText(item);
+                    break;
+                case 6:
+                    editJuzhuTime.setText(item);
+                    break;
+            }
+        });
+        popXingZhi.showAtLocation(getWindow().getDecorView());
+    }
+
+
+    /**
+     * 选择婚姻状况
+     */
+    private void switchHunYin() {
+        List<String> list = new ArrayList<>();
+        list.add(getResources().getString(R.string.hunyin1));
+        list.add(getResources().getString(R.string.hunyin2));
+        list.add(getResources().getString(R.string.hunyin3));
+        list.add(getResources().getString(R.string.hunyin4));
+        PopXingZhi popXingZhi = new PopXingZhi(this, "", list);
+        popXingZhi.setListener((position, item) -> {
+            selectHunyin = position;
+            editHunyin.setText(item);
+        });
+        popXingZhi.showAtLocation(getWindow().getDecorView());
+    }
+
+
+    @OnClick(R.id.bt_login)
+    public void commit() {
+        String strXueli = editXueli.getText().toString().trim();
+        if (StringUtils.isEmpty(strXueli)) {
+            showToast(getResources().getString(R.string.xueli_toast));
+            return;
+        }
+        String strHunyin = editHunyin.getText().toString().trim();
+        if (StringUtils.isEmpty(strHunyin)) {
+            showToast(getResources().getString(R.string.hunyin_toast));
+            return;
+        }
+        String strZiNvNum = editZinvNum.getText().toString().trim();
+        if (StringUtils.isEmpty(strZiNvNum)) {
+            showToast(getResources().getString(R.string.zinv_num_toast));
+            return;
+        }
+        String strjuzhuTime = editJuzhuTime.getText().toString().trim();
+        if (StringUtils.isEmpty(strjuzhuTime)) {
+            showToast(getResources().getString(R.string.juzhu_time_toast));
+            return;
+        }
+        String strJuzhuAddress = editAddress.getText().toString().trim();
+        if (StringUtils.isEmpty(strJuzhuAddress)) {
+            showToast(getResources().getString(R.string.juzhudizhi_toast));
+            return;
+        }
+        String zalo = editZalo.getText().toString().trim();
+        String facebook = editFacebook.getText().toString().trim();
+        HttpServerImpl.commitPersonMsg(strXueli, selectHunyin + "", strZiNvNum, strjuzhuTime,
+                strJuzhuAddress, zalo, facebook).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                showToast(getResources().getString(R.string.commit_sourss_toast));
+                finish();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
 }

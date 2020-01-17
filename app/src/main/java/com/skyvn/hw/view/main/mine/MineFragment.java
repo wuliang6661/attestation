@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.skyvn.hw.R;
+import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.mvp.MVPBaseFragment;
 import com.skyvn.hw.view.FanKuiActivity;
 import com.skyvn.hw.view.KefuActivity;
@@ -53,6 +55,11 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        userPhone.setText(MyApplication.userBO.getPhone());
+        Glide.with(getActivity()).load(MyApplication.userBO.getHeadPortrait())
+                .error(R.drawable.user_img_defalt).
+                placeholder(R.drawable.user_img_defalt).into(userImg);
     }
 
 

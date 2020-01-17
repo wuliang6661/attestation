@@ -1,10 +1,13 @@
 package com.skyvn.hw.api;
 
+import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -13,6 +16,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -49,6 +53,12 @@ public interface HttpService {
     Observable<BaseResult<LoginSuressBO>> loginUser(@Body Map<String, Object> params);
 
     /**
+     * 退出登录
+     */
+    @POST("/clientUser/exit")
+    Observable<BaseResult<String>> exitLogin(@Body Map<String, Object> params);
+
+    /**
      * 提交反馈
      */
     @POST("/operateApplicationFeedback/addOperateApplicationFeedback")
@@ -65,6 +75,30 @@ public interface HttpService {
      */
     @GET("/clientUserBankCard/getBankCard")
     Observable<BaseResult<BankCardBO>> getBankCard();
+
+    /**
+     * 提交个人资料
+     */
+    @POST("/clientUserInfo/addClientInfoAuthTwo")
+    Observable<BaseResult<String>> commitClientInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交公司信息
+     */
+    @POST("/clientUserInfo/addCompanyInfoAuth")
+    Observable<BaseResult<String>> commitCompanyInfo(@Body Map<String, Object> params);
+
+    /**
+     * 获取枚举数据
+     */
+    @GET("/sysLabel/getSysLabels")
+    Observable<BaseResult<List<LablesBO>>> getSysLabels(@Query("parentId") String parentId);
+
+    /**
+     * 获取所有银行
+     */
+    @GET("/sysBank/getSysBanks")
+    Observable<BaseResult<List<BankBO>>> getSysBanks();
 
     /**
      * 上传文件

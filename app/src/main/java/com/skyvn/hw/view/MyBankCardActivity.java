@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
@@ -57,9 +58,13 @@ public class MyBankCardActivity extends BaseActivity {
         setTitleText(getResources().getString(R.string.yinghangka));
         rightButton();
 
-        getBankCard();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getBankCard();
+    }
 
     /**
      * 获取我的银行卡
@@ -78,6 +83,9 @@ public class MyBankCardActivity extends BaseActivity {
                     noCardLayout.setVisibility(View.GONE);
                     btImg.setImageResource(R.drawable.switch_card);
                     btName.setText(getResources().getString(R.string.switch_card));
+                    Glide.with(MyBankCardActivity.this).load(s.getImageOssUrl()).into(yinghangImg);
+                    yinghangName.setText(s.getBank());
+                    yinghangNum.setText(s.getCardNo());
                 }
             }
 

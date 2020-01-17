@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
+import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.language.LanguageType;
 import com.skyvn.hw.util.language.LanguageUtil;
@@ -29,6 +30,8 @@ public class MyApplication extends Application {
     public static SPUtils spUtils;
     public static String token;
     public static boolean AppInBack = false;  //App 是否在后台
+
+    public static LoginSuressBO userBO;
 
     @Override
     public void onCreate() {
