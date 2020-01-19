@@ -16,17 +16,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.bumptech.glide.Glide;
 import com.guoqi.actionsheet.ActionSheet;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.LablesBO;
+import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
 import java.io.File;
@@ -71,12 +76,14 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
     @BindView(R.id.gongsi_img_hint)
     TextView gongsiImgHint;
     @BindView(R.id.gongsi_img)
-    LinearLayout gongsiImg;
+    ImageView gongsiImg;
 
 
     private File cameraSavePath;//拍照照片路径
     private Uri uri;
     private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+    private String gongsiImgUrl;
 
     @Override
     protected int getLayout() {
@@ -88,13 +95,32 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        goBack();
+        LinearLayout imageView = findViewById(R.id.back);
+        imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.gongsixinxi));
         rightButton();
 
         getPermission();
         cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +
                 System.currentTimeMillis() + ".jpg");
+    }
+
+    @OnClick(R.id.back)
+    public void back() {
+        HttpServerImpl.getBackMsg(AuthenticationUtils.COMMON_MSG_PAGE).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                new AlertDialog(CommonMsgActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                        .setMsg(s)
+                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -112,7 +138,6 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
                 break;
         }
     }
-
 
     /**
      * 获取标签
@@ -162,7 +187,7 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
 
 
     @OnClick(R.id.add_img)
-    public void addImage(){
+    public void addImage() {
         ActionSheet.showSheet(this, this, null);
     }
 
@@ -183,10 +208,42 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
             return;
         }
         String strCommonPhone = editCommonPhone.getText().toString().trim();
-        if(StringUtils.isEmpty(strCommonPhone)){
+        if (StringUtils.isEmpty(strCommonPhone)) {
             showToast(getResources().getString(R.string.email_hint_toast));
             return;
         }
+        String strZhiCheng = editZhicheng.getText().toString().trim();
+        if (StringUtils.isEmpty(strZhiCheng)) {
+            showToast(getResources().getString(R.string.common_zhicheng_toast));
+            return;
+        }
+        String strShouru = editShouru.getText().toString().trim();
+        if (StringUtils.isEmpty(strShouru)) {
+            showToast(getResources().getString(R.string.common_shouru_toast));
+            return;
+        }
+        String strShichang = editShichangTime.getText().toString().trim();
+        if (StringUtils.isEmpty(strShichang)) {
+            showToast(getResources().getString(R.string.common_shichang_toast));
+            return;
+        }
+        if (StringUtils.isEmpty(gongsiImgUrl)) {
+            showToast(getResources().getString(R.string.common_img_toast));
+            return;
+        }
+        HttpServerImpl.commitComplanyInfo(strCommonName, strCommonAddress, strCommonPhone, strZhiCheng,
+                strShouru, strShichang, gongsiImgUrl).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                showToast(getResources().getString(R.string.commit_sourss_toast));
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), CommonMsgActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -277,6 +334,8 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
             @Override
             public void onSuccess(String s) {
                 stopProgress();
+                gongsiImgUrl = s;
+                Glide.with(CommonMsgActivity.this).load(s).into(gongsiImg);
             }
 
             @Override

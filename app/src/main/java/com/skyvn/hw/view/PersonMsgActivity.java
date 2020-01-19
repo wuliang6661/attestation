@@ -13,7 +13,10 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.LablesBO;
+import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
 import java.util.ArrayList;
@@ -67,9 +70,29 @@ public class PersonMsgActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        goBack();
+        LinearLayout imageView = findViewById(R.id.back);
+        imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.gerenziliao));
         rightButton();
+    }
+
+
+    @OnClick(R.id.back)
+    public void back() {
+        HttpServerImpl.getBackMsg(AuthenticationUtils.PERSON_MSG).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                new AlertDialog(PersonMsgActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                        .setMsg(s)
+                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
     @OnClick({R.id.xueli_layout, R.id.zinv_num_layout, R.id.juzhu_time_layout, R.id.hunyin_layout})
@@ -185,11 +208,11 @@ public class PersonMsgActivity extends BaseActivity {
         String zalo = editZalo.getText().toString().trim();
         String facebook = editFacebook.getText().toString().trim();
         HttpServerImpl.commitPersonMsg(strXueli, selectHunyin + "", strZiNvNum, strjuzhuTime,
-                strJuzhuAddress, zalo, facebook).subscribe(new HttpResultSubscriber<String>() {
+                strJuzhuAddress, zalo, facebook).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
             @Override
-            public void onSuccess(String s) {
+            public void onSuccess(AttentionSourrssBO s) {
                 showToast(getResources().getString(R.string.commit_sourss_toast));
-                finish();
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), PersonMsgActivity.this);
             }
 
             @Override

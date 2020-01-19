@@ -329,23 +329,28 @@
                 android:background="#dddddd" />
 
 
-            <LinearLayout
-                android:id="@+id/gongsi_img"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="189dp"
                 android:layout_marginLeft="22dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="22dp"
                 android:layout_marginBottom="15dp"
-                android:background="@drawable/gongsi_img"
-                android:gravity="center"
                 android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/gongsi_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/gongsi_img" />
 
 
                 <LinearLayout
                     android:id="@+id/add_img"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
+                    android:layout_centerInParent="true"
                     android:background="@drawable/add_img_bg"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -362,12 +367,14 @@
                     android:id="@+id/gongsi_img_hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/add_img"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:text="@string/add_img_hint"
                     android:textColor="#40A5ED"
                     android:textSize="13sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>

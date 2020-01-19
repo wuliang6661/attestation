@@ -171,6 +171,18 @@
     <string name="hunyin3">离异</string>
     <string name="hunyin4">丧偶</string>
 
+    <string name="fuqin">父亲</string>
+    <string name="muqin">母亲</string>
+    <string name="peiou">配偶</string>
+    <string name="erzi">儿子</string>
+    <string name="nver">女儿</string>
+
+    <string name="xiongdi">兄弟</string>
+    <string name="pengyou">朋友</string>
+    <string name="tongshi">同事</string>
+    <string name="tongxue">同学</string>
+    <string name="qinqi">亲戚</string>
+
     <string name="xueli_toast">请选择学历！</string>
     <string name="hunyin_toast">请选择婚姻状况！</string>
     <string name="zinv_num_toast">请选择子女数量！</string>
@@ -179,5 +191,23 @@
 
     <string name="common_name_toast">请输入公司名称！</string>
     <string name="common_address_toast">请输入详细地址！</string>
+    <string name="common_zhicheng_toast">请选择职称！</string>
+    <string name="common_shouru_toast">请选择税前收入！</string>
+    <string name="common_shichang_toast">请选择工作时长！</string>
+    <string name="common_img_toast">请选择公司图片！</string>
+    <string name="sms_hint_toast">请上传认证截图！</string>
 
+    <string name="jiazhaozhengmian_toast">请上传驾照正面图片！</string>
+    <string name="jiazhaofanmian_toast">请上传驾照反面图片！</string>
+
+    <string name="video_toast">请上传小视频！</string>
+
+    <string name="wanshan_toast">请完善必填项！</string>
+
+    <string name="contact_aleg_dialog">认证必须上传通讯录，\n我们将严格保护你的隐私</string>
+    <string name="hao">好</string>
+    <string name="buyunxu">不允许</string>
+
+    <string name="jixurenzheng">继续认证</string>
+    <string name="fangqishenqing">放弃申请</string>
 </resources>

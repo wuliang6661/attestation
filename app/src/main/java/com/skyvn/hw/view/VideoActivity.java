@@ -1,7 +1,9 @@
 package com.skyvn.hw.view;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -9,15 +11,33 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.StringUtils;
+import com.guoqi.actionsheet.ActionSheet;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.util.PhotoFromPhotoAlbum;
+import com.skyvn.hw.widget.AlertDialog;
 
 import java.io.File;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * author : wuliang
@@ -26,8 +46,19 @@ import java.io.File;
  * desc   : 上传小视频
  * version: 1.0
  */
-public class VideoActivity extends BaseActivity {
+public class VideoActivity extends BaseActivity implements ActionSheet.OnActionSheetSelected {
 
+
+    @BindView(R.id.video_img)
+    ImageView videoImg;
+    @BindView(R.id.add_img)
+    LinearLayout addImg;
+
+    private File cameraSavePath;//拍照照片路径
+    private Uri uri;
+    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+    private Bitmap bitmap;
 
     @Override
     protected int getLayout() {
@@ -39,21 +70,70 @@ public class VideoActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        goBack();
+        LinearLayout imageView = findViewById(R.id.back);
+        imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.xiaoshipin));
         rightButton();
+
+        getPermission();
+        cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +
+                System.currentTimeMillis() + ".jpg");
+    }
+
+    @OnClick(R.id.back)
+    public void back() {
+        HttpServerImpl.getBackMsg(AuthenticationUtils.VIDEO_PAGE).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                new AlertDialog(VideoActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                        .setMsg(s)
+                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+
+    @OnClick(R.id.add_img)
+    public void addVideo() {
+        ActionSheet.showSheet(this, this, null);
+    }
+
+    @OnClick(R.id.bt_login)
+    public void commitVideo() {
+        if (StringUtils.isEmpty(videoUrl)) {
+            showToast(getResources().getString(R.string.video_toast));
+            return;
+        }
+        HttpServerImpl.commitVideoInfo(videoUrl).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                showToast(getResources().getString(R.string.commit_sourss_toast));
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), VideoActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
     //选择视频
     private void selectVideo() {
-        if (android.os.Build.BRAND.equals("Huawei")) {
+        if (Build.BRAND.equals("Huawei")) {
             Intent intentPic = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intentPic, 2);
         }
-        if (android.os.Build.BRAND.equals("Xiaomi")) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取视频
-            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (Build.BRAND.equals("Xiaomi")) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取视频
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "video/*");
             startActivityForResult(Intent.createChooser(intent, "选择要导入的视频"), 2);
         } else {//直接跳到系统相册去选取视频
@@ -117,49 +197,95 @@ public class VideoActivity extends BaseActivity {
                     int imageId = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
                     // 方法一 Thumbnails 利用createVideoThumbnail 通过路径得到缩略图，保持为视频的默认比例
                     // 第一个参数为 ContentResolver，第二个参数为视频缩略图ID， 第三个参数kind有两种为：MICRO_KIND和MINI_KIND 字面意思理解为微型和迷你两种缩略模式，前者分辨率更低一些。
-                    Bitmap bitmap1 = MediaStore.Video.Thumbnails.getThumbnail(cr, imageId, MediaStore.Video.Thumbnails.MICRO_KIND, null);
+                    bitmap = MediaStore.Video.Thumbnails.getThumbnail(cr, imageId, MediaStore.Video.Thumbnails.MICRO_KIND, null);
 
                     // 方法二 ThumbnailUtils 利用createVideoThumbnail 通过路径得到缩略图，保持为视频的默认比例
                     // 第一个参数为 视频/缩略图的位置，第二个依旧是分辨率相关的kind
                     Bitmap bitmap2 = ThumbnailUtils.createVideoThumbnail(imagePath, MediaStore.Video.Thumbnails.MICRO_KIND);
+                    cursor.close();
                     // 如果追求更好的话可以利用 ThumbnailUtils.extractThumbnail 把缩略图转化为的制定大小
                     if (duration > 11000) {
                         Toast.makeText(getApplicationContext(), "视频时长已超过10秒，请重新选择", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    updateFile(new File(Objects.requireNonNull(path)));
+                } else {
+                    cursor.close();
                 }
-                cursor.close();
             }
         } else if (resultCode == RESULT_OK && null != data && requestCode == 2) {
-            Uri uri = data.getData();
-            String path = getRealPathFromURI(uri);
+            String path = PhotoFromPhotoAlbum.getVideoRealPathFromUri(this, data.getData());
             Log.d("path", "path==" + path);
             File file = new File(path);
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();//实例化MediaMetadataRetriever对象
             mmr.setDataSource(file.getAbsolutePath());
-            Bitmap bitmap = mmr.getFrameAtTime();//获得视频第一帧的Bitmap对象
-            String duration = mmr.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION);//时长(毫秒)
+            bitmap = mmr.getFrameAtTime();//获得视频第一帧的Bitmap对象
+            String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//时长(毫秒)
             Log.d("ddd", "duration==" + duration);
             int int_duration = Integer.parseInt(duration);
             if (int_duration > 11000) {
                 Toast.makeText(getApplicationContext(), "视频时长已超过10秒，请重新选择", Toast.LENGTH_SHORT).show();
+                return;
             }
+            updateFile(file);
         }
     }
 
 
-    /**
-     * Uri转地址
-     */
-    public String getRealPathFromURI(Uri contentUri) {
-        String res = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
+    //获取权限
+    private void getPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                    }, 1);
+
         }
-        cursor.close();
-        return res;
+    }
+
+
+    @Override
+    public void onClick(int whichButton) {
+        switch (whichButton) {
+            case ActionSheet.CHOOSE_PICTURE:
+                //相册
+                selectVideo();
+                break;
+            case ActionSheet.TAKE_PICTURE:
+                //拍照
+                video();
+                break;
+            case ActionSheet.CANCEL:
+                //取消
+                break;
+        }
+    }
+
+    private String videoUrl;
+
+    /**
+     * 上传文件
+     */
+    private void updateFile(File file) {
+        showProgress();
+        HttpServerImpl.updateVideo(file).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                stopProgress();
+                videoUrl = s;
+                videoImg.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
     }
 }

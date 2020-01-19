@@ -1,9 +1,12 @@
 package com.skyvn.hw.api;
 
+import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.AuthTypeBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 
@@ -68,7 +71,7 @@ public interface HttpService {
      * 绑定银行卡
      */
     @POST("/clientUserBankCard/addClientSmsRecordAuth")
-    Observable<BaseResult<String>> bindBankCard(@Body Map<String, Object> params);
+    Observable<BaseResult<AttentionSourrssBO>> bindBankCard(@Body Map<String, Object> params);
 
     /**
      * 获取银行卡
@@ -77,16 +80,58 @@ public interface HttpService {
     Observable<BaseResult<BankCardBO>> getBankCard();
 
     /**
+     * 获取认证项的认证状态
+     */
+    @GET("/clientAuthStatus/getAuthList")
+    Observable<BaseResult<List<AuthTypeBO>>> getAuthList();
+
+    /**
      * 提交个人资料
      */
     @POST("/clientUserInfo/addClientInfoAuthTwo")
-    Observable<BaseResult<String>> commitClientInfo(@Body Map<String, Object> params);
+    Observable<BaseResult<AttentionSourrssBO>> commitClientInfo(@Body Map<String, Object> params);
 
     /**
      * 提交公司信息
      */
     @POST("/clientUserInfo/addCompanyInfoAuth")
-    Observable<BaseResult<String>> commitCompanyInfo(@Body Map<String, Object> params);
+    Observable<BaseResult<AttentionSourrssBO>> commitCompanyInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交驾照信息
+     */
+    @POST("/clientDrivingLicense/addDrivingLicenseAuth")
+    Observable<BaseResult<AttentionSourrssBO>> commitJiaZhaoInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交短信1414信息
+     */
+    @POST("/clientSms1414/addClientSms1414Auth")
+    Observable<BaseResult<AttentionSourrssBO>> addClientSms1414(@Body Map<String, Object> params);
+
+    /**
+     * 提交小视频认证
+     */
+    @POST("/clientIdcardVideo/addIdcardVideoAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addVideoInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交紧急联系人认证
+     */
+    @POST("/clientUserContact/addClientContactAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addClientContactInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交通讯录认证
+     */
+    @POST("/clientAddressList/addClientAddressListAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addContactListInfo(@Body Map<String, Object> params);
+
+    /**
+     * 获取返回的文案信息
+     */
+    @GET("/operateApplicationAuthProcess/getCopyWriter")
+    Observable<BaseResult<String>> getCopyWriter(@Query("code") String code);
 
     /**
      * 获取枚举数据
@@ -99,6 +144,12 @@ public interface HttpService {
      */
     @GET("/sysBank/getSysBanks")
     Observable<BaseResult<List<BankBO>>> getSysBanks();
+
+    /**
+     * 获取全部客服
+     */
+    @GET("/operateApplicationCustomerService/getCustomerServicesByApplicationId")
+    Observable<BaseResult<List<KeFuBO>>> getCustomerServicesByApplicationId();
 
     /**
      * 上传文件

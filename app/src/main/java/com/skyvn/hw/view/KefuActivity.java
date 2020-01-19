@@ -9,9 +9,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.util.PhoneUtils;
 import com.skyvn.hw.widget.AlertDialog;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,6 +44,7 @@ public class KefuActivity extends BaseActivity {
     @BindView(R.id.facebook_num)
     TextView facebookNum;
 
+    private List<KeFuBO> kefus;
 
     @Override
     protected int getLayout() {
@@ -52,6 +58,45 @@ public class KefuActivity extends BaseActivity {
 
         goBack();
         setTitleText(getResources().getString(R.string.my_kefu));
+
+        getKeFu();
+    }
+
+
+    /**
+     * 获取全部客服
+     */
+    private void getKeFu() {
+        HttpServerImpl.getCustomerServicesByApplicationId().subscribe(new HttpResultSubscriber<List<KeFuBO>>() {
+            @Override
+            public void onSuccess(List<KeFuBO> strings) {
+                kefus = strings;
+                showKeFu();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 显示客服
+     */
+    private void showKeFu() {
+        if (kefus.size() >= 1) {
+            phone1.setText(kefus.get(0).getContact());
+        }
+        if (kefus.size() >= 2) {
+            phone2.setText(kefus.get(1).getContact());
+        }
+        if (kefus.size() >= 3) {
+            zaloNum.setText(kefus.get(2).getContact());
+        }
+        if (kefus.size() >= 4) {
+            facebookNum.setText(kefus.get(3).getContact());
+        }
     }
 
 

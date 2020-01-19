@@ -21,6 +21,7 @@
 
 
     <LinearLayout
+        android:id="@+id/guanxi_layout1"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/white"
@@ -142,6 +143,7 @@
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:background="@null"
+            android:enabled="false"
             android:gravity="center_vertical"
             android:hint="@string/xingming"
             android:singleLine="true"
@@ -170,6 +172,7 @@
 
 
     <LinearLayout
+        android:id="@+id/guanxi_layout2"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/white"
@@ -291,6 +294,7 @@
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:background="@null"
+            android:enabled="false"
             android:gravity="center_vertical"
             android:hint="@string/xingming"
             android:singleLine="true"
@@ -321,6 +325,7 @@
             android:orientation="horizontal">
 
             <CheckBox
+                android:id="@+id/checkbox"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:background="@drawable/check_box_bg"

@@ -2,9 +2,13 @@ package com.skyvn.hw.api;
 
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
+import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.AuthTypeBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.ContactBO;
+import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.util.EquipmentUtil;
@@ -99,9 +103,17 @@ public class HttpServerImpl {
     }
 
     /**
+     * 获取所有认证项的认证状态
+     */
+    public static Observable<List<AuthTypeBO>> getAuthList() {
+        return getService().getAuthList().compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
      * 绑定银行卡
      */
-    public static Observable<String> bindBankCard(String bankName, String cardNo, String name, String subbranch) {
+    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch) {
         Map<String, Object> params = new HashMap<>();
         params.put("bank", bankName);
         params.put("cardNo", cardNo);
@@ -113,8 +125,8 @@ public class HttpServerImpl {
     /**
      * 提交个人资料
      */
-    public static Observable<String> commitPersonMsg(String xueli, String hunyin, String zinvNum, String juzhuTime,
-                                                     String juzhuAddress, String zalo, String facebook) {
+    public static Observable<AttentionSourrssBO> commitPersonMsg(String xueli, String hunyin, String zinvNum, String juzhuTime,
+                                                                 String juzhuAddress, String zalo, String facebook) {
         Map<String, Object> params = new HashMap<>();
         params.put("education", xueli);
         params.put("marriage", hunyin);
@@ -130,9 +142,9 @@ public class HttpServerImpl {
     /**
      * 提交公司资料
      */
-    public static Observable<String> commitComplanyInfo(String company, String companyAddress, String companyTel,
-                                                        String pretaxIncome, String profession, String workMonth,
-                                                        String workPicOssUrl) {
+    public static Observable<AttentionSourrssBO> commitComplanyInfo(String company, String companyAddress, String companyTel,
+                                                                    String pretaxIncome, String profession, String workMonth,
+                                                                    String workPicOssUrl) {
         Map<String, Object> params = new HashMap<>();
         params.put("company", company);
         params.put("companyAddress", companyAddress);
@@ -142,6 +154,68 @@ public class HttpServerImpl {
         params.put("workMonth", workMonth);
         params.put("workPicOssUrl", workPicOssUrl);
         return getService().commitCompanyInfo(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 提交短信认证
+     */
+    public static Observable<AttentionSourrssBO> addClientSms1414(String imageUrl, String remark) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("sms1414OssUrl", imageUrl);
+        params.put("remark", remark);
+        return getService().addClientSms1414(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 提交驾照认证
+     */
+    public static Observable<AttentionSourrssBO> commitJiaZhaoInfo(String imageUrl1, String imageUrl2) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("drivingLicenseFrontOssUrl", imageUrl1);
+        params.put("drivingLicenseBackOssUrl", imageUrl2);
+        return getService().commitJiaZhaoInfo(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 提交小视频认证
+     */
+    public static Observable<AttentionSourrssBO> commitVideoInfo(String videoUrl) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("videoOssUrl", videoUrl);
+        return getService().addVideoInfo(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 提交紧急联系人认证
+     */
+    public static Observable<AttentionSourrssBO> commitContactInfo(String nameOne, String nameTwo,
+                                                                   String phoneOne, String phoneTwo, int relationOne, int relationTwo) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("inContactOne", 1);
+        params.put("inContactTwo", 1);
+        params.put("nameOne", nameOne);
+        params.put("nameTwo", nameTwo);
+        params.put("phoneOne", phoneOne);
+        params.put("phoneTwo", phoneTwo);
+        params.put("relationOne", relationOne);
+        params.put("relationTwo", relationTwo);
+        return getService().addClientContactInfo(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 提交通讯录认证
+     */
+    public static Observable<AttentionSourrssBO> commitContactList(List<ContactBO> contactBOS) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("addressLists", contactBOS);
+        return getService().addContactListInfo(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取返回的文案信息
+     */
+    public static Observable<String> getBackMsg(int code) {
+        return getService().getCopyWriter(code + "").compose(RxResultHelper.httpRusult());
     }
 
 
@@ -157,6 +231,13 @@ public class HttpServerImpl {
      */
     public static Observable<List<BankBO>> getSysBanks() {
         return getService().getSysBanks().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取所有客服
+     */
+    public static Observable<List<KeFuBO>> getCustomerServicesByApplicationId() {
+        return getService().getCustomerServicesByApplicationId().compose(RxResultHelper.httpRusult());
     }
 
 
@@ -175,4 +256,14 @@ public class HttpServerImpl {
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         return getService().updateFile(body).compose(RxResultHelper.httpRusult());
     }
+
+    /**
+     * 提交视频
+     */
+    public static Observable<String> updateVideo(File file) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("video/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        return getService().updateFile(body).compose(RxResultHelper.httpRusult());
+    }
+
 }

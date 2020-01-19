@@ -60,6 +60,7 @@ public class MyBankCardActivity extends BaseActivity {
 
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();

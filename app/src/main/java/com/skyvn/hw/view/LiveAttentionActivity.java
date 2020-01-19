@@ -4,20 +4,23 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.util.AuthenticationUtils;
 
 import ai.advance.liveness.lib.LivenessResult;
 import ai.advance.liveness.sdk.activity.LivenessActivity;
-import ai.advance.liveness.sdk.activity.ResultActivity;
 import butterknife.OnClick;
 
 /**
@@ -44,11 +47,29 @@ public class LiveAttentionActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        goBack();
+        LinearLayout imageView = findViewById(R.id.back);
+        imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.shuanianrenzheng));
         rightButton();
     }
 
+    @OnClick(R.id.back)
+    public void back() {
+        HttpServerImpl.getBackMsg(AuthenticationUtils.LIVE_PAGE).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                new com.skyvn.hw.widget.AlertDialog(LiveAttentionActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                        .setMsg(s)
+                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
 
     @OnClick(R.id.bt_login)
     public void goLive() {

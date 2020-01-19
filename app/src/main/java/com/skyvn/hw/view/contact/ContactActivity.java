@@ -2,8 +2,8 @@ package com.skyvn.hw.view.contact;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,22 +13,31 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.CheckBox;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
+import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.ContactBO;
 import com.skyvn.hw.mvp.MVPBaseActivity;
+import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.phone.PhoneDto;
 import com.skyvn.hw.util.phone.PhoneUtil;
+import com.skyvn.hw.view.MyBankCardActivity;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -46,6 +55,8 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
     @BindView(R.id.recycle_view)
     RecyclerView recycleView;
 
+    int type = Integer.MAX_VALUE;
+
     @Override
     protected int getLayout() {
         return R.layout.act_contact;
@@ -55,15 +66,37 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        goBack();
+//        goBack();
+        LinearLayout imageView = findViewById(R.id.back);
+        imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.contact));
         rightButton();
 
+        type = getIntent().getIntExtra("auth_type", Integer.MAX_VALUE);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recycleView.setLayoutManager(manager);
         requestPermission();
         initView();
+    }
+
+
+    @OnClick(R.id.back)
+    public void back() {
+        HttpServerImpl.getBackMsg(AuthenticationUtils.PHONE_LIST).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                new AlertDialog(ContactActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                        .setMsg(s)
+                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -132,7 +165,57 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
                 holder.setText(R.id.phone, phoneDto.getTelPhone());
             }
         };
+        adapter.setOnItemClickListener(R.id.item_layout, new LGRecycleViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClicked(View view, int position) {
+                if (type != 0) {
+                    Intent intent = new Intent();
+                    ContactBO contactBO = new ContactBO();
+                    contactBO.setName(phones.get(position).getName());
+                    contactBO.setPhone(phones.get(position).getTelPhone());
+                    intent.putExtra("contact", contactBO);
+                    setResult(0x11, intent);
+                    finish();
+                }
+            }
+        });
         recycleView.setAdapter(adapter);
+        if (type == 0) {
+            new AlertDialog(this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                    .setMsg(getResources().getString(R.string.contact_aleg_dialog))
+                    .setNegativeButton(getResources().getString(R.string.buyunxu), null)
+                    .setPositiveButton(getResources().getString(R.string.hao), v -> {
+                        commitContactList(phones);
+                    }).show();
+        }
     }
+
+
+    /**
+     * 上传通讯录验证
+     */
+    private void commitContactList(List<PhoneDto> phoneDtos) {
+        List<ContactBO> contactBOS = new ArrayList<>();
+        for (PhoneDto phone : phoneDtos) {
+            ContactBO contactBO = new ContactBO();
+            contactBO.setPhone(phone.getTelPhone());
+            contactBO.setName(phone.getName());
+            contactBOS.add(contactBO);
+        }
+        HttpServerImpl.commitContactList(contactBOS).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                showToast(getResources().getString(R.string.commit_sourss_toast));
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ContactActivity.this);
+
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
 
 }

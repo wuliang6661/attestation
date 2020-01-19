@@ -3,6 +3,7 @@ package com.skyvn.hw.view.bindbankcard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,8 +13,12 @@ import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
+import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.mvp.MVPBaseActivity;
+import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.view.CommonMsgActivity;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
 import java.util.ArrayList;
@@ -56,10 +61,30 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        goBack();
+        LinearLayout imageView = findViewById(R.id.back);
+        imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.bangdingyinghangka));
         rightButton();
 
+    }
+
+
+    @OnClick(R.id.back)
+    public void back() {
+        HttpServerImpl.getBackMsg(AuthenticationUtils.BIND_BANK_CARD).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                new AlertDialog(BindBankCardActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                        .setMsg(s)
+                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -130,11 +155,11 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
             return;
         }
         HttpServerImpl.bindBankCard(stryinhangName, strBankNum, strName, suoshuzhihang)
-                .subscribe(new HttpResultSubscriber<String>() {
+                .subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
                     @Override
-                    public void onSuccess(String s) {
+                    public void onSuccess(AttentionSourrssBO s) {
                         showToast(getResources().getString(R.string.commit_sourss_toast));
-                        finish();
+                        AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), BindBankCardActivity.this);
                     }
 
                     @Override

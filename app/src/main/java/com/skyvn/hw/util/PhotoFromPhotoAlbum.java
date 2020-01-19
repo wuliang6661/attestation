@@ -34,6 +34,23 @@ public class PhotoFromPhotoAlbum {
     }
 
     /**
+     * 根据Uri获取视频的绝对路径
+     *
+     * @param context 上下文对象
+     * @param uri     图片的Uri
+     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     */
+    public static String getVideoRealPathFromUri(Context context, Uri uri) {
+        int sdkVersion = Build.VERSION.SDK_INT;
+        if (sdkVersion >= 19) {
+            return getVideoRealPathFromUriAboveApi19(context, uri);
+        } else {
+            return getVideoDataColumn(context, uri, null, null);
+        }
+    }
+
+
+    /**
      * 适配api19以下(不包括api19),根据uri获取图片的绝对路径
      *
      * @param context 上下文对象
@@ -99,6 +116,57 @@ public class PhotoFromPhotoAlbum {
         }
         return path;
     }
+
+
+    @SuppressLint("NewApi")
+    private static String getVideoRealPathFromUriAboveApi19(Context context, Uri uri) {
+        String filePath = null;
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            // 如果是document类型的 uri, 则通过document id来进行处理
+            String documentId = DocumentsContract.getDocumentId(uri);
+            if (isMediaDocument(uri)) {
+                // 使用':'分割
+                String id = documentId.split(":")[1];
+
+                String selection = MediaStore.Video.Media._ID + "=?";
+                String[] selectionArgs = {id};
+                filePath = getDataColumn(context, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
+            } else if (isDownloadsDocument(uri)) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
+                filePath = getDataColumn(context, contentUri, null, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是 content 类型的 Uri
+            filePath = getDataColumn(context, uri, null, null);
+        } else if ("file".equals(uri.getScheme())) {
+            // 如果是 file 类型的 Uri,直接获取图片对应的路径
+            filePath = uri.getPath();
+        }
+        return filePath;
+    }
+
+    /**
+     * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
+     */
+    private static String getVideoDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        String path = null;
+
+        String[] projection = new String[]{MediaStore.Video.Media.DATA};
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(projection[0]);
+                path = cursor.getString(columnIndex);
+            }
+        } catch (Exception e) {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return path;
+    }
+
 
     /**
      * @param uri the Uri to check
