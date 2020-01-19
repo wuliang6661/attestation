@@ -122,19 +122,19 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
         for (AuthTypeBO typeBO : typeBOS) {
             switch (typeBO.getCode()) {
                 case "0":   //个人资料
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), ziliaoType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), ziliaoType, ziliaoLayout);
                     break;
                 case "1":  //身份证验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), shimingType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), shimingType, shimingLayout);
                     break;
                 case "2":  // 活体验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), shualianType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), shualianType, shuanianLayout);
                     break;
                 case "3":  // 紧急联系人验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), lianxirenType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), lianxirenType, lianxirenLayout);
                     break;
                 case "4":  // 驾照验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), jiaozhaoType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), jiaozhaoType, jiazhaoLayout);
                     break;
                 case "5": // 运营商验证
 
@@ -143,40 +143,44 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
 
                     break;
                 case "7":  // 绑定银行卡验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), yinghangkaType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), yinghangkaType, yinghangkaLayout);
                     break;
                 case "8":  //短信记录验证
 
                     break;
                 case "9":   //1414短信验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), duanxinType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), duanxinType, duanxinLayout);
                     break;
                 case "10":  //手持身份证小视频
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), shipinType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), shipinType, shipinLayout);
                     break;
                 case "11":  // 公司资料验证
-                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), gongsiType);
+                    setTextShow(typeBO.getNeedStatus(), typeBO.getStatus(), gongsiType, gongsiLayout);
                     break;
             }
         }
     }
 
-    private void setTextShow(int needStatus, int status, TextView showMsg) {
+    private void setTextShow(int needStatus, int status, TextView showMsg, LinearLayout clickLayout) {
         if (needStatus == 0) {   //不必填
             if (status == 0) {   //未完成
                 showMsg.setTextColor(Color.parseColor("#0077EA"));
                 showMsg.setText(getResources().getString(R.string.weiwancheng));
+                clickLayout.setEnabled(true);
             } else {
                 showMsg.setTextColor(Color.parseColor("#666666"));
                 showMsg.setText(getResources().getString(R.string.yiwancheng));
+                clickLayout.setEnabled(false);
             }
         } else {
             if (status == 0) {   //未完成
                 showMsg.setTextColor(Color.parseColor("#FF6860"));
                 showMsg.setText(getResources().getString(R.string.weiwancheng));
+                clickLayout.setEnabled(true);
             } else {
                 showMsg.setTextColor(Color.parseColor("#666666"));
                 showMsg.setText(getResources().getString(R.string.yiwancheng));
+                clickLayout.setEnabled(false);
             }
         }
     }

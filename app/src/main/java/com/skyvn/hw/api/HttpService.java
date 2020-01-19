@@ -134,6 +134,12 @@ public interface HttpService {
     Observable<BaseResult<String>> getCopyWriter(@Query("code") String code);
 
     /**
+     * 跳过
+     */
+    @GET("/clientAuthStatus/getJumpAuth")
+    Observable<BaseResult<AttentionSourrssBO>> JumpAuth(@Query("code") String code);
+
+    /**
      * 获取枚举数据
      */
     @GET("/sysLabel/getSysLabels")

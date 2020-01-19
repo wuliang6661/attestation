@@ -218,6 +218,13 @@ public class HttpServerImpl {
         return getService().getCopyWriter(code + "").compose(RxResultHelper.httpRusult());
     }
 
+    /**
+     * 跳过
+     */
+    public static Observable<AttentionSourrssBO> jumpAuth(int code) {
+        return getService().JumpAuth(code + "").compose(RxResultHelper.httpRusult());
+    }
+
 
     /**
      * 获取枚举数据
