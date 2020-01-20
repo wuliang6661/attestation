@@ -210,4 +210,19 @@
 
     <string name="jixurenzheng">继续认证</string>
     <string name="fangqishenqing">放弃申请</string>
+
+    <string name="jine">金额</string>
+    <string name="yuan">（元）</string>
+    <string name="qixian">期限</string>
+    <string name="tian">（天）</string>
+
+    <string name="lijijiekuan">立即借款</string>
+    <string name="lianxikefu">联系客服</string>
+
+    <string name="daiqueren">待确认</string>
+    <string name="daihuankuan">待还款</string>
+    <string name="yijieshu">已结束</string>
+
+    <string name="jiekuanjine">借款金额：</string>
+    <string name="jiekuanqixian">借款期限：</string>
 </resources>

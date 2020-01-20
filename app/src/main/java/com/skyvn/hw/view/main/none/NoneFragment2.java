@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 
 import com.skyvn.hw.R;
+import com.skyvn.hw.view.main.order.OrderFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -29,9 +30,9 @@ public class NoneFragment2 extends SupportFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        if (findChildFragment(MessageFragment.class) == null) {
-//            loadRootFragment(R.id.fl_first_container, new MessageFragment());
-//        }
+        if (findChildFragment(OrderFragment.class) == null) {
+            loadRootFragment(R.id.fl_first_container, new OrderFragment());
+        }
     }
 
     @Override
