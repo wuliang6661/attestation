@@ -12,15 +12,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 
 import ai.advance.liveness.lib.LivenessResult;
 import ai.advance.liveness.sdk.activity.LivenessActivity;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -31,6 +34,10 @@ import butterknife.OnClick;
  * version: 1.0
  */
 public class LiveAttentionActivity extends BaseActivity {
+
+
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
     static final int REQUEST_CODE_LIVENESS = 1000;
     static final int REQUEST_CODE_RESULT_PAGE = 1001;
@@ -51,6 +58,28 @@ public class LiveAttentionActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.shuanianrenzheng));
         rightButton();
+
+        int needStatus = getIntent().getIntExtra("needStatus", 1);
+        if (needStatus == 0) {
+            jumpSkip.setVisibility(View.VISIBLE);
+        } else {
+            jumpSkip.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.jump_skip)
+    public void jump() {
+        HttpServerImpl.jumpAuth(AuthenticationUtils.LIVE_PAGE).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), LiveAttentionActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
     @OnClick(R.id.back)
@@ -95,7 +124,9 @@ public class LiveAttentionActivity extends BaseActivity {
                     boolean success = LivenessResult.isSuccess();
                     String errorMsg = LivenessResult.getErrorMsg();
                     if (success) {
-                        gotoActivity(LiveAuthSouressActivity.class, true);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("base64", livenessBitmap);
+                        gotoActivity(LiveAuthSouressActivity.class, bundle, true);
                     } else {
 //                        startActivityForResult(new Intent(this, ResultActivity.class), REQUEST_CODE_RESULT_PAGE);
                         gotoActivity(LiveAuthErrorActivity.class, true);

@@ -92,6 +92,12 @@ public interface HttpService {
     Observable<BaseResult<AttentionSourrssBO>> commitClientInfo(@Body Map<String, Object> params);
 
     /**
+     * 实名认证资料
+     */
+    @POST("/clientUserIdcard/addClientIdcardAuthTwo")
+    Observable<BaseResult<AttentionSourrssBO>> commitIdCard(@Body Map<String, Object> params);
+
+    /**
      * 提交公司信息
      */
     @POST("/clientUserInfo/addCompanyInfoAuth")
@@ -126,6 +132,12 @@ public interface HttpService {
      */
     @POST("/clientAddressList/addClientAddressListAuth")
     Observable<BaseResult<AttentionSourrssBO>> addContactListInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交活体检测认证
+     */
+    @POST("/clientActive/addClientActiveAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addClientActiveAuth(@Body Map<String, Object> params);
 
     /**
      * 获取返回的文案信息

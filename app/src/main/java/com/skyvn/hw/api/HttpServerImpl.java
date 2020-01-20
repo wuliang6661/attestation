@@ -138,6 +138,21 @@ public class HttpServerImpl {
         return getService().commitClientInfo(params).compose(RxResultHelper.httpRusult());
     }
 
+    /**
+     * 实名认证资料
+     */
+    public static Observable<AttentionSourrssBO> commitIdCard(String birthday, String gender, String idCardFrontOssUrl,
+                                                              String idCardBackOssUrl, String idCardNo, String realName) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("birthday", birthday + " 00:00:00");
+        params.put("gender", gender);
+        params.put("idCardFrontOssUrl", idCardFrontOssUrl);
+        params.put("idCardBackOssUrl", idCardBackOssUrl);
+        params.put("idCardNo", idCardNo);
+        params.put("realName", realName);
+        return getService().commitIdCard(params).compose(RxResultHelper.httpRusult());
+    }
+
 
     /**
      * 提交公司资料
@@ -210,6 +225,16 @@ public class HttpServerImpl {
         params.put("addressLists", contactBOS);
         return getService().addContactListInfo(params).compose(RxResultHelper.httpRusult());
     }
+
+    /**
+     * 提交活体检测认证
+     */
+    public static Observable<AttentionSourrssBO> addClientActiveAuth(String base64Img) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("activeString", base64Img);
+        return getService().addClientActiveAuth(params).compose(RxResultHelper.httpRusult());
+    }
+
 
     /**
      * 获取返回的文案信息

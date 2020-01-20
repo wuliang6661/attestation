@@ -20,6 +20,7 @@ import com.skyvn.hw.bean.ContactBO;
 import com.skyvn.hw.mvp.MVPBaseActivity;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.view.CommonMsgActivity;
+import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 import com.skyvn.hw.view.contact.ContactActivity;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
@@ -63,6 +64,8 @@ public class EmergencyContactActivity extends MVPBaseActivity<EmergencyContactCo
     CheckBox checkbox;
     @BindView(R.id.bt_login)
     Button btLogin;
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
     private int selectGuanxi1 = 0;  //关系1
 
@@ -84,6 +87,29 @@ public class EmergencyContactActivity extends MVPBaseActivity<EmergencyContactCo
         rightButton();
 
         checkbox.setOnCheckedChangeListener((compoundButton, b) -> btLogin.setEnabled(b));
+
+        int needStatus = getIntent().getIntExtra("needStatus", 1);
+        if (needStatus == 0) {
+            jumpSkip.setVisibility(View.VISIBLE);
+        } else {
+            jumpSkip.setVisibility(View.GONE);
+        }
+    }
+
+
+    @OnClick(R.id.jump_skip)
+    public void jump() {
+        HttpServerImpl.jumpAuth(AuthenticationUtils.CONTACT_PAGE).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), EmergencyContactActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 

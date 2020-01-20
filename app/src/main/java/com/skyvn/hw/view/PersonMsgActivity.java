@@ -16,6 +16,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
@@ -58,6 +59,8 @@ public class PersonMsgActivity extends BaseActivity {
     EditText editFacebook;
     @BindView(R.id.bt_login)
     Button btLogin;
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
     private int selectHunyin = 0;
 
@@ -74,8 +77,30 @@ public class PersonMsgActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.gerenziliao));
         rightButton();
+
+        int needStatus = getIntent().getIntExtra("needStatus", 1);
+        if (needStatus == 0) {
+            jumpSkip.setVisibility(View.VISIBLE);
+        } else {
+            jumpSkip.setVisibility(View.GONE);
+        }
     }
 
+
+    @OnClick(R.id.jump_skip)
+    public void jump() {
+        HttpServerImpl.jumpAuth(AuthenticationUtils.PERSON_MSG).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), PersonMsgActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
 
     @OnClick(R.id.back)
     public void back() {

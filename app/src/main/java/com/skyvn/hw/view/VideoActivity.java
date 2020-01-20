@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.StringUtils;
@@ -53,6 +54,8 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
     ImageView videoImg;
     @BindView(R.id.add_img)
     LinearLayout addImg;
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
     private File cameraSavePath;//拍照照片路径
     private Uri uri;
@@ -78,6 +81,29 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
         getPermission();
         cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +
                 System.currentTimeMillis() + ".jpg");
+
+        int needStatus = getIntent().getIntExtra("needStatus", 1);
+        if (needStatus == 0) {
+            jumpSkip.setVisibility(View.VISIBLE);
+        } else {
+            jumpSkip.setVisibility(View.GONE);
+        }
+    }
+
+
+    @OnClick(R.id.jump_skip)
+    public void jump() {
+        HttpServerImpl.jumpAuth(AuthenticationUtils.VIDEO_PAGE).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), VideoActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
     @OnClick(R.id.back)

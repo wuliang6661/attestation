@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
@@ -52,6 +53,8 @@ public class JiaZhaoActivity extends BaseActivity implements ActionSheet.OnActio
     LinearLayout addImg1;
     @BindView(R.id.add_img2)
     LinearLayout addImg2;
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
     private File cameraSavePath;//拍照照片路径
     private Uri uri;
@@ -84,8 +87,30 @@ public class JiaZhaoActivity extends BaseActivity implements ActionSheet.OnActio
         getPermission();
         cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +
                 System.currentTimeMillis() + ".jpg");
+
+        int needStatus = getIntent().getIntExtra("needStatus", 1);
+        if (needStatus == 0) {
+            jumpSkip.setVisibility(View.VISIBLE);
+        } else {
+            jumpSkip.setVisibility(View.GONE);
+        }
     }
 
+
+    @OnClick(R.id.jump_skip)
+    public void jump() {
+        HttpServerImpl.jumpAuth(AuthenticationUtils.DEVICE_PAGE).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), JiaZhaoActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
 
     @OnClick(R.id.back)
     public void back() {

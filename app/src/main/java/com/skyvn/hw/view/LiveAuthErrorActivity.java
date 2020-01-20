@@ -96,7 +96,9 @@ public class LiveAuthErrorActivity extends BaseActivity {
                     boolean success = LivenessResult.isSuccess();
                     String errorMsg = LivenessResult.getErrorMsg();
                     if (success) {
-                        gotoActivity(LiveAuthSouressActivity.class, true);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("base64", livenessBitmap);
+                        gotoActivity(LiveAuthSouressActivity.class, bundle, true);
                     } else {
                         gotoActivity(LiveAuthErrorActivity.class, true);
                     }

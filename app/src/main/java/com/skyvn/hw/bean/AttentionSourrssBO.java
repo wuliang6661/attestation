@@ -17,6 +17,15 @@ public class AttentionSourrssBO {
 
     private String code;
     private int needStatus;
+    private String copyWriter;
+
+    public String getCopyWriter() {
+        return copyWriter;
+    }
+
+    public void setCopyWriter(String copyWriter) {
+        this.copyWriter = copyWriter;
+    }
 
     public String getCode() {
         return code;

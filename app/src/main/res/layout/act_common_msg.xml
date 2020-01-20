@@ -11,24 +11,44 @@
         layout="@layout/layout_title_bar" />
 
 
-    <Button
-        android:id="@+id/bt_login"
+    <LinearLayout
+        android:id="@+id/bt_login_layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/login_btn"
-        android:text="@string/next"
-        android:textColor="@color/white"
-        android:textSize="18dp" />
+        android:orientation="vertical"
+        android:paddingBottom="15dp">
+
+
+        <Button
+            android:id="@+id/bt_login"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/login_btn"
+            android:text="@string/next"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+
+        <TextView
+            android:id="@+id/jump_skip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="@string/tiaoguo"
+            android:textColor="#999999"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bt_login"
+        android:layout_above="@+id/bt_login_layout"
         android:layout_below="@+id/title_bar">
 
 

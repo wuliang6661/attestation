@@ -170,7 +170,7 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
             } else {
                 showMsg.setTextColor(Color.parseColor("#666666"));
                 showMsg.setText(getResources().getString(R.string.yiwancheng));
-                clickLayout.setEnabled(false);
+//                clickLayout.setEnabled(false);
             }
         } else {
             if (status == 0) {   //未完成
@@ -180,7 +180,7 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
             } else {
                 showMsg.setTextColor(Color.parseColor("#666666"));
                 showMsg.setText(getResources().getString(R.string.yiwancheng));
-                clickLayout.setEnabled(false);
+//                clickLayout.setEnabled(false);
             }
         }
     }

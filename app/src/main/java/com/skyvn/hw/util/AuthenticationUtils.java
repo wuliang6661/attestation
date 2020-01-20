@@ -59,7 +59,7 @@ public class AuthenticationUtils {
                 break;
             case PHONE_LIST:
                 Intent intent = new Intent(context, ContactActivity.class);
-                intent.putExtra("needSourss", needSourss);
+                intent.putExtra("needStatus", needSourss);
                 intent.putExtra("auth_type", 0);
                 context.startActivity(intent);
                 context.finish();
@@ -87,7 +87,7 @@ public class AuthenticationUtils {
      */
     public static void gotoActivity(Class<?> cls, int needSourss, boolean isFinish, Activity context) {
         Intent intent = new Intent(context, cls);
-        intent.putExtra("needSourss", needSourss);
+        intent.putExtra("needStatus", needSourss);
         context.startActivity(intent);
         if (isFinish) {
             context.finish();

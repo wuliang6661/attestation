@@ -77,6 +77,8 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
     TextView gongsiImgHint;
     @BindView(R.id.gongsi_img)
     ImageView gongsiImg;
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
 
     private File cameraSavePath;//拍照照片路径
@@ -103,7 +105,31 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
         getPermission();
         cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +
                 System.currentTimeMillis() + ".jpg");
+
+        int needStatus = getIntent().getIntExtra("needStatus", 1);
+        if (needStatus == 0) {
+            jumpSkip.setVisibility(View.VISIBLE);
+        } else {
+            jumpSkip.setVisibility(View.GONE);
+        }
     }
+
+
+    @OnClick(R.id.jump_skip)
+    public void jump() {
+        HttpServerImpl.jumpAuth(AuthenticationUtils.COMMON_MSG_PAGE).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), CommonMsgActivity.this);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
 
     @OnClick(R.id.back)
     public void back() {
