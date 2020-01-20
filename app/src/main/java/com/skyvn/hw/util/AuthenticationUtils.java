@@ -10,6 +10,7 @@ import com.skyvn.hw.view.Msg14Activity;
 import com.skyvn.hw.view.PersonMsgActivity;
 import com.skyvn.hw.view.ShiMingActivity;
 import com.skyvn.hw.view.VideoActivity;
+import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
 import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 import com.skyvn.hw.view.contact.ContactActivity;
 import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
@@ -77,6 +78,9 @@ public class AuthenticationUtils {
                 break;
             case COMMON_MSG_PAGE:
                 gotoActivity(CommonMsgActivity.class, needSourss, true, context);
+                break;
+            case -1:   //认证完成
+                gotoActivity(AttentionZiliaoActivity.class, needSourss, true, context);
                 break;
         }
     }
