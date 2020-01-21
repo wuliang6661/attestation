@@ -94,6 +94,12 @@ public class HttpServerImpl {
         return getService().addOperateApplicationFeedback(params).compose(RxResultHelper.httpRusult());
     }
 
+    /**
+     * 去认证
+     */
+    public static Observable<AttentionSourrssBO> getFirstAuth() {
+        return getService().getFirstAuth().compose(RxResultHelper.httpRusult());
+    }
 
     /**
      * 获取银行卡

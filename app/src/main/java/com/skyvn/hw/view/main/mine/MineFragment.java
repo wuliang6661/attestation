@@ -12,8 +12,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.mvp.MVPBaseFragment;
+import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.view.FanKuiActivity;
 import com.skyvn.hw.view.KefuActivity;
 import com.skyvn.hw.view.MyBankCardActivity;
@@ -79,6 +83,25 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
                 gotoActivity(FanKuiActivity.class, false);
                 break;
         }
+    }
+
+
+    @OnClick(R.id.go_attention)
+    public void clickGoAttention() {
+        showProgress();
+        HttpServerImpl.getFirstAuth().subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                stopProgress();
+                AuthenticationUtils.goAuthNextPageByHome(s.getCode(), s.getNeedStatus(), false, getActivity());
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
     }
 
 

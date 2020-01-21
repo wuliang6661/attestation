@@ -86,6 +86,53 @@ public class AuthenticationUtils {
     }
 
 
+    public static void goAuthNextPageByHome(String pageNo, int needSourss, boolean isFinish, Activity context) {
+        int code = Integer.parseInt(pageNo);
+        switch (code) {
+            case PERSON_MSG:
+                gotoActivity(PersonMsgActivity.class, needSourss, isFinish, context);
+                break;
+            case ID_CARD:
+                gotoActivity(ShiMingActivity.class, needSourss, isFinish, context);
+                break;
+            case LIVE_PAGE:
+                gotoActivity(LiveAttentionActivity.class, needSourss, isFinish, context);
+                break;
+            case CONTACT_PAGE:
+                gotoActivity(EmergencyContactActivity.class, needSourss, isFinish, context);
+                break;
+            case DEVICE_PAGE:
+                gotoActivity(JiaZhaoActivity.class, needSourss, isFinish, context);
+                break;
+            case PHONE_COMMON:
+                break;
+            case PHONE_LIST:
+                Intent intent = new Intent(context, ContactActivity.class);
+                intent.putExtra("needStatus", needSourss);
+                intent.putExtra("auth_type", 0);
+                context.startActivity(intent);
+                break;
+            case BIND_BANK_CARD:
+                gotoActivity(BindBankCardActivity.class, needSourss, isFinish, context);
+                break;
+            case SMS__JILU_PAGE:
+                break;
+            case SMS_PAGE:
+                gotoActivity(Msg14Activity.class, needSourss, isFinish, context);
+                break;
+            case VIDEO_PAGE:
+                gotoActivity(VideoActivity.class, needSourss, isFinish, context);
+                break;
+            case COMMON_MSG_PAGE:
+                gotoActivity(CommonMsgActivity.class, needSourss, isFinish, context);
+                break;
+            case -1:   //认证完成
+                gotoActivity(AttentionZiliaoActivity.class, needSourss, isFinish, context);
+                break;
+        }
+    }
+
+
     /**
      * 常用的跳转方法
      */

@@ -140,6 +140,12 @@ public interface HttpService {
     Observable<BaseResult<AttentionSourrssBO>> addClientActiveAuth(@Body Map<String, Object> params);
 
     /**
+     * 去认证的接口
+     */
+    @GET("/clientAuthStatus/getFirstAuth")
+    Observable<BaseResult<AttentionSourrssBO>> getFirstAuth();
+
+    /**
      * 获取返回的文案信息
      */
     @GET("/operateApplicationAuthProcess/getCopyWriter")

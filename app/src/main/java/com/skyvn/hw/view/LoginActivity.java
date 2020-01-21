@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.Utils;
-import com.skyvn.hw.BuildConfig;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -83,12 +82,12 @@ public class LoginActivity extends BaseActivity {
 
         requestPermission();
         getCodeImg();
-        if (BuildConfig.DEBUG) {
-            etPhoto.setText("15151977426");
-            // 15726818192
-            etVerfication.setText("111111");
-            etImageVerfication.setText("ffff");
-        }
+//        if (BuildConfig.DEBUG) {
+//            etPhoto.setText("15151977426");
+//            // 15726818192
+//            etVerfication.setText("111111");
+//            etImageVerfication.setText("ffff");
+//        }
     }
 
 
