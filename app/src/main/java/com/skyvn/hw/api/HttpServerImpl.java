@@ -11,6 +11,7 @@ import com.skyvn.hw.bean.ContactBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
+import com.skyvn.hw.bean.OrderBO;
 import com.skyvn.hw.util.EquipmentUtil;
 import com.skyvn.hw.util.rx.RxResultHelper;
 
@@ -278,6 +279,47 @@ public class HttpServerImpl {
         return getService().getCustomerServicesByApplicationId().compose(RxResultHelper.httpRusult());
     }
 
+    /**
+     * 查询待确认订单
+     */
+    public static Observable<OrderBO> getMyConfirmLoan() {
+        return getService().getMyConfirmLoan(1, 2000).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 查询已完成订单
+     */
+    public static Observable<OrderBO> getMyEndLoan() {
+        return getService().getMyEndLoan(1, 2000).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 查询待还款订单
+     */
+    public static Observable<OrderBO> getMyRepayLoan() {
+        return getService().getMyRepayLoan(1, 2000).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取首页banner
+     */
+    public static Observable<String> getHomeBanner() {
+        return getService().getHomeBanner().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取首页轮播图
+     */
+    public static Observable<String> getHomeImgList() {
+        return getService().getHomeCarouse().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取首页公告列表
+     */
+    public static Observable<String> getNoticeList() {
+        return getService().getNoticeList().compose(RxResultHelper.httpRusult());
+    }
 
     /**
      * 提交图片

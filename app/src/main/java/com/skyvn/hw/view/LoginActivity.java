@@ -1,10 +1,8 @@
 package com.skyvn.hw.view;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -21,6 +19,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.Utils;
+import com.skyvn.hw.BuildConfig;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -82,12 +81,12 @@ public class LoginActivity extends BaseActivity {
 
         requestPermission();
         getCodeImg();
-//        if (BuildConfig.DEBUG) {
-//            etPhoto.setText("15151977426");
-//            // 15726818192
-//            etVerfication.setText("111111");
-//            etImageVerfication.setText("ffff");
-//        }
+        if (BuildConfig.DEBUG) {
+            etPhoto.setText("15151977426");
+            // 15726818192
+            etVerfication.setText("111111");
+            etImageVerfication.setText("ffff");
+        }
     }
 
 
@@ -323,9 +322,9 @@ public class LoginActivity extends BaseActivity {
     public void checkPermissions() {
         if (allPermissionsGranted()) {
             LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            loginLatitude = mLocation.getLatitude();
-            loginLongitude = mLocation.getLongitude();
+//            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            loginLatitude = mLocation.getLatitude();
+//            loginLongitude = mLocation.getLongitude();
         } else {
             loginLatitude = 0;
             loginLongitude = 0;

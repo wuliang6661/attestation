@@ -102,6 +102,24 @@
         <!--人脸识别失败页面-->
         <activity android:name=".view.LiveAuthErrorActivity" />
 
+        <!--系统消息页面-->
+        <activity android:name=".view.MessageActivity" />
+
+        <!--立即借款页面-->
+        <activity android:name=".view.ConfirmationActivity" />
+
+        <!--借款详情风格1-->
+        <activity android:name=".view.borrow_style1.BorrowActivity1" />
+
+        <!--还款详情风格1-->
+        <activity android:name=".view.pay_back_style1.PayBackActivity1" />
+
+        <!--还款详情风格2-->
+        <activity android:name=".view.pay_back_style2.PayBackActivity2" />
+
+        <!--展期说明-->
+        <activity android:name=".view.ZhanQiActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.skyvn.hw.fileprovider"

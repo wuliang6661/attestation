@@ -29,6 +29,7 @@
             app:riv_corner_radius="360dp" />
 
         <TextView
+            android:id="@+id/user_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -39,6 +40,7 @@
 
 
         <TextView
+            android:id="@+id/create_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="申请日期：2019/10/25"
@@ -68,6 +70,7 @@
 
 
         <TextView
+            android:id="@+id/pay_num"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -77,6 +80,7 @@
 
 
         <TextView
+            android:id="@+id/status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="审核不通过"
@@ -106,6 +110,7 @@
 
 
         <TextView
+            android:id="@+id/qixian_day"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -115,6 +120,7 @@
 
 
         <TextView
+            android:id="@+id/item_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/login_btn"

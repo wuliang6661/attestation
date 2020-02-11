@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.skyvn.hw.R;
 import com.skyvn.hw.mvp.MVPBaseFragment;
+import com.skyvn.hw.view.MessageActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -22,6 +24,7 @@ import com.youth.banner.loader.ImageLoader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -41,6 +44,8 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     @BindView(R.id.bt_login)
     Button btLogin;
     Unbinder unbinder;
+    @BindView(R.id.gonggao_layout)
+    LinearLayout gonggaoLayout;
 
     @Nullable
     @Override
@@ -53,6 +58,10 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mPresenter.getHomeBanner();
+        mPresenter.getHomeCarses();
+        mPresenter.getNoticeList();
     }
 
 
@@ -78,10 +87,26 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     }
 
 
+    @OnClick(R.id.gonggao_layout)
+    public void clickGonggao() {
+        gotoActivity(MessageActivity.class, false);
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void getBanner() {
+
+    }
+
+    @Override
+    public void onRequestError(String msg) {
+        showToast(msg);
     }
 
 

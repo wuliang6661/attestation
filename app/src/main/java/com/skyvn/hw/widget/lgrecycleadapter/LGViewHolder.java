@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.skyvn.hw.R;
+
 
 /**
  * Created by guizhigang on 16/8/8.
@@ -63,8 +66,8 @@ public class LGViewHolder extends RecyclerView.ViewHolder {
     public void setImageUrl(Context mContext, int viewId, String url) {
         ImageView view = (ImageView) getView(viewId);
 
-//        Glide.with(mContext).load(url).error(R.drawable.person_img_defailt).placeholder(R.drawable.person_img_defailt)
-//                .into(view);
+        Glide.with(mContext).load(url).error(R.drawable.user_img_defalt).placeholder(R.drawable.user_img_defalt)
+                .into(view);
     }
 
     public void setImageResurce(@IdRes int viewId, @DrawableRes int drawable) {

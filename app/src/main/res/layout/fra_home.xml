@@ -58,6 +58,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/gonggao_layout"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:background="#FDFCEC"

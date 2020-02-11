@@ -9,6 +9,7 @@ import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
+import com.skyvn.hw.bean.OrderBO;
 
 import java.util.List;
 import java.util.Map;
@@ -181,5 +182,41 @@ public interface HttpService {
     @Multipart
     @POST("/upload/uploadFile")
     Observable<BaseResult<String>> updateFile(@Part MultipartBody.Part file);
+
+    /**
+     * 获取首页banner
+     */
+    @GET("/operateApplicationBanner/getOperateApplicationBanner")
+    Observable<BaseResult<String>> getHomeBanner();
+
+    /**
+     * 获取全部轮播图
+     */
+    @GET("/operateApplicationCarousel/getCarouselsByApplicationId")
+    Observable<BaseResult<String>> getHomeCarouse();
+
+    /**
+     * 获取公告列表
+     */
+    @GET("/operateApplicationNotice/getNoticeListByApplicationId")
+    Observable<BaseResult<String>> getNoticeList();
+
+    /**
+     * 查询待确认订单
+     */
+    @GET("/orderLoan/getMyConfirmLoan")
+    Observable<BaseResult<OrderBO>> getMyConfirmLoan(@Query("pageNum") int pageNum, @Query("pageSize") int pageSize);
+
+    /**
+     * 查询已结束订单
+     */
+    @GET("/orderLoan/getMyEndLoan")
+    Observable<BaseResult<OrderBO>> getMyEndLoan(@Query("pageNum") int pageNum, @Query("pageSize") int pageSize);
+
+    /**
+     * 查询待还款订单
+     */
+    @GET("/orderLoan/getMyRepayLoan")
+    Observable<BaseResult<OrderBO>> getMyRepayLoan(@Query("pageNum") int pageNum, @Query("pageSize") int pageSize);
 
 }
