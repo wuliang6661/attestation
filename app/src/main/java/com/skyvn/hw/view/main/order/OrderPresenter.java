@@ -77,4 +77,26 @@ public class OrderPresenter extends BasePresenterImpl<OrderContract.View> implem
         });
     }
 
+
+    /**
+     * 再借一次
+     */
+    public void loanAgain(String id) {
+        HttpServerImpl.loanAgain(id).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (mView != null) {
+                    mView.loanAgainSouress();
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                if (mView != null) {
+                    mView.onRequestError(message);
+                }
+            }
+        });
+    }
+
 }

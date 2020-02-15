@@ -1,14 +1,22 @@
-package com.skyvn.hw.view;
+package com.skyvn.hw.view.person_msg_style;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -16,57 +24,57 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.util.AuthenticationUtils;
-import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-/**
- * author : wuliang
- * e-mail : wuliang6661@163.com
- * date   : 2020/1/1310:50
- * desc   : 个人资料页面
- * version: 1.0
- */
-public class PersonMsgActivity extends BaseActivity {
+public class PersonMsgActivity2 extends BaseActivity {
 
     @BindView(R.id.edit_xueli)
     TextView editXueli;
-    @BindView(R.id.xueli_layout)
-    LinearLayout xueliLayout;
     @BindView(R.id.edit_hunyin)
     TextView editHunyin;
-    @BindView(R.id.hunyin_layout)
-    LinearLayout hunyinLayout;
     @BindView(R.id.edit_zinv_num)
     TextView editZinvNum;
-    @BindView(R.id.zinv_num_layout)
-    LinearLayout zinvNumLayout;
     @BindView(R.id.edit_juzhu_time)
     TextView editJuzhuTime;
-    @BindView(R.id.juzhu_time_layout)
-    LinearLayout juzhuTimeLayout;
     @BindView(R.id.edit_address)
     EditText editAddress;
     @BindView(R.id.edit_zalo)
     EditText editZalo;
     @BindView(R.id.edit_facebook)
     EditText editFacebook;
-    @BindView(R.id.bt_login)
-    Button btLogin;
     @BindView(R.id.jump_skip)
     TextView jumpSkip;
 
+    @BindView(R.id.edit_user_name)
+    EditText editUserName;
+    @BindView(R.id.edit_user_idcard)
+    EditText editUserIdcard;
+    @BindView(R.id.edit_birthday)
+    TextView editBirthday;
+    @BindView(R.id.edit_sex)
+    TextView editSex;
+
     private int selectHunyin = 0;
+    private int selectSex = 0; // 性别默认是男
+
+    TimePickerView pvTime;
+    @SuppressLint("SimpleDateFormat")
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 
     @Override
     protected int getLayout() {
-        return R.layout.act_person_msg;
+        return R.layout.act_person_msg2;
     }
 
     @Override
@@ -92,7 +100,7 @@ public class PersonMsgActivity extends BaseActivity {
         HttpServerImpl.jumpAuth(AuthenticationUtils.PERSON_MSG).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
             @Override
             public void onSuccess(AttentionSourrssBO s) {
-                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), PersonMsgActivity.this);
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), PersonMsgActivity2.this);
             }
 
             @Override
@@ -107,7 +115,7 @@ public class PersonMsgActivity extends BaseActivity {
         HttpServerImpl.getBackMsg(AuthenticationUtils.PERSON_MSG).subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {
-                new AlertDialog(PersonMsgActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                new AlertDialog(PersonMsgActivity2.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
                         .setMsg(s)
                         .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
                         .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
@@ -119,6 +127,7 @@ public class PersonMsgActivity extends BaseActivity {
             }
         });
     }
+
 
     @OnClick({R.id.xueli_layout, R.id.zinv_num_layout, R.id.juzhu_time_layout, R.id.hunyin_layout})
     public void selectXueli(View view) {
@@ -185,6 +194,68 @@ public class PersonMsgActivity extends BaseActivity {
     }
 
 
+    @OnClick({R.id.birthday_layout, R.id.sex_layout})
+    public void clickBirthDay(View view) {
+        switch (view.getId()) {
+            case R.id.birthday_layout:
+                initTimePicker();
+                break;
+            case R.id.sex_layout:
+                selectSex();
+                break;
+        }
+    }
+
+
+    /**
+     * 性别选择
+     */
+    private void selectSex() {
+        List<String> list = new ArrayList<>();
+        list.add(getResources().getString(R.string.nan));
+        list.add(getResources().getString(R.string.nv));
+        list.add(getResources().getString(R.string.qita));
+        PopXingZhi popXingZhi = new PopXingZhi(this, "", list);
+        popXingZhi.setListener((position, item) -> {
+            editSex.setText(item);
+            selectSex = position;
+        });
+        popXingZhi.showAtLocation(getWindow().getDecorView());
+    }
+
+
+    /**
+     * 时间选择器
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void initTimePicker() {
+        Calendar startDate = Calendar.getInstance();
+        pvTime = new TimePickerBuilder(this, (date, v) -> editBirthday.setText(TimeUtils.date2String(date, format)))
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .setDate(startDate)
+                .setLineSpacingMultiplier(1.8f)
+                .build();
+        Dialog mDialog = pvTime.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvTime.getDialogContainerLayout().setLayoutParams(params);
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+                dialogWindow.setDimAmount(0.1f);
+            }
+        }
+        pvTime.show();
+    }
+
+
     /**
      * 选择婚姻状况
      */
@@ -205,6 +276,26 @@ public class PersonMsgActivity extends BaseActivity {
 
     @OnClick(R.id.bt_login)
     public void commit() {
+        String strName = editUserName.getText().toString().trim();
+        if (StringUtils.isEmpty(strName)) {
+            showToast(getResources().getString(R.string.wanshan_toast));
+            return;
+        }
+        String strIdCard = editUserIdcard.getText().toString().trim();
+        if (StringUtils.isEmpty(strIdCard)) {
+            showToast(getResources().getString(R.string.wanshan_toast));
+            return;
+        }
+        String strBirthDay = editBirthday.getText().toString().trim();
+        if (StringUtils.isEmpty(strBirthDay)) {
+            showToast(getResources().getString(R.string.wanshan_toast));
+            return;
+        }
+        String strSex = editSex.getText().toString().trim();
+        if (StringUtils.isEmpty(strSex)) {
+            showToast(getResources().getString(R.string.wanshan_toast));
+            return;
+        }
         String strXueli = editXueli.getText().toString().trim();
         if (StringUtils.isEmpty(strXueli)) {
             showToast(getResources().getString(R.string.xueli_toast));
@@ -232,12 +323,13 @@ public class PersonMsgActivity extends BaseActivity {
         }
         String zalo = editZalo.getText().toString().trim();
         String facebook = editFacebook.getText().toString().trim();
-        HttpServerImpl.commitPersonMsg(strXueli, selectHunyin + "", strZiNvNum, strjuzhuTime,
+        HttpServerImpl.addClientInfoAuth(strBirthDay, selectSex + "", strIdCard, strName,
+                strXueli, selectHunyin + "", strZiNvNum, strjuzhuTime,
                 strJuzhuAddress, zalo, facebook).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
             @Override
             public void onSuccess(AttentionSourrssBO s) {
                 showToast(getResources().getString(R.string.commit_sourss_toast));
-                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), PersonMsgActivity.this);
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), PersonMsgActivity2.this);
             }
 
             @Override
@@ -246,5 +338,4 @@ public class PersonMsgActivity extends BaseActivity {
             }
         });
     }
-
 }

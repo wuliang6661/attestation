@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -70,10 +71,10 @@
                             android:id="@+id/jine_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="100000"
                             android:textColor="#FFFFFF"
                             android:textSize="23sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="100000" />
 
 
                         <TextView
@@ -123,10 +124,10 @@
                             android:id="@+id/qixian_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7"
                             android:textColor="#FFFFFF"
                             android:textSize="23sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="7" />
 
 
                         <TextView
@@ -158,13 +159,14 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/dangzhang_num"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="1000元"
                     android:textColor="#101010"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="1000元" />
 
             </LinearLayout>
 
@@ -192,13 +194,14 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/lixi_num"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="1000元"
                     android:textColor="#101010"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="1000元" />
 
             </LinearLayout>
 
@@ -227,12 +230,14 @@
                     android:textSize="16sp" />
 
                 <ImageView
+                    android:id="@+id/kefu_img"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/feiyong_hint"
-                    android:layout_marginLeft="6dp"/>
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/feiyong_hint" />
 
                 <TextView
+                    android:id="@+id/fuwufei_num"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -268,13 +273,14 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/yinghuan_num"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="1000元"
                     android:textColor="#101010"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="1000元" />
 
             </LinearLayout>
 
@@ -297,20 +303,20 @@
                 android:orientation="horizontal">
 
                 <CheckBox
+                    android:id="@+id/checkbox"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:layout_marginRight="6dp"
                     android:background="@drawable/check_box2_bg"
                     android:button="@null"
                     android:checked="true" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/id_flowlayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:text="@string/jiekuan_hint"
-                    android:textColor="#888888"
-                    android:textSize="13sp" />
+                    app:max_select="-1" />
 
             </LinearLayout>
 
@@ -326,16 +332,15 @@
                 android:textColor="@color/white"
                 android:textSize="18dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/shuoming"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
-                android:lineSpacingExtra="3dp"
-                android:text="@string/jiekuan_shuoming"
-                android:textColor="#888888"
-                android:textSize="13sp" />
+                app:max_select="-1" />
 
 
             <TextView
@@ -398,9 +403,10 @@
                         android:textSize="13sp" />
 
                     <TextView
+                        android:id="@+id/kefu_num1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3333333333"
+                        tools:text="3333333333"
                         android:textColor="#2F87E0"
                         android:textSize="13sp" />
 
@@ -424,9 +430,10 @@
                         android:textSize="13sp" />
 
                     <TextView
+                        android:id="@+id/kefu_num2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3333333333"
+                        tools:text="3333333333"
                         android:textColor="#2F87E0"
                         android:textSize="13sp" />
 

@@ -3,17 +3,20 @@ package com.skyvn.hw.util;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.view.CommonMsgActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.LiveAttentionActivity;
 import com.skyvn.hw.view.Msg14Activity;
-import com.skyvn.hw.view.PersonMsgActivity;
-import com.skyvn.hw.view.ShiMingActivity;
 import com.skyvn.hw.view.VideoActivity;
 import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
 import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 import com.skyvn.hw.view.contact.ContactActivity;
 import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
+import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
+import com.skyvn.hw.view.person_msg_style.PersonMsgActivity2;
+import com.skyvn.hw.view.shiming_style.ShiMingActivity;
+import com.skyvn.hw.view.shiming_style.ShiMingActivity2;
 
 /**
  * author : wuliang
@@ -42,10 +45,18 @@ public class AuthenticationUtils {
         int code = Integer.parseInt(pageNo);
         switch (code) {
             case PERSON_MSG:
-                gotoActivity(PersonMsgActivity.class, needSourss, true, context);
+                if (IConstant.STYLE == 1) {
+                    gotoActivity(PersonMsgActivity.class, needSourss, true, context);
+                } else {
+                    gotoActivity(PersonMsgActivity2.class, needSourss, true, context);
+                }
                 break;
             case ID_CARD:
-                gotoActivity(ShiMingActivity.class, needSourss, true, context);
+                if (IConstant.STYLE == 1) {
+                    gotoActivity(ShiMingActivity.class, needSourss, true, context);
+                } else {
+                    gotoActivity(ShiMingActivity2.class, needSourss, true, context);
+                }
                 break;
             case LIVE_PAGE:
                 gotoActivity(LiveAttentionActivity.class, needSourss, true, context);

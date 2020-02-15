@@ -2,16 +2,23 @@ package com.skyvn.hw.api;
 
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
+import com.skyvn.hw.bean.AccountBO;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.AuthTypeBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
+import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.ContactBO;
+import com.skyvn.hw.bean.GongGaoBO;
+import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.bean.OrderBO;
+import com.skyvn.hw.bean.OrderDetailsBO;
+import com.skyvn.hw.bean.StatusBO;
+import com.skyvn.hw.bean.StsTokenBean;
 import com.skyvn.hw.util.EquipmentUtil;
 import com.skyvn.hw.util.rx.RxResultHelper;
 
@@ -146,6 +153,27 @@ public class HttpServerImpl {
     }
 
     /**
+     * 提交个人资料2
+     */
+    public static Observable<AttentionSourrssBO> addClientInfoAuth(String birthday, String gender, String idCardNo, String realName,
+                                                                   String xueli, String hunyin, String zinvNum, String juzhuTime,
+                                                                   String juzhuAddress, String zalo, String facebook) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("education", xueli);
+        params.put("marriage", hunyin);
+        params.put("child", zinvNum);
+        params.put("liveMonth", juzhuTime);
+        params.put("liveAddress", juzhuAddress);
+        params.put("zalo", zalo);
+        params.put("facebook", facebook);
+        params.put("birthday", birthday + " 00:00:00");
+        params.put("gender", gender);
+        params.put("idCardNo", idCardNo);
+        params.put("realName", realName);
+        return getService().addClientInfoAuth(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
      * 实名认证资料
      */
     public static Observable<AttentionSourrssBO> commitIdCard(String birthday, String gender, String idCardFrontOssUrl,
@@ -158,6 +186,16 @@ public class HttpServerImpl {
         params.put("idCardNo", idCardNo);
         params.put("realName", realName);
         return getService().commitIdCard(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 实名认证2
+     */
+    public static Observable<AttentionSourrssBO> addClientIdcardAuth(String idCardFrontOssUrl, String idCardBackOssUrl) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("idCardFrontOssUrl", idCardFrontOssUrl);
+        params.put("idCardBackOssUrl", idCardBackOssUrl);
+        return getService().addClientIdcardAuth(params).compose(RxResultHelper.httpRusult());
     }
 
 
@@ -303,23 +341,107 @@ public class HttpServerImpl {
     /**
      * 获取首页banner
      */
-    public static Observable<String> getHomeBanner() {
+    public static Observable<BannerBO> getHomeBanner() {
         return getService().getHomeBanner().compose(RxResultHelper.httpRusult());
     }
 
     /**
      * 获取首页轮播图
      */
-    public static Observable<String> getHomeImgList() {
+    public static Observable<List<BannerBO>> getHomeImgList() {
         return getService().getHomeCarouse().compose(RxResultHelper.httpRusult());
     }
 
     /**
      * 获取首页公告列表
      */
-    public static Observable<String> getNoticeList() {
+    public static Observable<List<GongGaoBO>> getNoticeList() {
         return getService().getNoticeList().compose(RxResultHelper.httpRusult());
     }
+
+    /**
+     * 获取金额和期限列表
+     */
+    public static Observable<List<String>> getPayNumOrDays(String code) {
+        return getService().getPayNumOrDays(code).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 查询当天提交的申请
+     */
+    public static Observable<StatusBO> getMyApplys() {
+        return getService().getMyApply().compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 提交借款订单
+     */
+    public static Observable<Object> addApplys(String days, String endAmount, String startAmount) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("days", days);
+        params.put("endAmount", endAmount);
+        params.put("startAmount", startAmount);
+        return getService().addOrderApply(params).compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 查询订单详情
+     */
+    public static Observable<OrderDetailsBO> getMyLoan(String id) {
+        return getService().getMyLoan(id).compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 查询还款流水
+     */
+    public static Observable<HuanKuanBO> getMyRepaySerial(String id) {
+        return getService().getMyRepaySerial(id, "1", "2000").compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 查询租户收款账户
+     */
+    public static Observable<List<AccountBO>> getUserPayNums(String tenantId) {
+        return getService().getUserPayNums(tenantId).compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 查询租户客服
+     */
+    public static Observable<List<KeFuBO>> getUserContact(String tenantId) {
+        return getService().getUserContact(tenantId).compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 再借一次
+     */
+    public static Observable<String> loanAgain(String tenantId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("tenantId", tenantId);
+        return getService().loanAgain(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 查询oss 配置
+     */
+    public static Observable<StsTokenBean> getOssInfo(int type) {
+        return getService().getOssInfo(type + "").compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 确认提现
+     */
+    public static Observable<String> withDraw(String id) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        return getService().withDraw(params).compose(RxResultHelper.httpRusult());
+    }
+
 
     /**
      * 提交图片

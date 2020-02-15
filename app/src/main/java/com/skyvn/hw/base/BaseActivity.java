@@ -214,7 +214,7 @@ public abstract class BaseActivity extends SupportActivity {
     protected void attachBaseContext(Context newBase) {
         //获取我们存储的语言环境 比如 "en","zh",等等
         //获取我们存储的语言环境 比如 "en","zh",等等
-        String language = MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, "");
+        String language = MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, "zh");
         /**
          * attach对应语言环境下的context
          */

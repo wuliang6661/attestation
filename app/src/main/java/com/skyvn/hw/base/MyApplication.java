@@ -42,7 +42,7 @@ public class MyApplication extends Application {
         spUtils = SPUtils.getInstance(TAG);
         registerActivityLifecycleCallbacks(new AppLifecycleHandler());
         if (TextUtils.isEmpty(spUtils.getString(IConstant.LANGUAGE_TYPE, ""))) {
-            spUtils.put(IConstant.LANGUAGE_TYPE, LanguageType.THAILAND.getLanguage());
+            spUtils.put(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage());
         }
         setLanguage();
         GuardianLivenessDetectionSDK.init(this, IConstant.LIVE_KEY, IConstant.Secret_Key,

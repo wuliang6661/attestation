@@ -76,7 +76,10 @@
         <activity android:name=".view.contact.ContactActivity" />
 
         <!--个人资料-->
-        <activity android:name=".view.PersonMsgActivity" />
+        <activity android:name=".view.person_msg_style.PersonMsgActivity" />
+
+        <!--个人资料2-->
+        <activity android:name=".view.person_msg_style.PersonMsgActivity2" />
 
         <!--公司信息-->
         <activity android:name=".view.CommonMsgActivity" />
@@ -91,7 +94,10 @@
         <activity android:name=".view.VideoActivity" />
 
         <!--实名认证-->
-        <activity android:name=".view.ShiMingActivity" />
+        <activity android:name=".view.shiming_style.ShiMingActivity" />
+
+        <!--实名认证2-->
+        <activity android:name=".view.shiming_style.ShiMingActivity2" />
 
         <!--开始人脸识别预备页面-->
         <activity android:name=".view.LiveAttentionActivity" />
@@ -119,6 +125,12 @@
 
         <!--展期说明-->
         <activity android:name=".view.ZhanQiActivity" />
+
+        <!--所有网页加载的页面-->
+        <activity android:name=".view.WebActivity" />
+
+        <!--还款流水页面-->
+        <activity android:name=".view.HuanKuanListActivty" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -1,15 +1,22 @@
 package com.skyvn.hw.api;
 
+import com.skyvn.hw.bean.AccountBO;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.AuthTypeBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
+import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.GongGaoBO;
+import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.bean.OrderBO;
+import com.skyvn.hw.bean.OrderDetailsBO;
+import com.skyvn.hw.bean.StatusBO;
+import com.skyvn.hw.bean.StsTokenBean;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +38,7 @@ import rx.Observable;
 
 public interface HttpService {
 
-    //    String URL = "http://47.98.108.34:8080/";   //正式服
+//        String URL = "http://192.168.0.105:9989/";   //正式服
     String URL = "http://47.96.126.117:9989/";   //测试服
 //    String URL = "http://mapi.platform.yinghezhong.com/";  //测试服2
 //    String URL = "http://api.open.yinghezhong.com/";  //正式环境
@@ -91,6 +98,19 @@ public interface HttpService {
      */
     @POST("/clientUserInfo/addClientInfoAuthTwo")
     Observable<BaseResult<AttentionSourrssBO>> commitClientInfo(@Body Map<String, Object> params);
+
+    /**
+     * 提交个人资料2
+     */
+    @POST("/clientUserIdcard/addClientInfoAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addClientInfoAuth(@Body Map<String, Object> params);
+
+    /**
+     * 身份证验证(实名认证2)
+     */
+    @POST("/clientUserIdcard/addClientIdcardAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addClientIdcardAuth(@Body Map<String, Object> params);
+
 
     /**
      * 实名认证资料
@@ -187,19 +207,37 @@ public interface HttpService {
      * 获取首页banner
      */
     @GET("/operateApplicationBanner/getOperateApplicationBanner")
-    Observable<BaseResult<String>> getHomeBanner();
+    Observable<BaseResult<BannerBO>> getHomeBanner();
 
     /**
      * 获取全部轮播图
      */
     @GET("/operateApplicationCarousel/getCarouselsByApplicationId")
-    Observable<BaseResult<String>> getHomeCarouse();
+    Observable<BaseResult<List<BannerBO>>> getHomeCarouse();
 
     /**
      * 获取公告列表
      */
     @GET("/operateApplicationNotice/getNoticeListByApplicationId")
-    Observable<BaseResult<String>> getNoticeList();
+    Observable<BaseResult<List<GongGaoBO>>> getNoticeList();
+
+    /**
+     * 获取金额和期限列表
+     */
+    @GET("/operateApplicationSetting/getNoticeListByApplicationId")
+    Observable<BaseResult<List<String>>> getPayNumOrDays(@Query("code") String code);
+
+    /**
+     * 查询当天提交的订单
+     */
+    @GET("/orderApply/getMyApply")
+    Observable<BaseResult<StatusBO>> getMyApply();
+
+    /**
+     * 提交客户申请
+     */
+    @POST("/orderApply/addOrderApply")
+    Observable<BaseResult<Object>> addOrderApply(@Body Map<String, Object> params);
 
     /**
      * 查询待确认订单
@@ -218,5 +256,50 @@ public interface HttpService {
      */
     @GET("/orderLoan/getMyRepayLoan")
     Observable<BaseResult<OrderBO>> getMyRepayLoan(@Query("pageNum") int pageNum, @Query("pageSize") int pageSize);
+
+    /**
+     * 查询订单详情
+     */
+    @GET("/orderLoan/getMyLoan")
+    Observable<BaseResult<OrderDetailsBO>> getMyLoan(@Query("id") String id);
+
+    /**
+     * 查询还款流水
+     */
+    @GET("/orderLoanRepaySerial/getMyRepaySerial")
+    Observable<BaseResult<HuanKuanBO>> getMyRepaySerial(@Query("orderId") String orderId, @Query("pageNum") String pageNum,
+                                                        @Query("pageSize") String pageSize);
+
+    /**
+     * 查询租户收款账户
+     */
+    @GET("/tenantGatheringAccount/getTenantGatheringAccounts")
+    Observable<BaseResult<List<AccountBO>>> getUserPayNums(@Query("tenantId") String tenantId);
+
+    /**
+     * 查询租户客服
+     */
+    @GET("/tenantCustomerService/getTenantCustomerServices")
+    Observable<BaseResult<List<KeFuBO>>> getUserContact(@Query("tenantId") String tenantId);
+
+
+    /**
+     * 再借一次
+     */
+    @POST("/orderLoan/loanAgain")
+    Observable<BaseResult<String>> loanAgain(@Body Map<String, Object> params);
+
+
+    /**
+     * 获取Oss配置
+     */
+    @GET("/ossInfo/getOssInfo")
+    Observable<BaseResult<StsTokenBean>> getOssInfo(@Query("type") String type);
+
+    /**
+     * 确认提现
+     */
+    @POST("/orderLoan/withdraw")
+    Observable<BaseResult<String>> withDraw(@Body Map<String, Object> params);
 
 }

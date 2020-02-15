@@ -14,6 +14,8 @@ public class OrderContract {
 
         void getOrder(OrderBO orderBO);
 
+        void loanAgainSouress();
+
     }
 
     interface Presenter extends BasePresenter<View> {

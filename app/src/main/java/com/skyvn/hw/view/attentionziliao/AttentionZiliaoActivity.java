@@ -11,16 +11,19 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.bean.AuthTypeBO;
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.mvp.MVPBaseActivity;
 import com.skyvn.hw.view.CommonMsgActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.LiveAttentionActivity;
 import com.skyvn.hw.view.Msg14Activity;
-import com.skyvn.hw.view.PersonMsgActivity;
-import com.skyvn.hw.view.ShiMingActivity;
 import com.skyvn.hw.view.VideoActivity;
 import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
+import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
+import com.skyvn.hw.view.person_msg_style.PersonMsgActivity2;
+import com.skyvn.hw.view.shiming_style.ShiMingActivity;
+import com.skyvn.hw.view.shiming_style.ShiMingActivity2;
 
 import java.util.List;
 
@@ -72,6 +75,10 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
     TextView jiaozhaoType;
     @BindView(R.id.jiazhao_layout)
     LinearLayout jiazhaoLayout;
+    @BindView(R.id.layout1_text)
+    TextView layout1Text;
+    @BindView(R.id.layout2_text)
+    TextView layout2Text;
 
     private List<AuthTypeBO> typeBOS;
 
@@ -89,6 +96,13 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
         setTitleText(getResources().getString(R.string.renzhengziliao));
         rightButton();
 
+        if (IConstant.STYLE == 1) {  //风格1
+            layout1Text.setText(getResources().getString(R.string.shimingrenzheng));
+            layout2Text.setText(getResources().getString(R.string.gerenziliao));
+        } else {
+            layout1Text.setText(getResources().getString(R.string.gerenziliao));
+            layout2Text.setText(getResources().getString(R.string.shenfenzhengyanzheng));
+        }
     }
 
     @Override
@@ -198,7 +212,11 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
 
     @OnClick(R.id.ziliao_layout)
     public void clickZiliao() {
-        gotoActivity(PersonMsgActivity.class, false);
+        if (IConstant.STYLE == 1) {
+            gotoActivity(ShiMingActivity.class, false);
+        } else {
+            gotoActivity(PersonMsgActivity2.class, false);
+        }
     }
 
     @OnClick(R.id.gongsi_layout)
@@ -223,7 +241,11 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
 
     @OnClick(R.id.shiming_layout)
     public void clickShiming() {
-        gotoActivity(ShiMingActivity.class, false);
+        if (IConstant.STYLE == 1) {
+            gotoActivity(PersonMsgActivity.class, false);
+        } else {
+            gotoActivity(ShiMingActivity2.class, false);
+        }
     }
 
 

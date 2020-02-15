@@ -1,9 +1,12 @@
 package com.skyvn.hw.view;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.skyvn.hw.R;
@@ -11,7 +14,11 @@ import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AppManager;
+import com.skyvn.hw.util.language.LanguageType;
+import com.skyvn.hw.util.language.LanguageUtil;
+import com.skyvn.hw.view.main.MainActivity;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
@@ -34,6 +41,9 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.lanunger_text)
     TextView lanungerText;
 
+    private String checkPosition = null;
+
+
     @Override
     protected int getLayout() {
         return R.layout.act_setting;
@@ -50,6 +60,8 @@ public class SettingActivity extends BaseActivity {
         Glide.with(this).load(MyApplication.userBO.getHeadPortrait())
                 .error(R.drawable.user_img_defalt).
                 placeholder(R.drawable.user_img_defalt).into(userImg);
+
+        checkPosition = MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, "");
     }
 
 
@@ -60,12 +72,48 @@ public class SettingActivity extends BaseActivity {
         list.add(getResources().getString(R.string.yuelanwen));
         PopXingZhi popXingZhi = new PopXingZhi(this, getResources().getString(R.string.switch_langnger), list);
         popXingZhi.setListener((position, item) -> {
-//            statisticType = position;
             lanungerText.setText(item);
-//            changeType(mChartType);
+            if (position == 0) {
+                checkPosition = LanguageType.CHINESE.getLanguage();
+            } else {
+                checkPosition = LanguageType.THAILAND.getLanguage();
+            }
+            switchLanguage();
         });
-//        popXingZhi.setSelectPosition(statisticType);
+        if (checkPosition.equals(LanguageType.CHINESE.getLanguage())) {
+            popXingZhi.setSelectPosition(0);
+        } else {
+            popXingZhi.setSelectPosition(1);
+        }
         popXingZhi.showAtLocation(getWindow().getDecorView());
+    }
+
+
+    /**
+     * 设置语言
+     */
+    private void switchLanguage() {
+        String local = null;
+        if (checkPosition.equals(LanguageType.CHINESE.getLanguage())) {
+//            ChangeLanguageUtils.updateLocale(this, Locale.CHINESE);
+            local = LanguageType.CHINESE.getLanguage();
+        } else if (checkPosition.equals(LanguageType.ENGLISH.getLanguage())) {
+//            ChangeLanguageUtils.updateLocale(this, Locale.ENGLISH);
+            local = LanguageType.ENGLISH.getLanguage();
+        } else if (checkPosition.equals(LanguageType.THAILAND.getLanguage())) {
+            //ChangeLanguageUtils.updateLocale(this, Locale.ENGLISH);
+            local = LanguageType.THAILAND.getLanguage();
+//            ChangeLanguageUtils.updateLocale(this, new Locale("es", "ES"));
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            LanguageUtil.changeAppLanguage(Utils.getApp(), local);
+        }
+        MyApplication.spUtils.put(IConstant.LANGUAGE_TYPE, local);
+        //清空任务栈确保当前打开activity为前台任务栈栈顶
+        Intent it = new Intent(SettingActivity.this, MainActivity.class);
+        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(it);
+        finish();
     }
 
 

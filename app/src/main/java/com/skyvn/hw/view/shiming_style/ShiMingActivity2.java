@@ -1,8 +1,6 @@
-package com.skyvn.hw.view;
+package com.skyvn.hw.view.shiming_style;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,21 +13,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.TimeUtils;
 import com.bumptech.glide.Glide;
 import com.guoqi.actionsheet.ActionSheet;
 import com.skyvn.hw.R;
@@ -40,44 +29,18 @@ import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
 import com.skyvn.hw.widget.AlertDialog;
-import com.skyvn.hw.widget.PopXingZhi;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * author : wuliang
- * e-mail : wuliang6661@163.com
- * date   : 2020/1/1315:48
- * desc   : 实名认证
- * version: 1.0
+ * 风格2的身份证认证
  */
-public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActionSheetSelected {
+public class ShiMingActivity2 extends BaseActivity implements ActionSheet.OnActionSheetSelected {
 
-    @BindView(R.id.jump_skip)
-    TextView jumpSkip;
-    @BindView(R.id.bt_login)
-    Button btLogin;
-    @BindView(R.id.edit_user_name)
-    EditText editUserName;
-    @BindView(R.id.edit_user_idcard)
-    EditText editUserIdcard;
-    @BindView(R.id.edit_birthday)
-    TextView editBirthday;
-    @BindView(R.id.birthday_layout)
-    LinearLayout birthdayLayout;
-    @BindView(R.id.edit_sex)
-    TextView editSex;
-    @BindView(R.id.sex_layout)
-    LinearLayout sexLayout;
     @BindView(R.id.id_card_font)
     ImageView idCardFont;
     @BindView(R.id.add_img)
@@ -86,10 +49,8 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
     ImageView idCardBack;
     @BindView(R.id.add_img1)
     LinearLayout addImg1;
-
-    TimePickerView pvTime;
-    @SuppressLint("SimpleDateFormat")
-    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    @BindView(R.id.jump_skip)
+    TextView jumpSkip;
 
     private File cameraSavePath;//拍照照片路径
     private Uri uri;
@@ -100,12 +61,9 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
 
     private int selectIdCardType = 0;  //默认是正面
 
-    private int selectSex = 0; // 性别默认是男
-
-
     @Override
     protected int getLayout() {
-        return R.layout.shiming_layout;
+        return R.layout.shiming_layout2;
     }
 
 
@@ -115,7 +73,7 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
 
         LinearLayout imageView = findViewById(R.id.back);
         imageView.setVisibility(View.VISIBLE);
-        setTitleText(getResources().getString(R.string.shimingrenzheng));
+        setTitleText(getResources().getString(R.string.shenfenzhengyanzheng));
         rightButton();
 
         int needStatus = getIntent().getIntExtra("needStatus", 1);
@@ -136,7 +94,7 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         HttpServerImpl.jumpAuth(AuthenticationUtils.ID_CARD).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
             @Override
             public void onSuccess(AttentionSourrssBO s) {
-                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ShiMingActivity.this);
+                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ShiMingActivity2.this);
             }
 
             @Override
@@ -151,7 +109,7 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         HttpServerImpl.getBackMsg(AuthenticationUtils.ID_CARD).subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {
-                new AlertDialog(ShiMingActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                new AlertDialog(ShiMingActivity2.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
                         .setMsg(s)
                         .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
                         .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
@@ -164,15 +122,9 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         });
     }
 
-    @OnClick({R.id.birthday_layout, R.id.sex_layout, R.id.add_img, R.id.add_img1})
+    @OnClick({R.id.add_img, R.id.add_img1})
     public void clickBirthDay(View view) {
         switch (view.getId()) {
-            case R.id.birthday_layout:
-                initTimePicker();
-                break;
-            case R.id.sex_layout:
-                selectSex();
-                break;
             case R.id.add_img:
                 selectIdCardType = 0;
                 ActionSheet.showSheet(this, this, null);
@@ -184,76 +136,9 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         }
     }
 
-    /**
-     * 性别选择
-     */
-    private void selectSex() {
-        List<String> list = new ArrayList<>();
-        list.add(getResources().getString(R.string.nan));
-        list.add(getResources().getString(R.string.nv));
-        list.add(getResources().getString(R.string.qita));
-        PopXingZhi popXingZhi = new PopXingZhi(this, "", list);
-        popXingZhi.setListener((position, item) -> {
-            editSex.setText(item);
-            selectSex = position;
-        });
-        popXingZhi.showAtLocation(getWindow().getDecorView());
-    }
-
-
-    /**
-     * 时间选择器
-     */
-    @SuppressLint("SimpleDateFormat")
-    private void initTimePicker() {
-        Calendar startDate = Calendar.getInstance();
-        pvTime = new TimePickerBuilder(this, (date, v) -> editBirthday.setText(TimeUtils.date2String(date, format)))
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .setDate(startDate)
-                .setLineSpacingMultiplier(1.8f)
-                .build();
-        Dialog mDialog = pvTime.getDialog();
-        if (mDialog != null) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            pvTime.getDialogContainerLayout().setLayoutParams(params);
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-                dialogWindow.setDimAmount(0.1f);
-            }
-        }
-        pvTime.show();
-    }
 
     @OnClick(R.id.bt_login)
     public void commitShiMing() {
-        String strName = editUserName.getText().toString().trim();
-        if (StringUtils.isEmpty(strName)) {
-            showToast(getResources().getString(R.string.wanshan_toast));
-            return;
-        }
-        String strIdCard = editUserIdcard.getText().toString().trim();
-        if (StringUtils.isEmpty(strIdCard)) {
-            showToast(getResources().getString(R.string.wanshan_toast));
-            return;
-        }
-        String strBirthDay = editBirthday.getText().toString().trim();
-        if (StringUtils.isEmpty(strBirthDay)) {
-            showToast(getResources().getString(R.string.wanshan_toast));
-            return;
-        }
-        String strSex = editSex.getText().toString().trim();
-        if (StringUtils.isEmpty(strSex)) {
-            showToast(getResources().getString(R.string.wanshan_toast));
-            return;
-        }
         if (StringUtils.isEmpty(idCardFontUrl)) {
             showToast(getResources().getString(R.string.wanshan_toast));
             return;
@@ -262,12 +147,12 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
             showToast(getResources().getString(R.string.wanshan_toast));
             return;
         }
-        HttpServerImpl.commitIdCard(strBirthDay, selectSex + "", idCardFontUrl, idCardBackUrl, strIdCard, strName)
+        HttpServerImpl.addClientIdcardAuth(idCardFontUrl, idCardBackUrl)
                 .subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
                     @Override
                     public void onSuccess(AttentionSourrssBO s) {
                         showToast(getResources().getString(R.string.commit_sourss_toast));
-                        AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ShiMingActivity.this);
+                        AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ShiMingActivity2.this);
                     }
 
                     @Override
@@ -367,10 +252,10 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
                 stopProgress();
                 if (selectIdCardType == 0) {
                     idCardFontUrl = s;
-                    Glide.with(ShiMingActivity.this).load(s).into(idCardFont);
+                    Glide.with(ShiMingActivity2.this).load(s).into(idCardFont);
                 } else {
                     idCardBackUrl = s;
-                    Glide.with(ShiMingActivity.this).load(s).into(idCardBack);
+                    Glide.with(ShiMingActivity2.this).load(s).into(idCardBack);
                 }
             }
 
@@ -381,5 +266,4 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
             }
         });
     }
-
 }

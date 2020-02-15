@@ -15,11 +15,13 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.bean.OrderBO;
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.mvp.MVPBaseFragment;
 import com.skyvn.hw.view.ConfirmationActivity;
-import com.skyvn.hw.view.borrow_style1.BorrowActivity1;
+import com.skyvn.hw.view.pay_back_style1.PayBackActivity1;
 import com.skyvn.hw.view.pay_back_style2.PayBackActivity2;
 import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
@@ -80,7 +82,6 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
         animotionView.setLayoutParams(params);
 
         titles = new TextView[]{btDaiqueren, btDaihuankuan, btYijieshu};
-        setAdapter();
         mPresenter.getMyConfirmLoan();
     }
 
@@ -95,6 +96,7 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                 animationStart(0);
                 setTitles(0);
                 viewInType = 0;
+                showProgress();
                 mPresenter.getMyConfirmLoan();
                 break;
             case R.id.bt_daihuankuan:   //待还款
@@ -104,6 +106,7 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                 animationStart(1);
                 setTitles(1);
                 viewInType = 1;
+                showProgress();
                 mPresenter.getMyRepayLoan();
                 break;
             case R.id.bt_yijieshu:   //已结束
@@ -113,6 +116,7 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                 animationStart(2);
                 setTitles(2);
                 viewInType = 2;
+                showProgress();
                 mPresenter.getMyEndLoan();
                 break;
         }
@@ -140,12 +144,17 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
         animotionView.startAnimation(animation);//開始动画
     }
 
+    LGRecycleViewAdapter<OrderBO.DataBean> adapter;
 
     /**
      * 设置数据适配器
      */
     private void setAdapter() {
-        LGRecycleViewAdapter<OrderBO.DataBean> adapter = new LGRecycleViewAdapter<OrderBO.DataBean>(list) {
+        if(adapter != null){
+            adapter.setData(list);
+            return;
+        }
+        adapter = new LGRecycleViewAdapter<OrderBO.DataBean>(list) {
             @Override
             public int getLayoutId(int viewType) {
                 return R.layout.item_order;
@@ -155,14 +164,16 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
             public void convert(LGViewHolder holder, OrderBO.DataBean s, int position) {
                 holder.setImageUrl(getActivity(), R.id.user_img, s.getLogoOssUrl());
                 holder.setText(R.id.user_name, s.getSmsName());
-                holder.setText(R.id.pay_num, s.getLoanAmount() + "VND");
+                holder.setText(R.id.pay_num, s.getPrice() + "VND");
                 holder.setText(R.id.qixian_day, s.getDays() + getResources().getString(R.string.danwei_tian));
                 TextView statusText = (TextView) holder.getView(R.id.status_text);
                 TextView item_btn = (TextView) holder.getView(R.id.item_btn);
                 if (viewInType == 0) {  //待确认
                     holder.setText(R.id.create_time, getResources().getString(R.string.shenqing_riqi) + (s.getCreateTime().split(" ")[0]));
+                    holder.setText(R.id.pay_num_text, getResources().getString(R.string.shenqingjine));
                     switch (s.getStatus()) {
                         case 0:  //审核中
+                            statusText.setVisibility(View.VISIBLE);
                             statusText.setTextColor(Color.parseColor("#0077EA"));
                             statusText.setText(getResources().getString(R.string.shenhezhong));
                             item_btn.setVisibility(View.GONE);
@@ -174,9 +185,29 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                             break;
                     }
                 } else if (viewInType == 1) {    //待还款
-
+                    holder.setText(R.id.pay_num_text, getResources().getString(R.string.jiekuanjine));
+                    if (s.getOverdueDays() > 0) {
+                        statusText.setVisibility(View.VISIBLE);
+                        statusText.setTextColor(Color.parseColor("#BC792F"));
+                        statusText.setText(getResources().getString(R.string.yiyuqi) + s.getOverdueDays() +
+                                getResources().getString(R.string.danwei_tian));
+                    } else {
+                        statusText.setVisibility(View.GONE);
+                    }
+                    if (!StringUtils.isEmpty(s.getRepaymentDate())) {
+                        holder.setText(R.id.create_time, getResources().getString(R.string.yinghuankuan_riqi) + (s.getRepaymentDate().split(" ")[0]));
+                    } else {
+                        holder.setText(R.id.create_time, getResources().getString(R.string.yinghuankuan_riqi));
+                    }
+                    item_btn.setVisibility(View.VISIBLE);
+                    item_btn.setText(getResources().getString(R.string.lijihuankuan));
                 } else {   //已结束
-                    holder.setText(R.id.create_time, getResources().getString(R.string.jiekuan_riqi) + (s.getCreateTime().split(" ")[0]));
+                    holder.setText(R.id.pay_num_text, getResources().getString(R.string.jiekuanjine));
+                    if (!StringUtils.isEmpty(s.getLoanDate())) {
+                        holder.setText(R.id.create_time, getResources().getString(R.string.jiekuan_riqi) + (s.getLoanDate().split(" ")[0]));
+                    } else {
+                        holder.setText(R.id.create_time, getResources().getString(R.string.jiekuan_riqi));
+                    }
                     switch (s.getStatus()) {
                         case 0:  //审核失败
                             holder.setText(R.id.create_time, getResources().getString(R.string.shenqing_riqi) + (s.getCreateTime().split(" ")[0]));
@@ -216,16 +247,21 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                 }
             }
         };
-        adapter.setOnItemClickListener(R.id.item_btn, new LGRecycleViewAdapter.ItemClickListener() {
-            @Override
-            public void onItemClicked(View view, int position) {
-                if (viewInType == 0) {  //提现界面
-                    gotoActivity(ConfirmationActivity.class, false);
-                } else if (viewInType == 1) {  //还款详情
-                    gotoActivity(PayBackActivity2.class, false);
-                } else {   //借款详情
-                    gotoActivity(BorrowActivity1.class, false);
+        adapter.setOnItemClickListener(R.id.item_btn, (view, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", list.get(position).getId());
+            if (viewInType == 0) {  //提现界面
+                gotoActivity(ConfirmationActivity.class, bundle, false);
+            } else if (viewInType == 1) {  //还款详情
+                if (IConstant.STYLE == 1) {
+                    bundle.putInt("type", 1);
+                    gotoActivity(PayBackActivity1.class, bundle, false);
+                } else {
+                    gotoActivity(PayBackActivity2.class, bundle, false);
                 }
+            } else {   //借款详情
+//                gotoActivity(BorrowActivity1.class, bundle, false);
+                mPresenter.loanAgain(list.get(position).getTenantId());
             }
         });
         recycleView.setAdapter(adapter);
@@ -240,12 +276,33 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
 
     @Override
     public void onRequestError(String msg) {
+        stopProgress();
         showToast(msg);
     }
 
     @Override
     public void getOrder(OrderBO orderBO) {
+        stopProgress();
         this.list = orderBO.getData();
         setAdapter();
+    }
+
+    private void refreshList(){
+        switch (viewInType){
+            case 0:
+                mPresenter.getMyConfirmLoan();
+                break;
+            case 1:
+                mPresenter.getMyRepayLoan();
+                break;
+            case 2:
+                mPresenter.getMyEndLoan();
+                break;
+        }
+    }
+    @Override
+    public void loanAgainSouress() {
+        showToast(getResources().getString(R.string.commit_sourss_toast));
+        refreshList();
     }
 }

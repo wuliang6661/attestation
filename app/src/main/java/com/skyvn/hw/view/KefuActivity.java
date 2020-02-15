@@ -85,6 +85,9 @@ public class KefuActivity extends BaseActivity {
      * 显示客服
      */
     private void showKeFu() {
+        if(kefus == null){
+            return;
+        }
         if (kefus.size() >= 1) {
             phone1.setText(kefus.get(0).getContact());
         }

@@ -280,6 +280,7 @@ public class LoginActivity extends BaseActivity {
      * 登录请求
      */
     private void synLogin() {
+
         String strPhone = etPhoto.getText().toString().trim();
         String strCodeImg = etImageVerfication.getText().toString().trim();
         String strVersition = etVerfication.getText().toString().trim();
@@ -298,9 +299,11 @@ public class LoginActivity extends BaseActivity {
             inputLayoutVerfication.setErrorEnabled(true);
         }
         checkPermissions();
+        showProgress();
         HttpServerImpl.loginUser(loginLatitude, loginLongitude, strPhone, strVersition).subscribe(new HttpResultSubscriber<LoginSuressBO>() {
             @Override
             public void onSuccess(LoginSuressBO s) {
+                stopProgress();
                 MyApplication.userBO = s;
                 MyApplication.token = s.getToken();
                 gotoActivity(MainActivity.class, true);
@@ -308,6 +311,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFiled(String message) {
+                stopProgress();
                 showToast(message);
             }
         });

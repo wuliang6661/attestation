@@ -5,9 +5,9 @@ package com.skyvn.hw.util.language;
  */
 public enum LanguageType {
 
-    CHINESE("ch"),   //中文
+    CHINESE("zh"),   //中文
     ENGLISH("en"),
-    THAILAND("es");   //越南语
+    THAILAND("vi");   //越南语
 
     private String language;
 

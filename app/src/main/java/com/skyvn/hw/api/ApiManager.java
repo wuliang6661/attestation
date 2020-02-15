@@ -2,8 +2,10 @@ package com.skyvn.hw.api;
 
 import android.util.Log;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.MD5;
 
 import java.io.IOException;
@@ -85,6 +87,20 @@ public class ApiManager {
 
 
     /**
+     * 获取STS服务的代理服务
+     */
+    public <T> T configRetrofit2(Class<T> service, String url) {
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .client(builder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return mRetrofit.create(service);
+    }
+
+
+    /**
      * 自定义网络拦截器，如果头部信息中有通知数据已压缩，则解压过滤
      */
     private Interceptor postInterceptor = new Interceptor() {
@@ -131,19 +147,21 @@ public class ApiManager {
         if (StringUtils.isEmpty(MyApplication.token)) {
             // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
             request = chain.request().newBuilder()
-                    .addHeader("applicationId", "1")
-                    .addHeader("tenantId", "0")
-                    .addHeader("language", "zh")
+                    .addHeader("currentApplicationId", "1")
+                    .addHeader("currentTenantId", "0")
+                    .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE))
+//                    .addHeader("Authorization", "1")
                     .build();
         } else {
             // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
             request = chain.request().newBuilder()
                     .addHeader("Authorization", MyApplication.token)
-                    .addHeader("applicationId", "1")
-                    .addHeader("tenantId", "0")
-                    .addHeader("language", "zh")
+                    .addHeader("currentApplicationId", "1")
+                    .addHeader("currentTenantId", "0")
+                    .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE))
                     .build();
         }
+        LogUtils.d(request.headers().toString());
         return chain.proceed(request);
     };
 

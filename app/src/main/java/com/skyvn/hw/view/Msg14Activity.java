@@ -29,6 +29,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
+import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.widget.AlertDialog;
 
 import java.io.File;
@@ -231,20 +232,23 @@ public class Msg14Activity extends BaseActivity implements ActionSheet.OnActionS
      * 上传文件
      */
     private void updateFile(File file) {
-        showProgress();
-        HttpServerImpl.updateFile(file).subscribe(new HttpResultSubscriber<String>() {
-            @Override
-            public void onSuccess(String s) {
-                stopProgress();
-                imageUrl = s;
-                Glide.with(Msg14Activity.this).load(s).into(smsImage);
-            }
+//        showProgress();
+//        HttpServerImpl.updateFile(file).subscribe(new HttpResultSubscriber<String>() {
+//            @Override
+//            public void onSuccess(String s) {
+//                stopProgress();
+//                imageUrl = s;
+//                Glide.with(Msg14Activity.this).load(s).into(smsImage);
+//            }
+//
+//            @Override
+//            public void onFiled(String message) {
+//                stopProgress();
+//                showToast(message);
+//            }
+//        });
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.updateFile(4,file.getAbsolutePath());
 
-            @Override
-            public void onFiled(String message) {
-                stopProgress();
-                showToast(message);
-            }
-        });
     }
 }
