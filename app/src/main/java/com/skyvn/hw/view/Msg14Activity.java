@@ -1,12 +1,15 @@
 package com.skyvn.hw.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -102,7 +105,6 @@ public class Msg14Activity extends BaseActivity implements ActionSheet.OnActionS
             }
         });
     }
-
 
 
     @OnClick(R.id.back)
@@ -248,7 +250,30 @@ public class Msg14Activity extends BaseActivity implements ActionSheet.OnActionS
 //            }
 //        });
         UpdateFileUtils utils = new UpdateFileUtils();
-        utils.updateFile(4,file.getAbsolutePath());
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
+            @Override
+            public void call(String s) {
+                stopProgress();
+                imageUrl = s;
+                handler.sendEmptyMessage(0x11);
+            }
 
+            @Override
+            public void callError(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+        utils.updateFile(4, file.getAbsolutePath());
     }
+
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Glide.with(Msg14Activity.this).load(imageUrl).into(smsImage);
+        }
+    };
 }

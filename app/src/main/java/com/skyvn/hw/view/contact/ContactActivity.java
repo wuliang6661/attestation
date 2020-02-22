@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -28,7 +29,6 @@ import com.skyvn.hw.mvp.MVPBaseActivity;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.phone.PhoneDto;
 import com.skyvn.hw.util.phone.PhoneUtil;
-import com.skyvn.hw.view.MyBankCardActivity;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
@@ -152,42 +152,49 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
      * 获取通讯录用户
      */
     private void getPersonList(String msg) {
-        List<PhoneDto> phones = new PhoneUtil(this).searchContacts(msg);
-        LGRecycleViewAdapter<PhoneDto> adapter = new LGRecycleViewAdapter<PhoneDto>(phones) {
+        showProgress();
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public int getLayoutId(int viewType) {
-                return R.layout.item_persons_layout;
-            }
+            public void run() {
+                List<PhoneDto> phones = new PhoneUtil(ContactActivity.this).searchContacts(msg);
+                stopProgress();
+                LGRecycleViewAdapter<PhoneDto> adapter = new LGRecycleViewAdapter<PhoneDto>(phones) {
+                    @Override
+                    public int getLayoutId(int viewType) {
+                        return R.layout.item_persons_layout;
+                    }
 
-            @Override
-            public void convert(LGViewHolder holder, PhoneDto phoneDto, int position) {
-                holder.setText(R.id.person_name, phoneDto.getName());
-                holder.setText(R.id.phone, phoneDto.getTelPhone());
-            }
-        };
-        adapter.setOnItemClickListener(R.id.item_layout, new LGRecycleViewAdapter.ItemClickListener() {
-            @Override
-            public void onItemClicked(View view, int position) {
-                if (type != 0) {
-                    Intent intent = new Intent();
-                    ContactBO contactBO = new ContactBO();
-                    contactBO.setName(phones.get(position).getName());
-                    contactBO.setPhone(phones.get(position).getTelPhone());
-                    intent.putExtra("contact", contactBO);
-                    setResult(0x11, intent);
-                    finish();
+                    @Override
+                    public void convert(LGViewHolder holder, PhoneDto phoneDto, int position) {
+                        holder.setText(R.id.person_name, phoneDto.getName());
+                        holder.setText(R.id.phone, phoneDto.getTelPhone());
+                    }
+                };
+                adapter.setOnItemClickListener(R.id.item_layout, new LGRecycleViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClicked(View view, int position) {
+                        if (type != 0) {
+                            Intent intent = new Intent();
+                            ContactBO contactBO = new ContactBO();
+                            contactBO.setName(phones.get(position).getName());
+                            contactBO.setPhone(phones.get(position).getTelPhone());
+                            intent.putExtra("contact", contactBO);
+                            setResult(0x11, intent);
+                            finish();
+                        }
+                    }
+                });
+                recycleView.setAdapter(adapter);
+                if (type == 0) {
+                    new AlertDialog(ContactActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                            .setMsg(getResources().getString(R.string.contact_aleg_dialog))
+                            .setNegativeButton(getResources().getString(R.string.buyunxu), null)
+                            .setPositiveButton(getResources().getString(R.string.hao), v -> {
+                                commitContactList(phones);
+                            }).show();
                 }
             }
-        });
-        recycleView.setAdapter(adapter);
-        if (type == 0) {
-            new AlertDialog(this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
-                    .setMsg(getResources().getString(R.string.contact_aleg_dialog))
-                    .setNegativeButton(getResources().getString(R.string.buyunxu), null)
-                    .setPositiveButton(getResources().getString(R.string.hao), v -> {
-                        commitContactList(phones);
-                    }).show();
-        }
+        }, 1000);
     }
 
 

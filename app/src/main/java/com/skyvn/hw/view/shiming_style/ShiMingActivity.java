@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -39,6 +41,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
+import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
@@ -360,26 +363,60 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
      * 上传文件
      */
     private void updateFile(File file) {
-        showProgress();
-        HttpServerImpl.updateFile(file).subscribe(new HttpResultSubscriber<String>() {
+//        showProgress();
+//        HttpServerImpl.updateFile(file).subscribe(new HttpResultSubscriber<String>() {
+//            @Override
+//            public void onSuccess(String s) {
+//                stopProgress();
+//                if (selectIdCardType == 0) {
+//                    idCardFontUrl = s;
+//                    Glide.with(ShiMingActivity.this).load(s).into(idCardFont);
+//                } else {
+//                    idCardBackUrl = s;
+//                    Glide.with(ShiMingActivity.this).load(s).into(idCardBack);
+//                }
+//            }
+//
+//            @Override
+//            public void onFiled(String message) {
+//                stopProgress();
+//                showToast(message);
+//            }
+//        });
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
             @Override
-            public void onSuccess(String s) {
+            public void call(String s) {
                 stopProgress();
                 if (selectIdCardType == 0) {
                     idCardFontUrl = s;
-                    Glide.with(ShiMingActivity.this).load(s).into(idCardFont);
                 } else {
                     idCardBackUrl = s;
-                    Glide.with(ShiMingActivity.this).load(s).into(idCardBack);
                 }
+                handler.sendEmptyMessage(0x11);
             }
 
             @Override
-            public void onFiled(String message) {
+            public void callError(String message) {
                 stopProgress();
                 showToast(message);
             }
         });
+        utils.updateFile(0, file.getAbsolutePath());
     }
+
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (selectIdCardType == 0) {
+                Glide.with(ShiMingActivity.this).load(idCardFontUrl).into(idCardFont);
+            } else {
+                Glide.with(ShiMingActivity.this).load(idCardBackUrl).into(idCardBack);
+            }
+        }
+    };
 
 }

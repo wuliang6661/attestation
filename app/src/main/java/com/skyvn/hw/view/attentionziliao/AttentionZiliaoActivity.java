@@ -215,7 +215,7 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
         if (IConstant.STYLE == 1) {
             gotoActivity(ShiMingActivity.class, false);
         } else {
-            gotoActivity(PersonMsgActivity2.class, false);
+            gotoActivity(ShiMingActivity2.class, false);
         }
     }
 
@@ -244,7 +244,7 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
         if (IConstant.STYLE == 1) {
             gotoActivity(PersonMsgActivity.class, false);
         } else {
-            gotoActivity(ShiMingActivity2.class, false);
+            gotoActivity(PersonMsgActivity2.class, false);
         }
     }
 

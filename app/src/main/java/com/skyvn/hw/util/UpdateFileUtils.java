@@ -14,6 +14,8 @@ import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.skyvn.hw.api.HttpResultSubscriber;
@@ -33,7 +35,7 @@ public class UpdateFileUtils {
         HttpServerImpl.getOssInfo(type).subscribe(new HttpResultSubscriber<StsTokenBean>() {
             @Override
             public void onSuccess(StsTokenBean s) {
-                upload_file(s, filePath);
+                new Thread(() -> upload_file(s, filePath)).start();
             }
 
             @Override
@@ -44,6 +46,9 @@ public class UpdateFileUtils {
     }
 
 
+    /**
+     * 解密
+     */
     private String decodeMsg(String key, String msg) {
 //        AES aes = SecureUtil.aes(Base64.decode(key));
         AES aes1 = SecureUtil.aes(cn.hutool.core.codec.Base64.decode(key));
@@ -54,15 +59,17 @@ public class UpdateFileUtils {
     //上传文件方法
     private void upload_file(StsTokenBean stsTokenBean, String loacalFilePath) {
         //根据你的OSS的地区而自行定义，本文中的是杭州
-//        String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+//        String url = "http://oss-cn-hangzhou.aliyuncs.com";
+        String url = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getHttpUrl());
         String endpoint = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getEndpoint());
         String AccessKeyId = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getAccessKeyId());
         String AccessKeySecret = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getAccessKeySecret());
+        String accessToken = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getSecurityToken());
         String bucket = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getBucket());
 
         //移动端建议使用该方式，此时，stsToken中的前三个参数就派上用场了
         OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, AccessKeySecret,
-                stsTokenBean.getKey());
+                accessToken);
 
         // 配置类如果不设置，会有默认配置。
         ClientConfiguration conf = new ClientConfiguration();
@@ -78,8 +85,8 @@ public class UpdateFileUtils {
         //当前时间戳，用于自定义文件在OSS中存储路径末尾的名称
         String image_url_time = System.currentTimeMillis() + "";
         // 构造上传请求,第二个数参是ObjectName，第三个参数是本地文件路径
-        PutObjectRequest put = new PutObjectRequest(bucket, image_url_time, loacalFilePath);
-
+        String ossFiles = "appFile/" + image_url_time + "." + FileUtils.getFileExtension(loacalFilePath);
+        PutObjectRequest put = new PutObjectRequest(bucket, ossFiles, loacalFilePath);
         //异步上传可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -89,7 +96,6 @@ public class UpdateFileUtils {
 
             }
         });
-
         //实现异步上传
         OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
@@ -97,13 +103,17 @@ public class UpdateFileUtils {
                 Log.d("PutObject", "UploadSuccess");
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
-
                 //这个image_url左边的字符串部分是我OSS的Bucket的文件存储地址，根据个人的文件存储地址不同，替换成自己的即可，而后面的image_url_time则是为了区分每个文件的文件名
                 //注意，最好的方式是设置回调，因为回调的功能必须要在线上服务器才能测试，我服务器在本地环境中是不允许回调的
                 //在咨询阿里云相关人员之后，他们说也允许记住地址，进行拼接的方式保存线上文件url路径
                 //但是这种方式需要在OSS的管理控制台中将你的存储空间设置为公共读的方式，不然没法用下面的拼接链接。
                 //此时你上传的文件所在的线上地址就已经获得了，想怎么使用则随意了
 //                image_url = stsTokenBean.getBucket()+ image_url_time;
+                String aliPath = url + "/" + ossFiles;
+                LogUtils.d(aliPath);
+                if (listener != null) {
+                    listener.call(aliPath);
+                }
             }
 
             @Override
@@ -111,13 +121,18 @@ public class UpdateFileUtils {
                 if (clientException != null) {
                     // 本地异常，如网络异常等。
                     clientException.printStackTrace();
+                    if (listener != null) {
+                        listener.callError("Internet Error!");
+                    }
                 }
                 if (serviceException != null) {
-                    // 服务异常。
                     Log.e("ErrorCode", serviceException.getErrorCode());
                     Log.e("RequestId", serviceException.getRequestId());
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
+                    if (listener != null) {
+                        listener.callError(serviceException.getRawMessage());
+                    }
                 }
             }
         });
@@ -125,4 +140,17 @@ public class UpdateFileUtils {
         task.waitUntilFinished();
     }
 
+
+    private OnCallBackListener listener;
+
+    public void setListener(OnCallBackListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnCallBackListener {
+
+        void call(String s);
+
+        void callError(String message);
+    }
 }

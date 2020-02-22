@@ -75,7 +75,7 @@ public class PhoneUtil {
                     PhoneDto phoneDto = new PhoneDto(name, phoneNumber, photo);
                     phoneDtos.add(phoneDto);
                 }
-
+                nameC.close();
             }
             cursorP.close();
         } else {
@@ -100,7 +100,7 @@ public class PhoneUtil {
                     PhoneDto phoneDto = new PhoneDto(name, phoneNumber, photo);
                     phoneDtos.add(phoneDto);
                 }
-
+                phone.close();
             }
             cursorName.close();
         }

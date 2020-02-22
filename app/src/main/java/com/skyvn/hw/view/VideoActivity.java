@@ -1,6 +1,7 @@
 package com.skyvn.hw.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -32,6 +35,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
+import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.widget.AlertDialog;
 
 import java.io.File;
@@ -298,20 +302,47 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
      * 上传文件
      */
     private void updateFile(File file) {
+//        showProgress();
+//        HttpServerImpl.updateVideo(file).subscribe(new HttpResultSubscriber<String>() {
+//            @Override
+//            public void onSuccess(String s) {
+//                stopProgress();
+//                videoUrl = s;
+//                videoImg.setImageBitmap(bitmap);
+//            }
+//
+//            @Override
+//            public void onFiled(String message) {
+//                stopProgress();
+//                showToast(message);
+//            }
+//        });
         showProgress();
-        HttpServerImpl.updateVideo(file).subscribe(new HttpResultSubscriber<String>() {
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
             @Override
-            public void onSuccess(String s) {
+            public void call(String s) {
                 stopProgress();
                 videoUrl = s;
-                videoImg.setImageBitmap(bitmap);
+                handler.sendEmptyMessage(0x11);
             }
 
             @Override
-            public void onFiled(String message) {
+            public void callError(String message) {
                 stopProgress();
                 showToast(message);
             }
         });
+        utils.updateFile(1, file.getAbsolutePath());
     }
+
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            videoImg.setImageBitmap(bitmap);
+        }
+    };
 }

@@ -224,7 +224,7 @@ public interface HttpService {
     /**
      * 获取金额和期限列表
      */
-    @GET("/operateApplicationSetting/getNoticeListByApplicationId")
+    @GET("/operateApplicationSetting/getSaasAppHomePagePullDowns")
     Observable<BaseResult<List<String>>> getPayNumOrDays(@Query("code") String code);
 
     /**
