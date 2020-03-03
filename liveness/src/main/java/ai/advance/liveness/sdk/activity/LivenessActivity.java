@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.gyf.barlibrary.ImmersionBar;
+
 import ai.advance.common.utils.ScreenUtil;
 import ai.advance.liveness.lib.GuardianLivenessDetectionSDK;
 import ai.advance.liveness.lib.LivenessResult;
@@ -28,10 +30,11 @@ public class LivenessActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liveness);
+        ImmersionBar.with(this).keyboardEnable(true).init();   //解决虚拟按键与状态栏沉浸冲突
         ScreenUtil.init(this);
         changeAppBrightness(255);
     }

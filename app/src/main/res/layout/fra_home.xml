@@ -41,8 +41,7 @@
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
                 android:layout_height="97dp"
-                android:layout_margin="13dp"
-                android:background="@drawable/home_banner_img2" />
+                android:layout_margin="13dp" />
 
 
             <View
@@ -286,6 +285,7 @@
 
 
             <LinearLayout
+                android:id="@+id/kefu_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"

@@ -4,9 +4,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
@@ -15,11 +14,12 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.util.PhoneUtils;
 import com.skyvn.hw.widget.AlertDialog;
+import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
+import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 
 /**
@@ -27,22 +27,9 @@ import butterknife.OnClick;
  */
 public class KefuActivity extends BaseActivity {
 
-    @BindView(R.id.kefu1)
-    LinearLayout kefu1;
-    @BindView(R.id.kefu2)
-    LinearLayout kefu2;
-    @BindView(R.id.zalo)
-    LinearLayout zalo;
-    @BindView(R.id.facebook)
-    LinearLayout facebook;
-    @BindView(R.id.phone1)
-    TextView phone1;
-    @BindView(R.id.phone2)
-    TextView phone2;
-    @BindView(R.id.zalo_num)
-    TextView zaloNum;
-    @BindView(R.id.facebook_num)
-    TextView facebookNum;
+
+    @BindView(R.id.recycle_view)
+    RecyclerView recycleView;
 
     private List<KeFuBO> kefus;
 
@@ -59,6 +46,9 @@ public class KefuActivity extends BaseActivity {
         goBack();
         setTitleText(getResources().getString(R.string.my_kefu));
 
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recycleView.setLayoutManager(manager);
         getKeFu();
     }
 
@@ -85,65 +75,39 @@ public class KefuActivity extends BaseActivity {
      * 显示客服
      */
     private void showKeFu() {
-        if(kefus == null){
+        if (kefus == null) {
+            showToast(getString(R.string.wushuju));
             return;
         }
-        if (kefus.size() >= 1) {
-            phone1.setText(kefus.get(0).getContact());
-        }
-        if (kefus.size() >= 2) {
-            phone2.setText(kefus.get(1).getContact());
-        }
-        if (kefus.size() >= 3) {
-            zaloNum.setText(kefus.get(2).getContact());
-        }
-        if (kefus.size() >= 4) {
-            facebookNum.setText(kefus.get(3).getContact());
-        }
-    }
+        LGRecycleViewAdapter<KeFuBO> adapter = new LGRecycleViewAdapter<KeFuBO>(kefus) {
+            @Override
+            public int getLayoutId(int viewType) {
+                return R.layout.item_kefu;
+            }
 
-
-    @OnClick({R.id.kefu1, R.id.kefu2})
-    public void kefuClick(View view) {
-        switch (view.getId()) {
-            case R.id.kefu1:
-                String strPhone1 = phone1.getText().toString().trim();
-                new AlertDialog(this).builder().setGone().setTitle(getResources().getString(R.string.kefudianhua))
-                        .setMsg(strPhone1)
-                        .setNegativeButton(getResources().getString(R.string.cancle), null)
-                        .setPositiveButton(getResources().getString(R.string.call), v -> PhoneUtils.callPhone(strPhone1)).show();
-                break;
-            case R.id.kefu2:
-                String strPhone2 = phone2.getText().toString().trim();
-                new AlertDialog(this).builder().setGone().setTitle(getResources().getString(R.string.kefudianhua))
-                        .setMsg(strPhone2)
-                        .setNegativeButton(getResources().getString(R.string.cancle), null)
-                        .setPositiveButton(getResources().getString(R.string.call), v -> PhoneUtils.callPhone(strPhone2)).show();
-
-                break;
-        }
-    }
-
-
-    @OnClick({R.id.zalo, R.id.facebook})
-    public void zaloClick(View view) {
-        switch (view.getId()) {
-            case R.id.zalo:
-                String strPhone1 = zaloNum.getText().toString().trim();
-                new AlertDialog(this).builder().setGone().setTitle(getResources().getString(R.string.zalo))
-                        .setMsg(strPhone1)
-                        .setNegativeButton(getResources().getString(R.string.cancle), null)
-                        .setPositiveButton(getResources().getString(R.string.copy), v -> copyText(strPhone1)).show();
-                break;
-            case R.id.facebook:
-                String strPhone2 = facebookNum.getText().toString().trim();
-                new AlertDialog(this).builder().setGone().setTitle(getResources().getString(R.string.facebook))
-                        .setMsg(strPhone2)
-                        .setNegativeButton(getResources().getString(R.string.cancle), null)
-                        .setPositiveButton(getResources().getString(R.string.copy), v -> copyText(strPhone2)).show();
-
-                break;
-        }
+            @Override
+            public void convert(LGViewHolder holder, KeFuBO keFuBO, int position) {
+                holder.setText(R.id.kefu_name, keFuBO.getName());
+                holder.setText(R.id.phone1, keFuBO.getContact());
+            }
+        };
+        adapter.setOnItemClickListener(R.id.kefu1, (view, position) -> {
+            switch (kefus.get(position).getType()) {
+                case 0:   //电话
+                    new AlertDialog(KefuActivity.this).builder().setGone().setTitle(kefus.get(position).getName())
+                            .setMsg(kefus.get(position).getContact())
+                            .setNegativeButton(getResources().getString(R.string.cancle), null)
+                            .setPositiveButton(getResources().getString(R.string.call), v -> PhoneUtils.callPhone(kefus.get(position).getContact())).show();
+                    break;
+                default:
+                    new AlertDialog(KefuActivity.this).builder().setGone().setTitle(kefus.get(position).getName())
+                            .setMsg(kefus.get(position).getContact())
+                            .setNegativeButton(getResources().getString(R.string.cancle), null)
+                            .setPositiveButton(getResources().getString(R.string.copy), v -> copyText(kefus.get(position).getContact())).show();
+                    break;
+            }
+        });
+        recycleView.setAdapter(adapter);
     }
 
 

@@ -336,5 +336,8 @@
     <string name="shenfenzhengyanzheng">身份证验证</string>
     <string name="gerenzhuangkuang">个人状况</string>
     <string name="qurenzheng">去认证</string>
+    <string name="renzheng_hint">您需要先完成所有认证</string>
+    <string name="wushuju">无数据！</string>
+    <string name="wurenzheng">暂无该认证！</string>
 
 </resources>

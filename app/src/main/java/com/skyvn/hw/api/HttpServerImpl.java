@@ -4,6 +4,7 @@ import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
 import com.skyvn.hw.bean.AccountBO;
 import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.AuthStatusBO;
 import com.skyvn.hw.bean.AuthTypeBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
@@ -276,7 +277,7 @@ public class HttpServerImpl {
      */
     public static Observable<AttentionSourrssBO> addClientActiveAuth(String base64Img) {
         Map<String, Object> params = new HashMap<>();
-        params.put("activeString", base64Img);
+        params.put("activeOssUrl", base64Img);
         return getService().addClientActiveAuth(params).compose(RxResultHelper.httpRusult());
     }
 
@@ -466,6 +467,13 @@ public class HttpServerImpl {
         RequestBody requestFile = RequestBody.create(MediaType.parse("video/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         return getService().updateFile(body).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取认证总状态
+     */
+    public static Observable<AuthStatusBO> getMyAuthStatus(){
+        return getService().getMyAuthStatus().compose(RxResultHelper.httpRusult());
     }
 
 }

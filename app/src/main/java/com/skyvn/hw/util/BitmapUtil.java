@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -129,4 +130,14 @@ public class BitmapUtil {
         return bitmap;
     }
 
+    /**
+     * 图片转成文件
+     */
+    public static void decoderBase64File(String base64Code, String savePath) throws Exception {
+        //byte[] buffer = new BASE64Decoder().decodeBuffer(base64Code);
+        byte[] buffer = Base64.decode(base64Code, Base64.DEFAULT);
+        FileOutputStream out = new FileOutputStream(savePath);
+        out.write(buffer);
+        out.close();
+    }
 }

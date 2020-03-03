@@ -336,5 +336,8 @@
     <string name="shenfenzhengyanzheng">Kiểm tra thẻ nhận diện</string>
     <string name="gerenzhuangkuang">Tình trạng cá nhân</string>
     <string name="qurenzheng">Giấy chứng nhận</string>
+    <string name="renzheng_hint">Anh cần phải hoàn thành tất cả giấy chứng nhận trước</string>
+    <string name="wushuju">Không có dữ liệu！</string>
+    <string name="wurenzheng">Không có chứng nhận！</string>
 
 </resources>

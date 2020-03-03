@@ -2,6 +2,7 @@ package com.skyvn.hw.api;
 
 import com.skyvn.hw.bean.AccountBO;
 import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.AuthStatusBO;
 import com.skyvn.hw.bean.AuthTypeBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
@@ -38,8 +39,8 @@ import rx.Observable;
 
 public interface HttpService {
 
-//        String URL = "http://192.168.0.105:9989/";   //正式服
-    String URL = "http://47.96.126.117:9989/";   //测试服
+    String URL = "http://tsa.fengyunv40.com/";   //正式服
+//    String URL = "http://47.96.126.117:9989/";   //测试服
 //    String URL = "http://mapi.platform.yinghezhong.com/";  //测试服2
 //    String URL = "http://api.open.yinghezhong.com/";  //正式环境
 //    String URL = "http://mapi.open.yinghezhong.com/";  //正式环境2
@@ -92,6 +93,12 @@ public interface HttpService {
      */
     @GET("/clientAuthStatus/getAuthList")
     Observable<BaseResult<List<AuthTypeBO>>> getAuthList();
+
+    /**
+     * 获取认证总状态
+     */
+    @GET("/clientAuthStatus/getMyAuthStatus")
+    Observable<BaseResult<AuthStatusBO>> getMyAuthStatus();
 
     /**
      * 提交个人资料

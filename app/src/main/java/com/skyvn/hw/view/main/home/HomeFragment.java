@@ -16,12 +16,20 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
+import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.AuthStatusBO;
 import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.StatusBO;
 import com.skyvn.hw.mvp.MVPBaseFragment;
+import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.view.KefuActivity;
 import com.skyvn.hw.view.MessageActivity;
 import com.skyvn.hw.view.WebActivity;
+import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -108,8 +116,12 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
     private void setBanner() {
         List<String> images = new ArrayList<>();
-        for (BannerBO bannerBO : bannerBOS) {
-            images.add(bannerBO.getImageUrl());
+        if (bannerBOS == null) {
+            images.add("");
+        } else {
+            for (BannerBO bannerBO : bannerBOS) {
+                images.add(bannerBO.getImageUrl());
+            }
         }
         //设置banner样式
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
@@ -159,19 +171,66 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         }
     }
 
+    @OnClick(R.id.kefu_layout)
+    public void clickKefu() {
+        gotoActivity(KefuActivity.class, false);
+    }
+
 
     @OnClick(R.id.bt_login)
     public void clickAddOrder() {
-        String amounts = payNum.getText().toString().trim();
-        if (StringUtils.isEmpty(amounts)) {
-            return;
-        }
-        String days = daysText.getText().toString().trim();
-        if (StringUtils.isEmpty(days)) {
-            return;
-        }
-        String[] paynums = amounts.split("~");
-        mPresenter.addMyApply(days, paynums[1], paynums[0]);
+        getMyAuthStatus();
+    }
+
+
+    public void clickGoAttention() {
+        showProgress();
+        HttpServerImpl.getFirstAuth().subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                stopProgress();
+                gotoActivity(AttentionZiliaoActivity.class, false);
+                AuthenticationUtils.goAuthNextPageByHome(s.getCode(), s.getNeedStatus(), false, getActivity());
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+    }
+
+    private void getMyAuthStatus() {
+        HttpServerImpl.getMyAuthStatus().subscribe(new HttpResultSubscriber<AuthStatusBO>() {
+            @Override
+            public void onSuccess(AuthStatusBO s) {
+                if ("2".equals(s.getStatus())) {  //认证通过
+                    String amounts = payNum.getText().toString().trim();
+                    if (StringUtils.isEmpty(amounts)) {
+                        return;
+                    }
+                    String days = daysText.getText().toString().trim();
+                    if (StringUtils.isEmpty(days)) {
+                        return;
+                    }
+                    String[] paynums = amounts.split("~");
+                    mPresenter.addMyApply(days, paynums[1], paynums[0]);
+                } else {
+                    new AlertDialog(getActivity()).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                            .setMsg(getString(R.string.renzheng_hint))
+                            .setNegativeButton(getResources().getString(R.string.cancle), null)
+                            .setPositiveButton(getResources().getString(R.string.qurenzheng), v ->
+                                    clickGoAttention()
+                            ).show();
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -190,7 +249,13 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     @Override
     public void getBanner(BannerBO bannerBO) {
         this.bannerBO = bannerBO;
-        Glide.with(getActivity()).load(bannerBO.getImageUrl()).into(homeBannerImg);
+        if (bannerBO == null) {
+            Glide.with(getActivity()).load("").error(R.drawable.defalt_img)
+                    .placeholder(R.drawable.defalt_img).into(homeBannerImg);
+        } else {
+            Glide.with(getActivity()).load(bannerBO.getImageUrl()).error(R.drawable.defalt_img)
+                    .placeholder(R.drawable.defalt_img).into(homeBannerImg);
+        }
     }
 
 
@@ -207,7 +272,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
     @Override
     public void getGongGao(List<GongGaoBO> gongGaoBOS) {
-        if (gongGaoBOS.isEmpty()) {
+        if (gongGaoBOS == null || gongGaoBOS.isEmpty()) {
             gonggaoLayout.setVisibility(View.GONE);
             return;
         }
@@ -287,7 +352,8 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
              切记不要胡乱强转！
              */
             //Glide 加载图片简单用法
-            Glide.with(context).load(path).into(imageView);
+            Glide.with(context).load(path).error(R.drawable.defalt_img)
+                    .placeholder(R.drawable.defalt_img).into(imageView);
         }
 
 //        //提供createImageView 方法，如果不用可以不重写这个方法，主要是方便自定义ImageView的创建

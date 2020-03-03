@@ -25,5 +25,5 @@ public interface IConstant {
     /**
      * 界面风格  1 :风格1  2：风格2
      */
-    int STYLE = 2;
+    int STYLE = 1;
 }

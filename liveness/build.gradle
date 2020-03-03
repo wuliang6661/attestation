@@ -33,4 +33,5 @@ dependencies {
     api(name: 'guardian_core_v1.6', ext: 'aar')
     api(name: 'liveness_lib_v1.1.8', ext: 'aar')
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.3-beta15'
 }

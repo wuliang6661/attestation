@@ -81,12 +81,12 @@ public class LoginActivity extends BaseActivity {
 
         requestPermission();
         getCodeImg();
-        if (BuildConfig.DEBUG) {
-            etPhoto.setText("15151977426");
-            // 15726818192
-            etVerfication.setText("111111");
-            etImageVerfication.setText("ffff");
-        }
+//        if (BuildConfig.DEBUG) {
+//            etPhoto.setText("151519777777");
+//            // 15726818192
+//            etVerfication.setText("111111");
+//            etImageVerfication.setText("ffff");
+//        }
     }
 
 

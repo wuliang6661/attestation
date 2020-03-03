@@ -16,7 +16,6 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -30,6 +29,8 @@ import cn.hutool.crypto.symmetric.AES;
  */
 public class UpdateFileUtils {
 
+    public static String key = "vqZS3bbwDbMXDi09Ankwxw==";
+
 
     public void updateFile(int type, String filePath) {
         HttpServerImpl.getOssInfo(type).subscribe(new HttpResultSubscriber<StsTokenBean>() {
@@ -40,7 +41,9 @@ public class UpdateFileUtils {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShort(message);
+                if (listener != null) {
+                    listener.callError(message);
+                }
             }
         });
     }
@@ -49,7 +52,7 @@ public class UpdateFileUtils {
     /**
      * 解密
      */
-    private String decodeMsg(String key, String msg) {
+    private String decodeMsg(String msg) {
 //        AES aes = SecureUtil.aes(Base64.decode(key));
         AES aes1 = SecureUtil.aes(cn.hutool.core.codec.Base64.decode(key));
         return aes1.decryptStr(cn.hutool.core.codec.Base64.decode(msg));
@@ -60,12 +63,12 @@ public class UpdateFileUtils {
     private void upload_file(StsTokenBean stsTokenBean, String loacalFilePath) {
         //根据你的OSS的地区而自行定义，本文中的是杭州
 //        String url = "http://oss-cn-hangzhou.aliyuncs.com";
-        String url = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getHttpUrl());
-        String endpoint = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getEndpoint());
-        String AccessKeyId = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getAccessKeyId());
-        String AccessKeySecret = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getAccessKeySecret());
-        String accessToken = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getSecurityToken());
-        String bucket = decodeMsg(stsTokenBean.getKey(), stsTokenBean.getBucket());
+        String url = decodeMsg(stsTokenBean.getHttpUrl());
+        String endpoint = decodeMsg(stsTokenBean.getEndpoint());
+        String AccessKeyId = decodeMsg(stsTokenBean.getAccessKeyId());
+        String AccessKeySecret = decodeMsg(stsTokenBean.getAccessKeySecret());
+        String accessToken = decodeMsg(stsTokenBean.getSecurityToken());
+        String bucket = decodeMsg(stsTokenBean.getBucket());
 
         //移动端建议使用该方式，此时，stsToken中的前三个参数就派上用场了
         OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, AccessKeySecret,
