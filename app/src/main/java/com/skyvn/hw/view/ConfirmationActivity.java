@@ -178,7 +178,7 @@ public class ConfirmationActivity extends BaseActivity {
             showToast(getResources().getString(R.string.xieyi_hint));
             return;
         }
-        HttpServerImpl.withDraw(orderId).subscribe(new HttpResultSubscriber<String>() {
+        HttpServerImpl.withDraw(orderId, orderDetailsBO.getTenantId()).subscribe(new HttpResultSubscriber<String>() {
             @Override
             public void onSuccess(String s) {
                 showTiXianSourss();

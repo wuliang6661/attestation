@@ -60,6 +60,16 @@ public class OrderDetailsBO implements Serializable {
     private String serviceThreeName;
     private String serviceThreePrice;
     private String serviceAmount;
+    private String repayAmount;
+
+
+    public String getRepayAmount() {
+        return repayAmount;
+    }
+
+    public void setRepayAmount(String repayAmount) {
+        this.repayAmount = repayAmount;
+    }
 
     public String getId() {
         return id;

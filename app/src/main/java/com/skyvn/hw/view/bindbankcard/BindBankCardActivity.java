@@ -51,6 +51,7 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
     TextView jumpSkip;
 
     private int selectPosition = 0;
+    private List<BankBO> bankBOS;
 
     @Override
     protected int getLayout() {
@@ -124,6 +125,7 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
             @Override
             public void onSuccess(List<BankBO> s) {
                 stopProgress();
+                bankBOS = s;
                 switchBanks(s);
             }
 
@@ -175,7 +177,7 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
             showToast(getResources().getString(R.string.suoshuzhihang_toast));
             return;
         }
-        HttpServerImpl.bindBankCard(stryinhangName, strBankNum, strName, suoshuzhihang)
+        HttpServerImpl.bindBankCard(stryinhangName, strBankNum, strName, suoshuzhihang, bankBOS.get(selectPosition).getCode())
                 .subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
                     @Override
                     public void onSuccess(AttentionSourrssBO s) {

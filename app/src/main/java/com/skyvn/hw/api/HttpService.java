@@ -18,6 +18,7 @@ import com.skyvn.hw.bean.OrderBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
 import com.skyvn.hw.bean.StatusBO;
 import com.skyvn.hw.bean.StsTokenBean;
+import com.skyvn.hw.bean.VersionBO;
 
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,8 @@ import rx.Observable;
 
 public interface HttpService {
 
-    String URL = "http://tsa.fengyunv40.com/";   //正式服
-//    String URL = "http://47.96.126.117:9989/";   //测试服
+    //        String URL = "http://tsa.fengyunv40.com/";   //正式服
+    String URL = "http://47.96.126.117:9989/";   //测试服
 //    String URL = "http://mapi.platform.yinghezhong.com/";  //测试服2
 //    String URL = "http://api.open.yinghezhong.com/";  //正式环境
 //    String URL = "http://mapi.open.yinghezhong.com/";  //正式环境2
@@ -160,6 +161,12 @@ public interface HttpService {
      */
     @POST("/clientAddressList/addClientAddressListAuth")
     Observable<BaseResult<AttentionSourrssBO>> addContactListInfo(@Body Map<String, Object> params);
+
+    /**
+     * 短信记录认证
+     */
+    @POST("/clientSmsRecord/addClientSmsRecordAuth")
+    Observable<BaseResult<AttentionSourrssBO>> addClientSmsRecordAuth(@Body Map<String, Object> params);
 
     /**
      * 提交活体检测认证
@@ -308,5 +315,11 @@ public interface HttpService {
      */
     @POST("/orderLoan/withdraw")
     Observable<BaseResult<String>> withDraw(@Body Map<String, Object> params);
+
+    /**
+     * 检查更新
+     */
+    @GET("/operateApplication/getForceUpdate")
+    Observable<BaseResult<VersionBO>> checkUpdate();
 
 }

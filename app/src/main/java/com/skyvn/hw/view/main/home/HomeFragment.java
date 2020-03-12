@@ -277,7 +277,12 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             return;
         }
         gonggaoLayout.setVisibility(View.VISIBLE);
-        gonggaoText.setText(gongGaoBOS.get(0).getContent());
+        StringBuilder builder = new StringBuilder();
+        for (GongGaoBO gongGaoBO : gongGaoBOS) {
+            builder.append(gongGaoBO.getContent());
+            builder.append("             ");
+        }
+        gonggaoText.setText(builder.toString());
     }
 
     @Override

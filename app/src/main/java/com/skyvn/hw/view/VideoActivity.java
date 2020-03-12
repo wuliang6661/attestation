@@ -131,7 +131,8 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
 
     @OnClick(R.id.add_img)
     public void addVideo() {
-        ActionSheet.showSheet(this, this, null);
+//        ActionSheet.showSheet(this, this, null);
+        video();
     }
 
     @OnClick(R.id.bt_login)
@@ -248,7 +249,7 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
             Log.d("path", "path==" + path);
             File file = new File(path);
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();//实例化MediaMetadataRetriever对象
-            mmr.setDataSource(file.getAbsolutePath());
+            mmr.setDataSource(this,Uri.fromFile(file));
             bitmap = mmr.getFrameAtTime();//获得视频第一帧的Bitmap对象
             String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//时长(毫秒)
             Log.d("ddd", "duration==" + duration);

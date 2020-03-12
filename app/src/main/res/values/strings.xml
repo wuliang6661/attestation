@@ -339,5 +339,10 @@
     <string name="renzheng_hint">您需要先完成所有认证</string>
     <string name="wushuju">无数据！</string>
     <string name="wurenzheng">暂无该认证！</string>
+    <string name="sms_aleg_dialog">认证必须上传短信记录，我们将严格保护你的隐私</string>
+
+    <string name="zhengzaijiazai">正在下载新版本</string>
+    <string name="faxianxinbanben">发现新版本</string>
+    <string name="shifoulijigengxin">是否立即更新？</string>
 
 </resources>

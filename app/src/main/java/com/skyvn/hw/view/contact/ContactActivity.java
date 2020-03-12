@@ -209,19 +209,19 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
             contactBO.setName(phone.getName());
             contactBOS.add(contactBO);
         }
-        HttpServerImpl.commitContactList(contactBOS).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
-            @Override
-            public void onSuccess(AttentionSourrssBO s) {
-                showToast(getResources().getString(R.string.commit_sourss_toast));
-                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ContactActivity.this);
-
-            }
-
-            @Override
-            public void onFiled(String message) {
-                showToast(message);
-            }
-        });
+//        HttpServerImpl.commitContactList("").subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+//            @Override
+//            public void onSuccess(AttentionSourrssBO s) {
+//                showToast(getResources().getString(R.string.commit_sourss_toast));
+//                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), ContactActivity.this);
+//
+//            }
+//
+//            @Override
+//            public void onFiled(String message) {
+//                showToast(message);
+//            }
+//        });
     }
 
 

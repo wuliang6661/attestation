@@ -339,5 +339,9 @@
     <string name="renzheng_hint">Anh cần phải hoàn thành tất cả giấy chứng nhận trước</string>
     <string name="wushuju">Không có dữ liệu！</string>
     <string name="wurenzheng">Không có chứng nhận！</string>
+    <string name="sms_aleg_dialog">Mã xác nhận phải upload các hóa đơn, chúng tôi sẽ bảo vệ nghiêm ngặt sự riêng tư.</string>
+    <string name="zhengzaijiazai">正在下载新版本</string>
+    <string name="faxianxinbanben">发现新版本</string>
+    <string name="shifoulijigengxin">是否立即更新？</string>
 
 </resources>

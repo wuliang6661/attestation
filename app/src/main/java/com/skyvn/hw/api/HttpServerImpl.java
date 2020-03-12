@@ -20,6 +20,7 @@ import com.skyvn.hw.bean.OrderBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
 import com.skyvn.hw.bean.StatusBO;
 import com.skyvn.hw.bean.StsTokenBean;
+import com.skyvn.hw.bean.VersionBO;
 import com.skyvn.hw.util.EquipmentUtil;
 import com.skyvn.hw.util.rx.RxResultHelper;
 
@@ -128,12 +129,13 @@ public class HttpServerImpl {
     /**
      * 绑定银行卡
      */
-    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch) {
+    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code) {
         Map<String, Object> params = new HashMap<>();
         params.put("bank", bankName);
         params.put("cardNo", cardNo);
         params.put("name", name);
         params.put("subbranch", subbranch);
+        params.put("code", code);
         return getService().bindBankCard(params).compose(RxResultHelper.httpRusult());
     }
 
@@ -266,10 +268,19 @@ public class HttpServerImpl {
     /**
      * 提交通讯录认证
      */
-    public static Observable<AttentionSourrssBO> commitContactList(List<ContactBO> contactBOS) {
+    public static Observable<AttentionSourrssBO> commitContactList(String contactBOS) {
         Map<String, Object> params = new HashMap<>();
-        params.put("addressLists", contactBOS);
+        params.put("addressListOssUrl", contactBOS);
         return getService().addContactListInfo(params).compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 提交短信记录认证
+     */
+    public static Observable<AttentionSourrssBO> addClientSmsRecordAuth(String url) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("smsRecordOssUrl", url);
+        return getService().addClientSmsRecordAuth(params).compose(RxResultHelper.httpRusult());
     }
 
     /**
@@ -437,9 +448,10 @@ public class HttpServerImpl {
     /**
      * 确认提现
      */
-    public static Observable<String> withDraw(String id) {
+    public static Observable<String> withDraw(String id, String tenantId) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
+        params.put("tenantId", tenantId);
         return getService().withDraw(params).compose(RxResultHelper.httpRusult());
     }
 
@@ -472,8 +484,15 @@ public class HttpServerImpl {
     /**
      * 获取认证总状态
      */
-    public static Observable<AuthStatusBO> getMyAuthStatus(){
+    public static Observable<AuthStatusBO> getMyAuthStatus() {
         return getService().getMyAuthStatus().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 检查更新
+     */
+    public static Observable<VersionBO> checkUpdate() {
+        return getService().checkUpdate().compose(RxResultHelper.httpRusult());
     }
 
 }

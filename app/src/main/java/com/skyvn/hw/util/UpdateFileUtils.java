@@ -8,7 +8,6 @@ import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
-import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
@@ -91,13 +90,8 @@ public class UpdateFileUtils {
         String ossFiles = "appFile/" + image_url_time + "." + FileUtils.getFileExtension(loacalFilePath);
         PutObjectRequest put = new PutObjectRequest(bucket, ossFiles, loacalFilePath);
         //异步上传可以设置进度回调
-        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
-            @Override
-            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+        put.setProgressCallback((request, currentSize, totalSize) -> {
 
-//                Log.i("上传进度：", "当前进度" + currentSize + "   总进度" + totalSize);
-
-            }
         });
         //实现异步上传
         OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {

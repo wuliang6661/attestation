@@ -1,9 +1,26 @@
 package com.skyvn.hw.util;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.google.gson.Gson;
+import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
+import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.ContactBO;
+import com.skyvn.hw.bean.SmsBO;
 import com.skyvn.hw.config.IConstant;
+import com.skyvn.hw.util.phone.PhoneDto;
+import com.skyvn.hw.util.phone.PhoneUtil;
 import com.skyvn.hw.view.CommonMsgActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.LiveAttentionActivity;
@@ -11,12 +28,19 @@ import com.skyvn.hw.view.Msg14Activity;
 import com.skyvn.hw.view.VideoActivity;
 import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
 import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
-import com.skyvn.hw.view.contact.ContactActivity;
 import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
 import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
 import com.skyvn.hw.view.person_msg_style.PersonMsgActivity2;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity2;
+import com.skyvn.hw.widget.AlertDialog;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * author : wuliang
@@ -68,18 +92,55 @@ public class AuthenticationUtils {
                 gotoActivity(JiaZhaoActivity.class, needSourss, true, context);
                 break;
             case PHONE_COMMON:
+
                 break;
             case PHONE_LIST:
-                Intent intent = new Intent(context, ContactActivity.class);
-                intent.putExtra("needStatus", needSourss);
-                intent.putExtra("auth_type", 0);
-                context.startActivity(intent);
-                context.finish();
+                if (needSourss == 0) {   //可以跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    jump(PHONE_LIST);
+                                }
+                            })
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestPermission(context);
+                            }).show();
+                } else {// 不能跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
+                                    context.finish())
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestPermission(context);
+                            }).show();
+                }
                 break;
             case BIND_BANK_CARD:
                 gotoActivity(BindBankCardActivity.class, needSourss, true, context);
                 break;
             case SMS__JILU_PAGE:
+                if (needSourss == 0) {   //可以跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), view -> jump(SMS__JILU_PAGE))
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestSmsPermission(context);
+                            }).show();
+                } else {// 不能跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
+                                    context.finish())
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestSmsPermission(context);
+                            }).show();
+                }
                 break;
             case SMS_PAGE:
                 gotoActivity(Msg14Activity.class, needSourss, true, context);
@@ -116,17 +177,55 @@ public class AuthenticationUtils {
                 gotoActivity(JiaZhaoActivity.class, needSourss, isFinish, context);
                 break;
             case PHONE_COMMON:
+
                 break;
             case PHONE_LIST:
-                Intent intent = new Intent(context, ContactActivity.class);
-                intent.putExtra("needStatus", needSourss);
-                intent.putExtra("auth_type", 0);
-                context.startActivity(intent);
+                if (needSourss == 0) {   //可以跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    jump(PHONE_LIST);
+                                }
+                            })
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestPermission(context);
+                            }).show();
+                } else {// 不能跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
+                                    context.finish())
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestPermission(context);
+                            }).show();
+                }
                 break;
             case BIND_BANK_CARD:
                 gotoActivity(BindBankCardActivity.class, needSourss, isFinish, context);
                 break;
             case SMS__JILU_PAGE:
+                if (needSourss == 0) {   //可以跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), view -> jump(SMS__JILU_PAGE))
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestSmsPermission(context);
+                            }).show();
+                } else {// 不能跳过
+                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
+                            .setCancelable(false)
+                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
+                                    context.finish())
+                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+                                requestSmsPermission(context);
+                            }).show();
+                }
                 break;
             case SMS_PAGE:
                 gotoActivity(Msg14Activity.class, needSourss, isFinish, context);
@@ -154,6 +253,190 @@ public class AuthenticationUtils {
         if (isFinish) {
             context.finish();
         }
+    }
+
+
+    public static void jump(int status) {
+        HttpServerImpl.jumpAuth(status).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                goAuthNextPage(s.getCode(), s.getNeedStatus(), AppManager.getAppManager().curremtActivity());
+            }
+
+            @Override
+            public void onFiled(String message) {
+                ToastUtils.showShort(message);
+            }
+        });
+    }
+
+
+    /**
+     * 通讯录权限
+     */
+    private static void requestPermission(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+            //开启定位权限,200是标识码
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 200);
+        } else {
+            getPersonList(activity);
+        }
+    }
+
+
+    /**
+     * 短信记录权限
+     */
+    private static void requestSmsPermission(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_SMS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+            //开启定位权限,200是标识码
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_SMS,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 300);
+        } else {
+            getSmsList(activity);
+        }
+    }
+
+
+    static List<PhoneDto> phones;
+
+    /**
+     * 获取通讯录用户
+     */
+    private static void getPersonList(Activity activity) {
+        new Thread(() -> {
+            try {
+                phones = new PhoneUtil(activity).searchContacts("");
+                commitContactList(phones);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }).start();
+    }
+
+    static List<SmsBO> smsBOS;
+
+    /**
+     * 获取短信记录
+     */
+    private static void getSmsList(Activity activity) {
+        new Thread(() -> {
+            try {
+                smsBOS = SMSUtils.obtainPhoneMessage(activity);
+                commitSmsList();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }).start();
+    }
+
+
+    /**
+     * 上传短信记录验证
+     */
+    private static void commitSmsList() {
+        String json = new Gson().toJson(smsBOS);
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/saas.json";
+        FileUtils.createFileByDeleteOldFile(filePath);
+        try {
+            FileWriter fw = new FileWriter(new File(filePath));
+            BufferedWriter out = new BufferedWriter(fw);
+            out.write(json);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
+            @Override
+            public void call(String s) {
+                updateSms(s);
+            }
+
+            @Override
+            public void callError(String message) {
+                ToastUtils.showShort(message);
+            }
+        });
+        utils.updateFile(4, filePath);
+    }
+
+    private static void updateSms(String url) {
+        HttpServerImpl.addClientSmsRecordAuth(url).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                goAuthNextPage(s.getCode(), s.getNeedStatus(), AppManager.getAppManager().curremtActivity());
+            }
+
+            @Override
+            public void onFiled(String message) {
+                ToastUtils.showShort(message);
+            }
+        });
+    }
+
+
+    /**
+     * 上传通讯录验证
+     */
+    private static void commitContactList(List<PhoneDto> phoneDtos) {
+        List<ContactBO> contactBOS = new ArrayList<>();
+        for (PhoneDto phone : phoneDtos) {
+            ContactBO contactBO = new ContactBO();
+            contactBO.setPhone(phone.getTelPhone());
+            contactBO.setName(phone.getName());
+            contactBOS.add(contactBO);
+        }
+        String json = new Gson().toJson(contactBOS);
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/saas.json";
+        FileUtils.createFileByDeleteOldFile(filePath);
+        try {
+            FileWriter fw = new FileWriter(new File(filePath));
+            BufferedWriter out = new BufferedWriter(fw);
+            out.write(json);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
+            @Override
+            public void call(String s) {
+                updateContact(s);
+            }
+
+            @Override
+            public void callError(String message) {
+                ToastUtils.showShort(message);
+            }
+        });
+        utils.updateFile(3, filePath);
+    }
+
+
+    private static void updateContact(String url) {
+        HttpServerImpl.commitContactList(url).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                goAuthNextPage(s.getCode(), s.getNeedStatus(), AppManager.getAppManager().curremtActivity());
+            }
+
+            @Override
+            public void onFiled(String message) {
+                ToastUtils.showShort(message);
+            }
+        });
     }
 
 }

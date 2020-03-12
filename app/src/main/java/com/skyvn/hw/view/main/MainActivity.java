@@ -7,6 +7,7 @@ import android.view.View;
 import com.skyvn.hw.R;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.util.AppManager;
+import com.skyvn.hw.util.UpdateUtils;
 import com.skyvn.hw.view.main.none.NoneFragment1;
 import com.skyvn.hw.view.main.none.NoneFragment2;
 import com.skyvn.hw.view.main.none.NoneFragment3;
@@ -47,6 +48,11 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new UpdateUtils().checkUpdate(this, null);
+    }
 
     @OnClick({R.id.main1, R.id.main2, R.id.main3})
     public void onClick(View v) {

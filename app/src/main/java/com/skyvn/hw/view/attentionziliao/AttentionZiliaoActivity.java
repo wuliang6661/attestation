@@ -1,20 +1,39 @@
 package com.skyvn.hw.view.attentionziliao;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.google.gson.Gson;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
+import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.AuthTypeBO;
+import com.skyvn.hw.bean.ContactBO;
+import com.skyvn.hw.bean.SmsBO;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.mvp.MVPBaseActivity;
+import com.skyvn.hw.util.SMSUtils;
+import com.skyvn.hw.util.UpdateFileUtils;
+import com.skyvn.hw.util.phone.PhoneDto;
+import com.skyvn.hw.util.phone.PhoneUtil;
 import com.skyvn.hw.view.CommonMsgActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.LiveAttentionActivity;
@@ -26,9 +45,15 @@ import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
 import com.skyvn.hw.view.person_msg_style.PersonMsgActivity2;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity2;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -173,13 +198,13 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 showToast(getString(R.string.wurenzheng));
                 break;
             case "6":  // 通讯录验证
-                showToast(getString(R.string.wurenzheng));
+                requestPermission();
                 break;
             case "7":  // 绑定银行卡验证
                 gotoActivity(BindBankCardActivity.class, false);
                 break;
             case "8":  //短信记录验证
-                showToast(getString(R.string.wurenzheng));
+                requestSmsPermission();
                 break;
             case "9":   //1414短信验证
                 gotoActivity(Msg14Activity.class, false);
@@ -192,5 +217,247 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 break;
         }
     }
+
+
+    /**
+     * 通讯录权限
+     */
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+            //开启定位权限,200是标识码
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 200);
+        } else {
+            getPersonList("");
+        }
+    }
+
+
+    /**
+     * 短信记录权限
+     */
+    private void requestSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+            //开启定位权限,200是标识码
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 300);
+        } else {
+            getSmsList();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 200://刚才的识别码
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {//用户同意权限,执行我们的操作
+                    getPersonList("");
+                } else {//用户拒绝之后,当然我们也可以弹出一个窗口,直接跳转到系统设置页面
+                    Toast.makeText(this, "未开启通讯录权限,请手动到设置去开启权限", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 300:  //短信记录
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {//用户同意权限,执行我们的操作
+                    getSmsList();
+                } else {//用户拒绝之后,当然我们也可以弹出一个窗口,直接跳转到系统设置页面
+                    Toast.makeText(this, "未开启短信权限,请手动到设置去开启权限", Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    List<PhoneDto> phones;
+
+    /**
+     * 获取通讯录用户
+     */
+    private void getPersonList(String msg) {
+        showProgress();
+        new Thread(() -> {
+            try {
+                phones = new PhoneUtil(AttentionZiliaoActivity.this).searchContacts(msg);
+                handler.sendEmptyMessage(0x11);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                handler.sendEmptyMessage(0x22);
+            }
+        }).start();
+    }
+
+    List<SmsBO> smsBOS;
+
+    /**
+     * 获取短信记录
+     */
+    private void getSmsList() {
+        showProgress();
+        new Thread(() -> {
+            try {
+                smsBOS = SMSUtils.obtainPhoneMessage(AttentionZiliaoActivity.this);
+                handler.sendEmptyMessage(0x33);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                handler.sendEmptyMessage(0x22);
+            }
+        }).start();
+    }
+
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0x11:
+                    stopProgress();
+                    new AlertDialog(AttentionZiliaoActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                            .setMsg(getResources().getString(R.string.contact_aleg_dialog))
+                            .setNegativeButton(getResources().getString(R.string.buyunxu), null)
+                            .setPositiveButton(getResources().getString(R.string.hao), v -> {
+                                commitContactList(phones);
+                            }).show();
+                    break;
+                case 0x22:
+                    stopProgress();
+                    break;
+                case 0x33:
+                    stopProgress();
+                    new AlertDialog(AttentionZiliaoActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
+                            .setMsg(getString(R.string.sms_aleg_dialog))
+                            .setNegativeButton(getResources().getString(R.string.buyunxu), null)
+                            .setPositiveButton(getResources().getString(R.string.hao), v -> {
+                                commitSmsList();
+                            }).show();
+                    break;
+            }
+        }
+    };
+
+
+    /**
+     * 上传短信记录验证
+     */
+    private void commitSmsList() {
+        showProgress();
+        String json = new Gson().toJson(smsBOS);
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/saas.json";
+        FileUtils.createFileByDeleteOldFile(filePath);
+        try {
+            FileWriter fw = new FileWriter(new File(filePath));
+            BufferedWriter out = new BufferedWriter(fw);
+            out.write(json);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
+            @Override
+            public void call(String s) {
+                updateSms(s);
+            }
+
+            @Override
+            public void callError(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+        utils.updateFile(4, filePath);
+    }
+
+    private void updateSms(String url) {
+        HttpServerImpl.addClientSmsRecordAuth(url).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                stopProgress();
+                showToast(getResources().getString(R.string.commit_sourss_toast));
+//                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), AttentionZiliaoActivity.this);
+                getAuthList();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 上传通讯录验证
+     */
+    private void commitContactList(List<PhoneDto> phoneDtos) {
+        showProgress();
+        List<ContactBO> contactBOS = new ArrayList<>();
+        for (PhoneDto phone : phoneDtos) {
+            ContactBO contactBO = new ContactBO();
+            contactBO.setPhone(phone.getTelPhone());
+            contactBO.setName(phone.getName());
+            contactBOS.add(contactBO);
+        }
+        String json = new Gson().toJson(contactBOS);
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/saas.json";
+        FileUtils.createFileByDeleteOldFile(filePath);
+        try {
+            FileWriter fw = new FileWriter(new File(filePath));
+            BufferedWriter out = new BufferedWriter(fw);
+            out.write(json);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        UpdateFileUtils utils = new UpdateFileUtils();
+        utils.setListener(new UpdateFileUtils.OnCallBackListener() {
+            @Override
+            public void call(String s) {
+                updateContact(s);
+            }
+
+            @Override
+            public void callError(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+        utils.updateFile(3, filePath);
+    }
+
+
+    private void updateContact(String url) {
+        HttpServerImpl.commitContactList(url).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                stopProgress();
+                showToast(getResources().getString(R.string.commit_sourss_toast));
+//                AuthenticationUtils.goAuthNextPage(s.getCode(), s.getNeedStatus(), AttentionZiliaoActivity.this);
+                getAuthList();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+    }
+
 
 }
