@@ -261,8 +261,8 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
             showToast(getResources().getString(R.string.common_img_toast));
             return;
         }
-        HttpServerImpl.commitComplanyInfo(strCommonName, strCommonAddress, strCommonPhone, strZhiCheng,
-                strShouru, strShichang, gongsiImgUrl).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+        HttpServerImpl.commitComplanyInfo(strCommonName, strCommonAddress, strCommonPhone, strShouru,
+                strZhiCheng, strShichang, gongsiImgUrl).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
             @Override
             public void onSuccess(AttentionSourrssBO s) {
                 showToast(getResources().getString(R.string.commit_sourss_toast));

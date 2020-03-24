@@ -129,13 +129,14 @@ public class HttpServerImpl {
     /**
      * 绑定银行卡
      */
-    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code) {
+    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code,String cardType) {
         Map<String, Object> params = new HashMap<>();
         params.put("bank", bankName);
         params.put("cardNo", cardNo);
         params.put("name", name);
         params.put("subbranch", subbranch);
         params.put("code", code);
+        params.put("cardType", cardType);
         return getService().bindBankCard(params).compose(RxResultHelper.httpRusult());
     }
 
@@ -296,14 +297,14 @@ public class HttpServerImpl {
     /**
      * 获取返回的文案信息
      */
-    public static Observable<String> getBackMsg(int code) {
+    public static Observable<String> getBackMsg(String code) {
         return getService().getCopyWriter(code + "").compose(RxResultHelper.httpRusult());
     }
 
     /**
      * 跳过
      */
-    public static Observable<AttentionSourrssBO> jumpAuth(int code) {
+    public static Observable<AttentionSourrssBO> jumpAuth(String code) {
         return getService().JumpAuth(code + "").compose(RxResultHelper.httpRusult());
     }
 

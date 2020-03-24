@@ -174,10 +174,16 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
                     @Override
                     public void onItemClicked(View view, int position) {
                         if (type != 0) {
+                            String phone = phones.get(position).getTelPhone().replaceAll(" ", "")
+                                    .replaceAll("-", "");
+                            if (phone.length() != 10) {
+                                showToast(getString(R.string.jingjilianxiren_xianzhi));
+                                return;
+                            }
                             Intent intent = new Intent();
                             ContactBO contactBO = new ContactBO();
                             contactBO.setName(phones.get(position).getName());
-                            contactBO.setPhone(phones.get(position).getTelPhone());
+                            contactBO.setPhone(phone);
                             intent.putExtra("contact", contactBO);
                             setResult(0x11, intent);
                             finish();

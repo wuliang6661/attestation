@@ -51,23 +51,22 @@ import java.util.List;
  */
 public class AuthenticationUtils {
 
-    public static final int PERSON_MSG = 0;// 个人资料认证
-    public static final int ID_CARD = 1;   //身份证认证
-    public static final int LIVE_PAGE = 2;  //活体验证
-    public static final int CONTACT_PAGE = 3;  //紧急联系人
-    public static final int DEVICE_PAGE = 4;    //驾照验证
-    public static final int PHONE_COMMON = 5;   //运营商验证
-    public static final int PHONE_LIST = 6;      //通讯录验证
-    public static final int BIND_BANK_CARD = 7;   //绑定银行卡验证
-    public static final int SMS__JILU_PAGE = 8;         //短信记录认证
-    public static final int SMS_PAGE = 9;       //短信1414验证
-    public static final int VIDEO_PAGE = 10;    //视频验证
-    public static final int COMMON_MSG_PAGE = 11;   //公司信息认证
+    public static final String PERSON_MSG = "auth.code.user.Info";// 个人资料认证
+    public static final String ID_CARD = "auth.code.idcard";   //身份证认证
+    public static final String LIVE_PAGE = "auth.code.active";  //活体验证
+    public static final String CONTACT_PAGE = "auth.code.contact";  //紧急联系人
+    public static final String DEVICE_PAGE = "auth.code.driving";    //驾照验证
+    public static final String PHONE_COMMON = "auth.code.operate";   //运营商验证
+    public static final String PHONE_LIST = "auth.code.address";      //通讯录验证
+    public static final String BIND_BANK_CARD = "auth.code.band.card";   //绑定银行卡验证
+    public static final String SMS__JILU_PAGE = "auth.code.sms.record";         //短信记录认证
+    public static final String SMS_PAGE = "auth.code.sma.1414";       //短信1414验证
+    public static final String VIDEO_PAGE = "auth.code.video";    //视频验证
+    public static final String COMMON_MSG_PAGE = "auth.code.company.info";   //公司信息认证
 
 
     public static void goAuthNextPage(String pageNo, int needSourss, Activity context) {
-        int code = Integer.parseInt(pageNo);
-        switch (code) {
+        switch (pageNo) {
             case PERSON_MSG:
                 if (IConstant.STYLE == 1) {
                     gotoActivity(PersonMsgActivity.class, needSourss, true, context);
@@ -151,7 +150,7 @@ public class AuthenticationUtils {
             case COMMON_MSG_PAGE:
                 gotoActivity(CommonMsgActivity.class, needSourss, true, context);
                 break;
-            case -1:   //认证完成
+            case "-1":   //认证完成
                 gotoActivity(AttentionZiliaoActivity.class, needSourss, true, context);
                 break;
         }
@@ -159,8 +158,7 @@ public class AuthenticationUtils {
 
 
     public static void goAuthNextPageByHome(String pageNo, int needSourss, boolean isFinish, Activity context) {
-        int code = Integer.parseInt(pageNo);
-        switch (code) {
+        switch (pageNo) {
             case PERSON_MSG:
                 gotoActivity(PersonMsgActivity.class, needSourss, isFinish, context);
                 break;
@@ -236,7 +234,7 @@ public class AuthenticationUtils {
             case COMMON_MSG_PAGE:
                 gotoActivity(CommonMsgActivity.class, needSourss, isFinish, context);
                 break;
-            case -1:   //认证完成
+            case "-1":   //认证完成
                 gotoActivity(AttentionZiliaoActivity.class, needSourss, isFinish, context);
                 break;
         }
@@ -256,7 +254,7 @@ public class AuthenticationUtils {
     }
 
 
-    public static void jump(int status) {
+    public static void jump(String status) {
         HttpServerImpl.jumpAuth(status).subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
             @Override
             public void onSuccess(AttentionSourrssBO s) {

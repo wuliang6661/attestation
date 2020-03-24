@@ -344,5 +344,9 @@
     <string name="zhengzaijiazai">正在下载新版本</string>
     <string name="faxianxinbanben">发现新版本</string>
     <string name="shifoulijigengxin">是否立即更新？</string>
+    <string name="shenfenzheng_xianzhi">身份证号为9位或12位！</string>
+    <string name="jingjilianxiren_xianzhi">联系人手机号需为10位，请重新选择！</string>
+    <string name="yinghangkaleixing">银行卡类型</string>
+    <string name="yinghangzhanghao">银行账号</string>
 
 </resources>

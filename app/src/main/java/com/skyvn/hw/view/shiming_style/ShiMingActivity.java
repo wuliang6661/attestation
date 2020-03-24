@@ -41,6 +41,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
+import com.skyvn.hw.util.TextChangedListener;
 import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
@@ -131,6 +132,7 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         getPermission();
         cameraSavePath = new File(Environment.getExternalStorageDirectory().getPath() + "/" +
                 System.currentTimeMillis() + ".jpg");
+        TextChangedListener.StringWatcher(editUserName);
     }
 
 
@@ -263,6 +265,10 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         }
         if (StringUtils.isEmpty(idCardBackUrl)) {
             showToast(getResources().getString(R.string.wanshan_toast));
+            return;
+        }
+        if (strIdCard.length() != 9 && strIdCard.length() != 12) {
+            showToast(getString(R.string.shenfenzheng_xianzhi));
             return;
         }
         HttpServerImpl.commitIdCard(strBirthDay, selectSex + "", idCardFontUrl, idCardBackUrl, strIdCard, strName)

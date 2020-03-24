@@ -30,6 +30,7 @@ import com.skyvn.hw.bean.ContactBO;
 import com.skyvn.hw.bean.SmsBO;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.mvp.MVPBaseActivity;
+import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.SMSUtils;
 import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.util.phone.PhoneDto;
@@ -171,48 +172,48 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
 
     private void goAttention(String code) {
         switch (code) {
-            case "0":   //个人资料
+            case AuthenticationUtils.PERSON_MSG:   //个人资料
                 if (IConstant.STYLE == 1) {
                     gotoActivity(PersonMsgActivity.class, false);
                 } else {
                     gotoActivity(PersonMsgActivity2.class, false);
                 }
                 break;
-            case "1":  //身份证验证
+            case AuthenticationUtils.ID_CARD:  //身份证验证
                 if (IConstant.STYLE == 1) {
                     gotoActivity(ShiMingActivity.class, false);
                 } else {
                     gotoActivity(ShiMingActivity2.class, false);
                 }
                 break;
-            case "2":  // 活体验证
+            case AuthenticationUtils.LIVE_PAGE:  // 活体验证
                 gotoActivity(LiveAttentionActivity.class, false);
                 break;
-            case "3":  // 紧急联系人验证
+            case AuthenticationUtils.CONTACT_PAGE:  // 紧急联系人验证
                 gotoActivity(EmergencyContactActivity.class, false);
                 break;
-            case "4":  // 驾照验证
+            case AuthenticationUtils.DEVICE_PAGE:  // 驾照验证
                 gotoActivity(JiaZhaoActivity.class, false);
                 break;
-            case "5": // 运营商验证
+            case AuthenticationUtils.PHONE_COMMON: // 运营商验证
                 showToast(getString(R.string.wurenzheng));
                 break;
-            case "6":  // 通讯录验证
+            case AuthenticationUtils.PHONE_LIST:  // 通讯录验证
                 requestPermission();
                 break;
-            case "7":  // 绑定银行卡验证
+            case AuthenticationUtils.BIND_BANK_CARD:  // 绑定银行卡验证
                 gotoActivity(BindBankCardActivity.class, false);
                 break;
-            case "8":  //短信记录验证
+            case AuthenticationUtils.SMS__JILU_PAGE:  //短信记录验证
                 requestSmsPermission();
                 break;
-            case "9":   //1414短信验证
+            case AuthenticationUtils.SMS_PAGE:   //1414短信验证
                 gotoActivity(Msg14Activity.class, false);
                 break;
-            case "10":  //手持身份证小视频
+            case AuthenticationUtils.VIDEO_PAGE:  //手持身份证小视频
                 gotoActivity(VideoActivity.class, false);
                 break;
-            case "11":  // 公司资料验证
+            case AuthenticationUtils.COMMON_MSG_PAGE:  // 公司资料验证
                 gotoActivity(CommonMsgActivity.class, false);
                 break;
         }

@@ -1,8 +1,10 @@
 package com.skyvn.hw.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -325,9 +327,9 @@ public class LoginActivity extends BaseActivity {
     public void checkPermissions() {
         if (allPermissionsGranted()) {
             LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-//            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            loginLatitude = mLocation.getLatitude();
-//            loginLongitude = mLocation.getLongitude();
+            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            loginLatitude = mLocation.getLatitude();
+            loginLongitude = mLocation.getLongitude();
         } else {
             loginLatitude = 0;
             loginLongitude = 0;

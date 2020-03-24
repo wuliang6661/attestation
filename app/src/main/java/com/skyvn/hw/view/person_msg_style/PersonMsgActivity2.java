@@ -24,6 +24,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.util.TextChangedListener;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
@@ -92,6 +93,7 @@ public class PersonMsgActivity2 extends BaseActivity {
         } else {
             jumpSkip.setVisibility(View.GONE);
         }
+        TextChangedListener.StringWatcher(editUserName);
     }
 
 
@@ -319,6 +321,10 @@ public class PersonMsgActivity2 extends BaseActivity {
         String strJuzhuAddress = editAddress.getText().toString().trim();
         if (StringUtils.isEmpty(strJuzhuAddress)) {
             showToast(getResources().getString(R.string.juzhudizhi_toast));
+            return;
+        }
+        if (strIdCard.length() != 9 && strIdCard.length() != 12) {
+            showToast(getString(R.string.shenfenzheng_xianzhi));
             return;
         }
         String zalo = editZalo.getText().toString().trim();

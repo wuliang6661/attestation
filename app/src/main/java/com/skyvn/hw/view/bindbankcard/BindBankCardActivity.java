@@ -17,6 +17,7 @@ import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.mvp.MVPBaseActivity;
 import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.util.TextChangedListener;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
 
@@ -49,9 +50,15 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
     Button btLogin;
     @BindView(R.id.jump_skip)
     TextView jumpSkip;
+    @BindView(R.id.edit_yinghang_type)
+    TextView editYinghangType;
+    @BindView(R.id.yinghang_type_layout)
+    LinearLayout yinghangTypeLayout;
 
     private int selectPosition = 0;
     private List<BankBO> bankBOS;
+
+    private int selectYingHangType = 0;
 
     @Override
     protected int getLayout() {
@@ -74,6 +81,7 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
         } else {
             jumpSkip.setVisibility(View.GONE);
         }
+        TextChangedListener.StringWatcher(editUserName);
     }
 
 
@@ -115,6 +123,21 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
         getBankNames();
     }
 
+
+    @OnClick(R.id.yinghang_type_layout)
+    public void clickYinghangKaType() {
+        List<String> list = new ArrayList<>();
+        list.add(getString(R.string.yinghangzhanghao));
+        list.add(getString(R.string.yinghangkahao));
+        PopXingZhi popXingZhi = new PopXingZhi(this, "", list);
+        popXingZhi.setListener((position, item) -> {
+            selectYingHangType = position;
+            editYinghangType.setText(item);
+            editYinghangNum.setHint(item);
+        });
+        popXingZhi.setSelectPosition(selectYingHangType);
+        popXingZhi.showAtLocation(getWindow().getDecorView());
+    }
 
     /**
      * 获取所有银行名称
@@ -177,7 +200,7 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
             showToast(getResources().getString(R.string.suoshuzhihang_toast));
             return;
         }
-        HttpServerImpl.bindBankCard(stryinhangName, strBankNum, strName, suoshuzhihang, bankBOS.get(selectPosition).getCode())
+        HttpServerImpl.bindBankCard(stryinhangName, strBankNum, strName, suoshuzhihang, bankBOS.get(selectPosition).getCode(), selectYingHangType + "")
                 .subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
                     @Override
                     public void onSuccess(AttentionSourrssBO s) {
