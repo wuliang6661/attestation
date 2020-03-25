@@ -297,8 +297,8 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             case 0:
                 statusAllLayout.setVisibility(View.VISIBLE);
                 statusLayout.setVisibility(View.GONE);
-                mPresenter.getPayNumAndDays("LA", 3);
-                mPresenter.getPayNumAndDays("LD", 4);
+                mPresenter.getPayNumAndDays("saas.app.la", 3);
+                mPresenter.getPayNumAndDays("saas.app.ld", 4);
                 break;
             case 1:
                 statusAllLayout.setVisibility(View.GONE);

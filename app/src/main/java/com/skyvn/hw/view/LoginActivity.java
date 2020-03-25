@@ -328,8 +328,13 @@ public class LoginActivity extends BaseActivity {
         if (allPermissionsGranted()) {
             LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
             @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            loginLatitude = mLocation.getLatitude();
-            loginLongitude = mLocation.getLongitude();
+            if (mLocation == null) {
+                loginLatitude = 0;
+                loginLongitude = 0;
+            } else {
+                loginLatitude = mLocation.getLatitude();
+                loginLongitude = mLocation.getLongitude();
+            }
         } else {
             loginLatitude = 0;
             loginLongitude = 0;
