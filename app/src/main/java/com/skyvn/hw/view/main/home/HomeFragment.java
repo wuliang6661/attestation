@@ -163,10 +163,10 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     public void clickLayout(View view) {
         switch (view.getId()) {
             case R.id.pay_num_layout:
-                mPresenter.getPayNumAndDays("LA", 0);
+                mPresenter.getPayNumAndDays("saas.app.la", 0);
                 break;
             case R.id.days_layout:
-                mPresenter.getPayNumAndDays("LD", 1);
+                mPresenter.getPayNumAndDays("saas.app.ld", 1);
                 break;
         }
     }
