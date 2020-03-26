@@ -1,11 +1,8 @@
 package com.skyvn.hw.view;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -20,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.Utils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -29,6 +25,7 @@ import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.util.BitmapUtil;
+import com.skyvn.hw.util.MyLocationUtil;
 import com.skyvn.hw.view.main.MainActivity;
 
 import butterknife.BindView;
@@ -81,6 +78,7 @@ public class LoginActivity extends BaseActivity {
         setListener();
 
         requestPermission();
+        checkPermissions();
         getCodeImg();
 //        if (BuildConfig.DEBUG) {
 //            etPhoto.setText("151519777777");
@@ -326,10 +324,18 @@ public class LoginActivity extends BaseActivity {
      */
     public void checkPermissions() {
         if (allPermissionsGranted()) {
-            LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            loginLatitude = mLocation.getLatitude();
-            loginLongitude = mLocation.getLongitude();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermission();
+                return;
+            }
+            Location mLocation = MyLocationUtil.getMyLocation();
+            if (mLocation == null) {
+                loginLatitude = 0;
+                loginLongitude = 0;
+            } else {
+                loginLatitude = mLocation.getLatitude();
+                loginLongitude = mLocation.getLongitude();
+            }
         } else {
             loginLatitude = 0;
             loginLongitude = 0;

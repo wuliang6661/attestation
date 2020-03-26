@@ -147,7 +147,7 @@ public class ApiManager {
         if (StringUtils.isEmpty(MyApplication.token)) {
             // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
             request = chain.request().newBuilder()
-                    .addHeader("currentApplicationId", "1241309958021787650")
+                    .addHeader("currentApplicationId", "1242415496784642049")
                     .addHeader("currentTenantId", "0")
                     .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE))
 //                    .addHeader("Authorization", "1")
@@ -156,7 +156,7 @@ public class ApiManager {
             // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
             request = chain.request().newBuilder()
                     .addHeader("Authorization", MyApplication.token)
-                    .addHeader("currentApplicationId", "1241309958021787650")
+                    .addHeader("currentApplicationId", "1242415496784642049")
                     .addHeader("currentTenantId", "0")
                     .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE))
                     .build();

@@ -129,7 +129,7 @@ public class HttpServerImpl {
     /**
      * 绑定银行卡
      */
-    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code,String cardType) {
+    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code, String cardType) {
         Map<String, Object> params = new HashMap<>();
         params.put("bank", bankName);
         params.put("cardNo", cardNo);
@@ -442,8 +442,8 @@ public class HttpServerImpl {
     /**
      * 查询oss 配置
      */
-    public static Observable<StsTokenBean> getOssInfo(int type) {
-        return getService().getOssInfo(type + "").compose(RxResultHelper.httpRusult());
+    public static Observable<StsTokenBean> getOssInfo(int type, String key) {
+        return getService().getOssInfo(type + "", key).compose(RxResultHelper.httpRusult());
     }
 
     /**

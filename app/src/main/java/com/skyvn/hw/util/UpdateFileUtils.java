@@ -15,10 +15,13 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.Utils;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.bean.StsTokenBean;
+
+import java.text.SimpleDateFormat;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
@@ -29,10 +32,14 @@ import cn.hutool.crypto.symmetric.AES;
 public class UpdateFileUtils {
 
     public static String key = "vqZS3bbwDbMXDi09Ankwxw==";
+    private String ossFiles;
 
 
     public void updateFile(int type, String filePath) {
-        HttpServerImpl.getOssInfo(type).subscribe(new HttpResultSubscriber<StsTokenBean>() {
+        long image_url_time = System.currentTimeMillis();
+        // 构造上传请求,第二个数参是ObjectName，第三个参数是本地文件路径
+        ossFiles = "hw/" + TimeUtils.millis2String(image_url_time, new SimpleDateFormat("yyyyMMdd")) + "/" + image_url_time + "." + FileUtils.getFileExtension(filePath);
+        HttpServerImpl.getOssInfo(type, ossFiles).subscribe(new HttpResultSubscriber<StsTokenBean>() {
             @Override
             public void onSuccess(StsTokenBean s) {
                 new Thread(() -> upload_file(s, filePath)).start();
@@ -84,10 +91,7 @@ public class UpdateFileUtils {
         //事实上，初始化OSS的实例对象，应该具有与整个应用程序相同的生命周期，在应用程序生命周期结束时销毁
         //但这里只是实现功能，若时间紧，你仍然可以按照本文方式先将功能实现，然后优化
         OSS oss = new OSSClient(Utils.getApp(), endpoint, credentialProvider, conf);
-        //当前时间戳，用于自定义文件在OSS中存储路径末尾的名称
-        String image_url_time = System.currentTimeMillis() + "";
-        // 构造上传请求,第二个数参是ObjectName，第三个参数是本地文件路径
-        String ossFiles = "appFile/" + image_url_time + "." + FileUtils.getFileExtension(loacalFilePath);
+
         PutObjectRequest put = new PutObjectRequest(bucket, ossFiles, loacalFilePath);
         //异步上传可以设置进度回调
         put.setProgressCallback((request, currentSize, totalSize) -> {
