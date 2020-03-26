@@ -348,5 +348,6 @@
     <string name="jingjilianxiren_xianzhi">联系人手机号需为10位，请重新选择！</string>
     <string name="yinghangkaleixing">银行卡类型</string>
     <string name="yinghangzhanghao">银行账号</string>
+    <string name="qingxianrenzhengshangyige">请先认证上一个认证项</string>
 
 </resources>

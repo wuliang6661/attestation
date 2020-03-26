@@ -163,10 +163,25 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 if (typeBOS.get(position).getStatus() != 0) {  //已完成
                     return;
                 }
-                goAttention(typeBOS.get(position).getCode());
+                if (isFirst(position)) {
+                    goAttention(typeBOS.get(position).getCode());
+                }
             }
         });
         recycleView.setAdapter(adapter);
+    }
+
+
+    private boolean isFirst(int position) {
+        for (int i = 0; i < typeBOS.size(); i++) {
+            if (i < position) {
+                if (typeBOS.get(i).getNeedStatus() != 0 && typeBOS.get(i).getStatus() == 0) {   //必填未完成
+                    showToast(getString(R.string.qingxianrenzhengshangyige));
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
