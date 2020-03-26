@@ -75,6 +75,7 @@ public class UpdateFileUtils {
         String AccessKeySecret = decodeMsg(stsTokenBean.getAccessKeySecret());
         String accessToken = decodeMsg(stsTokenBean.getSecurityToken());
         String bucket = decodeMsg(stsTokenBean.getBucket());
+        String ossUrl = decodeMsg(stsTokenBean.getOosUrl());
 
         //移动端建议使用该方式，此时，stsToken中的前三个参数就派上用场了
         OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, AccessKeySecret,
@@ -110,10 +111,10 @@ public class UpdateFileUtils {
                 //但是这种方式需要在OSS的管理控制台中将你的存储空间设置为公共读的方式，不然没法用下面的拼接链接。
                 //此时你上传的文件所在的线上地址就已经获得了，想怎么使用则随意了
 //                image_url = stsTokenBean.getBucket()+ image_url_time;
-                String aliPath = url + "/" + ossFiles;
-                LogUtils.d(aliPath);
+//                String aliPath = url + "/" + ossFiles;
+                LogUtils.d(ossUrl);
                 if (listener != null) {
-                    listener.call(aliPath);
+                    listener.call(ossUrl);
                 }
             }
 
