@@ -78,7 +78,6 @@ public class LoginActivity extends BaseActivity {
         setListener();
 
         requestPermission();
-        checkPermissions();
         getCodeImg();
 //        if (BuildConfig.DEBUG) {
 //            etPhoto.setText("151519777777");
@@ -324,11 +323,8 @@ public class LoginActivity extends BaseActivity {
      */
     public void checkPermissions() {
         if (allPermissionsGranted()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermission();
-                return;
-            }
-            Location mLocation = MyLocationUtil.getMyLocation();
+            LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
+            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (mLocation == null) {
                 loginLatitude = 0;
                 loginLongitude = 0;
