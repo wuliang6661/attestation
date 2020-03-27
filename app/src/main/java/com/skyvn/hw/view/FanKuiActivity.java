@@ -244,7 +244,7 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
                 showToast(message);
             }
         });
-        utils.updateFile(6, file.getAbsolutePath());
+        utils.updateFile(9, file.getAbsolutePath());
     }
 
 

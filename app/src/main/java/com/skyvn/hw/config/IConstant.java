@@ -26,4 +26,26 @@ public interface IConstant {
      * 界面风格  1 :风格1  2：风格2
      */
     int STYLE = 1;
+
+    /**
+     * AppId
+     */
+    String appId = "1242415496784642049";
+
+    /**
+     * 服务器接口地址
+     */
+    String URL = "http://tsa.fengyunv40.com/";
+
+//    app打包：
+//    百倍云：
+//    saas-app：currentApplicationId：1237328537956216833
+//    接口地址：http://47.96.126.117:9989
+//    租户app：currentApplicationId：1237613520948129793 ，currentTenantId：1234763145872871425
+//    接口地址：http://47.96.126.117:9986
+//    客户：
+//    saas-app：currentApplicationId：1242415496784642049
+//    接口地址：http://tsa.fengyunv40.com
+//    租户app：currentApplicationId：1242353191250165761 ，currentTenantId：1242352620035608577
+//    接口地址：http://tta.fengyunv40.com
 }

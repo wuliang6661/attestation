@@ -264,7 +264,7 @@ public class Msg14Activity extends BaseActivity implements ActionSheet.OnActionS
                 showToast(message);
             }
         });
-        utils.updateFile(4, file.getAbsolutePath());
+        utils.updateFile(7, file.getAbsolutePath());
     }
 
 

@@ -389,7 +389,7 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
                 showToast(message);
             }
         });
-        utils.updateFile(6, file.getAbsolutePath());
+        utils.updateFile(8, file.getAbsolutePath());
     }
 
 
