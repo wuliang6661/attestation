@@ -29,6 +29,7 @@ import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.util.BitmapUtil;
+import com.skyvn.hw.util.MyLocationUtil;
 import com.skyvn.hw.view.main.MainActivity;
 
 import butterknife.BindView;

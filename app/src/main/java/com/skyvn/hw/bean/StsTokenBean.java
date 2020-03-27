@@ -21,6 +21,15 @@ public class StsTokenBean {
      */
     private String securityToken;
     private String httpUrl;
+    private String oosUrl;
+
+    public String getOosUrl() {
+        return oosUrl;
+    }
+
+    public void setOosUrl(String oosUrl) {
+        this.oosUrl = oosUrl;
+    }
 
     public String getHttpUrl() {
         return httpUrl;

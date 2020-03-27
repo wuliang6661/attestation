@@ -308,7 +308,7 @@ public interface HttpService {
      * 获取Oss配置
      */
     @GET("/ossInfo/getOssInfo")
-    Observable<BaseResult<StsTokenBean>> getOssInfo(@Query("type") String type);
+    Observable<BaseResult<StsTokenBean>> getOssInfo(@Query("type") String type, @Query("key") String key);
 
     /**
      * 确认提现

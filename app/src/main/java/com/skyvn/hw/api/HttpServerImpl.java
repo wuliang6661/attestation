@@ -10,7 +10,6 @@ import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.CodeImgBO;
-import com.skyvn.hw.bean.ContactBO;
 import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.KeFuBO;
@@ -22,6 +21,7 @@ import com.skyvn.hw.bean.StatusBO;
 import com.skyvn.hw.bean.StsTokenBean;
 import com.skyvn.hw.bean.VersionBO;
 import com.skyvn.hw.util.EquipmentUtil;
+import com.skyvn.hw.util.MD5;
 import com.skyvn.hw.util.rx.RxResultHelper;
 
 import java.io.File;
@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
@@ -129,7 +130,7 @@ public class HttpServerImpl {
     /**
      * 绑定银行卡
      */
-    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code,String cardType) {
+    public static Observable<AttentionSourrssBO> bindBankCard(String bankName, String cardNo, String name, String subbranch, String code, String cardType) {
         Map<String, Object> params = new HashMap<>();
         params.put("bank", bankName);
         params.put("cardNo", cardNo);
@@ -442,8 +443,8 @@ public class HttpServerImpl {
     /**
      * 查询oss 配置
      */
-    public static Observable<StsTokenBean> getOssInfo(int type) {
-        return getService().getOssInfo(type + "").compose(RxResultHelper.httpRusult());
+    public static Observable<StsTokenBean> getOssInfo(int type, String key) {
+        return getService().getOssInfo(type + "", key).compose(RxResultHelper.httpRusult());
     }
 
     /**
@@ -451,7 +452,13 @@ public class HttpServerImpl {
      */
     public static Observable<String> withDraw(String id, String tenantId) {
         Map<String, Object> params = new HashMap<>();
+        Random r = new Random(1);
+        int rdm = r.nextInt(10000);
+        String time = System.currentTimeMillis() + "";
+        params.put("rdm", rdm);
+        params.put("sign", MD5.strToMd5Low32(id + time + rdm));
         params.put("id", id);
+        params.put("time", time);
         params.put("tenantId", tenantId);
         return getService().withDraw(params).compose(RxResultHelper.httpRusult());
     }
