@@ -62,8 +62,8 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
 
         userPhone.setText(MyApplication.userBO.getPhone());
         Glide.with(getActivity()).load(MyApplication.userBO.getHeadPortrait())
-                .error(R.drawable.user_img_defalt).
-                placeholder(R.drawable.user_img_defalt).into(userImg);
+                .error(R.drawable.person_defalt).
+                placeholder(R.drawable.person_defalt).into(userImg);
     }
 
 

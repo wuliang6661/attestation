@@ -59,7 +59,6 @@ public class UpdateFileUtils {
      * 解密
      */
     private String decodeMsg(String msg) {
-//        AES aes = SecureUtil.aes(Base64.decode(key));
         AES aes1 = SecureUtil.aes(cn.hutool.core.codec.Base64.decode(key));
         return aes1.decryptStr(cn.hutool.core.codec.Base64.decode(msg));
 
