@@ -41,10 +41,10 @@ public class MyApplication extends Application {
         Utils.init(this);
         spUtils = SPUtils.getInstance(TAG);
         registerActivityLifecycleCallbacks(new AppLifecycleHandler());
-        if (TextUtils.isEmpty(spUtils.getString(IConstant.LANGUAGE_TYPE, ""))) {
-            spUtils.put(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage());
+        if (!TextUtils.isEmpty(spUtils.getString(IConstant.LANGUAGE_TYPE, ""))) {
+//            spUtils.put(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage());
+            setLanguage();
         }
-        setLanguage();
         GuardianLivenessDetectionSDK.init(this, IConstant.LIVE_KEY, IConstant.Secret_Key,
                 Market.Vietnam);
     }
