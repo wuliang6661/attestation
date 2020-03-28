@@ -65,6 +65,7 @@ public class LiveAttentionActivity extends BaseActivity {
         } else {
             jumpSkip.setVisibility(View.GONE);
         }
+        getSaasKey();
     }
 
     @OnClick(R.id.jump_skip)
@@ -110,6 +111,24 @@ public class LiveAttentionActivity extends BaseActivity {
         Intent intent = new Intent(this, LivenessActivity.class);
         startActivityForResult(intent, REQUEST_CODE_LIVENESS);
     }
+
+    /**
+     * 获取活体检测的key
+     */
+    private void getSaasKey() {
+        HttpServerImpl.getSaaSActiveKey().subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,7 +183,7 @@ public class LiveAttentionActivity extends BaseActivity {
 
     public String[] getRequiredPermissions() {
         return new String[]{Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     }
 
     @Override

@@ -323,4 +323,10 @@ public interface HttpService {
     @GET("/operateApplication/getForceUpdate")
     Observable<BaseResult<VersionBO>> checkUpdate();
 
+    /**
+     * 获取活体密钥
+     */
+    @GET("/operateApplication/getSaaSActiveKey")
+    Observable<BaseResult<String>> getSaaSActiveKey();
+
 }

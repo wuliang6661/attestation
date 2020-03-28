@@ -503,4 +503,11 @@ public class HttpServerImpl {
         return getService().checkUpdate().compose(RxResultHelper.httpRusult());
     }
 
+
+    /**
+     * 获取活体密钥
+     */
+    public static Observable<String> getSaaSActiveKey() {
+        return getService().getSaaSActiveKey().compose(RxResultHelper.httpRusult());
+    }
 }

@@ -101,16 +101,15 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        mPresenter.getHomeBanner();
-        mPresenter.getHomeCarses();
-        mPresenter.getNoticeList();
     }
 
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        mPresenter.getHomeBanner();
+        mPresenter.getHomeCarses();
+        mPresenter.getNoticeList();
         mPresenter.getMyApply();
     }
 

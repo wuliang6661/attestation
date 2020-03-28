@@ -82,9 +82,15 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
         animotionView.setLayoutParams(params);
 
         titles = new TextView[]{btDaiqueren, btDaihuankuan, btYijieshu};
-        mPresenter.getMyConfirmLoan();
+//        mPresenter.getMyConfirmLoan();
     }
 
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        refreshList();
+    }
 
     @OnClick({R.id.bt_daiqueren, R.id.bt_daihuankuan, R.id.bt_yijieshu})
     public void clickTitle(View view) {
@@ -150,7 +156,7 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
      * 设置数据适配器
      */
     private void setAdapter() {
-        if(adapter != null){
+        if (adapter != null) {
             adapter.setData(list);
             return;
         }
@@ -287,8 +293,8 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
         setAdapter();
     }
 
-    private void refreshList(){
-        switch (viewInType){
+    private void refreshList() {
+        switch (viewInType) {
             case 0:
                 mPresenter.getMyConfirmLoan();
                 break;
@@ -300,6 +306,7 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                 break;
         }
     }
+
     @Override
     public void loanAgainSouress() {
         showToast(getResources().getString(R.string.commit_sourss_toast));
