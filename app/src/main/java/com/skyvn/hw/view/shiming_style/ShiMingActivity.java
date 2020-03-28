@@ -343,6 +343,8 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
             photoPath = PhotoFromPhotoAlbum.getRealPathFromUri(this, data.getData());
             showProgress();
             updateFile(new File(photoPath));
+        }else {
+            showToast("图片获取失败！");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -42,7 +42,16 @@ public class UpdateFileUtils {
         HttpServerImpl.getOssInfo(type, ossFiles).subscribe(new HttpResultSubscriber<StsTokenBean>() {
             @Override
             public void onSuccess(StsTokenBean s) {
-                new Thread(() -> upload_file(s, filePath)).start();
+                new Thread(() -> {
+                    try {
+                        upload_file(s, filePath);
+                    } catch (Exception e) {
+                        if (listener != null) {
+                            listener.callError(e.getMessage());
+                        }
+                        e.printStackTrace();
+                    }
+                }).start();
             }
 
             @Override
@@ -65,7 +74,7 @@ public class UpdateFileUtils {
     }
 
     //上传文件方法
-    private void upload_file(StsTokenBean stsTokenBean, String loacalFilePath) {
+    private void upload_file(StsTokenBean stsTokenBean, String loacalFilePath) throws Exception {
         //根据你的OSS的地区而自行定义，本文中的是杭州
 //        String url = "http://oss-cn-hangzhou.aliyuncs.com";
         String url = decodeMsg(stsTokenBean.getHttpUrl());
