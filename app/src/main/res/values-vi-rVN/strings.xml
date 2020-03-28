@@ -348,5 +348,7 @@
     <string name="yinghangkaleixing">银行卡类型</string>
     <string name="yinghangzhanghao">银行账号</string>
     <string name="qingxianrenzhengshangyige">请先认证上一个认证项</string>
+    <string name="tongxunluquanxian">未开启通讯录权限,请手动到设置去开启权限</string>
+    <string name="duanxinhuotongxunluquanxian">未开启短信权限或通讯录权限,请手动到设置去开启权限</string>
 
 </resources>

@@ -173,14 +173,14 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
 
 
     private boolean isFirst(int position) {
-        for (int i = 0; i < typeBOS.size(); i++) {
-            if (i < position) {
-                if (typeBOS.get(i).getNeedStatus() != 0 && typeBOS.get(i).getStatus() == 0) {   //必填未完成
-                    showToast(getString(R.string.qingxianrenzhengshangyige));
-                    return false;
-                }
-            }
-        }
+//        for (int i = 0; i < typeBOS.size(); i++) {
+//            if (i < position) {
+//                if (typeBOS.get(i).getNeedStatus() != 0 && typeBOS.get(i).getStatus() == 0) {   //必填未完成
+//                    showToast(getString(R.string.qingxianrenzhengshangyige));
+//                    return false;
+//                }
+//            }
+//        }
         return true;
     }
 
@@ -263,10 +263,14 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED) {
             //开启定位权限,200是标识码
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 300);
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.READ_EXTERNAL_STORAGE}, 300);
         } else {
             getSmsList();
         }
@@ -281,14 +285,14 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {//用户同意权限,执行我们的操作
                     getPersonList("");
                 } else {//用户拒绝之后,当然我们也可以弹出一个窗口,直接跳转到系统设置页面
-                    Toast.makeText(this, "未开启通讯录权限,请手动到设置去开启权限", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.tongxunluquanxian, Toast.LENGTH_LONG).show();
                 }
                 break;
             case 300:  //短信记录
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {//用户同意权限,执行我们的操作
                     getSmsList();
                 } else {//用户拒绝之后,当然我们也可以弹出一个窗口,直接跳转到系统设置页面
-                    Toast.makeText(this, "未开启短信权限,请手动到设置去开启权限", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.duanxinhuotongxunluquanxian, Toast.LENGTH_LONG).show();
                 }
                 break;
             default:
