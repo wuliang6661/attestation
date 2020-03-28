@@ -17,6 +17,7 @@ import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
+import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.widget.MyDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -222,12 +223,10 @@ public class ConfirmationActivity extends BaseActivity {
         View view = getLayoutInflater().inflate(R.layout.dialog_jiekuan_souress, null);
         TextView guanBi = view.findViewById(R.id.guanbi);
         MyDialog mMyDialog = new MyDialog(this, 0, 0, view, R.style.DialogTheme);
-        mMyDialog.setCancelable(true);
-        guanBi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mMyDialog.dismiss();
-            }
+        mMyDialog.setCancelable(false);
+        guanBi.setOnClickListener(view1 -> {
+            mMyDialog.dismiss();
+            AppManager.getAppManager().goHome();
         });
         mMyDialog.show();
     }
