@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.MD5;
+import com.skyvn.hw.util.language.LanguageType;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -149,7 +150,7 @@ public class ApiManager {
             request = chain.request().newBuilder()
                     .addHeader("currentApplicationId", IConstant.appId)
                     .addHeader("currentTenantId", "0")
-                    .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE))
+                    .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage()))
 //                    .addHeader("Authorization", "1")
                     .build();
         } else {
@@ -158,7 +159,7 @@ public class ApiManager {
                     .addHeader("Authorization", MyApplication.token)
                     .addHeader("currentApplicationId", IConstant.appId)
                     .addHeader("currentTenantId", "0")
-                    .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE))
+                    .addHeader("language", MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage()))
                     .build();
         }
         LogUtils.d(request.headers().toString());
