@@ -48,6 +48,9 @@ public class SMSUtils {
     }
 
 
+    /**
+     * 根据短信号码查询通讯录里的备注
+     */
     private static String getContactByAddr(Context context, String mAddress) {
         Uri personUri = Uri.withAppendedPath(
                 ContactsContract.PhoneLookup.CONTENT_FILTER_URI, mAddress);
