@@ -30,12 +30,12 @@ public interface IConstant {
     /**
      * AppId
      */
-    String appId = "1243737596078301186";
+    String appId = "1237328537956216833";
 
     /**
      * 服务器接口地址
      */
-    String URL = "http://tsa.fengyunv40.com/";
+    String URL = "http://47.96.126.117:9989/";
 
 //    app打包：
 //    百倍云：
