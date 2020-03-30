@@ -5,7 +5,11 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.skyvn.hw.R;
+import com.skyvn.hw.api.HttpResultSubscriber;
+import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.bean.LiveKeyBO;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.UpdateUtils;
 import com.skyvn.hw.view.main.none.NoneFragment1;
@@ -13,6 +17,8 @@ import com.skyvn.hw.view.main.none.NoneFragment2;
 import com.skyvn.hw.view.main.none.NoneFragment3;
 import com.xyz.tabitem.BottmTabItem;
 
+import ai.advance.liveness.lib.GuardianLivenessDetectionSDK;
+import ai.advance.liveness.lib.Market;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -41,7 +47,30 @@ public class MainActivity extends BaseActivity {
 
         buttms = new BottmTabItem[]{main1, main2, main3};
         initFragment();
+        getSaasKey();
     }
+
+
+    /**
+     * 获取活体检测的key
+     */
+    private void getSaasKey() {
+        HttpServerImpl.getSaaSActiveKey().subscribe(new HttpResultSubscriber<LiveKeyBO>() {
+            @Override
+            public void onSuccess(LiveKeyBO s) {
+                MyApplication.LIVE_KEY = s.getSdkKey();
+                MyApplication.Secret_Key = s.getSecretKey();
+                GuardianLivenessDetectionSDK.init(getApplication(), MyApplication.LIVE_KEY, MyApplication.Secret_Key,
+                        Market.Vietnam);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
 
     @Override
     protected int getLayout() {

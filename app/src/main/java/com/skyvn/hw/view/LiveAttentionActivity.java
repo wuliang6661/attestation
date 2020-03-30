@@ -18,10 +18,15 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.LiveKeyBO;
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AuthenticationUtils;
 
+import ai.advance.liveness.lib.GuardianLivenessDetectionSDK;
 import ai.advance.liveness.lib.LivenessResult;
+import ai.advance.liveness.lib.Market;
 import ai.advance.liveness.sdk.activity.LivenessActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,7 +70,6 @@ public class LiveAttentionActivity extends BaseActivity {
         } else {
             jumpSkip.setVisibility(View.GONE);
         }
-        getSaasKey();
     }
 
     @OnClick(R.id.jump_skip)
@@ -112,22 +116,6 @@ public class LiveAttentionActivity extends BaseActivity {
         startActivityForResult(intent, REQUEST_CODE_LIVENESS);
     }
 
-    /**
-     * 获取活体检测的key
-     */
-    private void getSaasKey() {
-        HttpServerImpl.getSaaSActiveKey().subscribe(new HttpResultSubscriber<String>() {
-            @Override
-            public void onSuccess(String s) {
-
-            }
-
-            @Override
-            public void onFiled(String message) {
-                showToast(message);
-            }
-        });
-    }
 
 
     @Override

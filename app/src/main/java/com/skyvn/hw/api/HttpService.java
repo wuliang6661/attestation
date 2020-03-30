@@ -13,6 +13,7 @@ import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
+import com.skyvn.hw.bean.LiveKeyBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.bean.OrderBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
@@ -327,6 +328,6 @@ public interface HttpService {
      * 获取活体密钥
      */
     @GET("/operateApplication/getSaaSActiveKey")
-    Observable<BaseResult<String>> getSaaSActiveKey();
+    Observable<BaseResult<LiveKeyBO>> getSaaSActiveKey();
 
 }

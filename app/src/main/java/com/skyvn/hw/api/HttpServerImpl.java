@@ -14,6 +14,7 @@ import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
+import com.skyvn.hw.bean.LiveKeyBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.bean.OrderBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
@@ -507,7 +508,7 @@ public class HttpServerImpl {
     /**
      * 获取活体密钥
      */
-    public static Observable<String> getSaaSActiveKey() {
+    public static Observable<LiveKeyBO> getSaaSActiveKey() {
         return getService().getSaaSActiveKey().compose(RxResultHelper.httpRusult());
     }
 }

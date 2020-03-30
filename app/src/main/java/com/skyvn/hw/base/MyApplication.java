@@ -31,6 +31,16 @@ public class MyApplication extends Application {
     public static String token;
     public static boolean AppInBack = false;  //App 是否在后台
 
+    /**
+     * 活体检测的key
+     */
+    public static String LIVE_KEY = "";
+
+    /**
+     * 活体检测的
+     */
+    public static String Secret_Key = "";
+
     public static LoginSuressBO userBO;
 
     @Override
@@ -45,8 +55,6 @@ public class MyApplication extends Application {
 //            spUtils.put(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage());
             setLanguage();
         }
-        GuardianLivenessDetectionSDK.init(this, IConstant.LIVE_KEY, IConstant.Secret_Key,
-                Market.Vietnam);
     }
 
 

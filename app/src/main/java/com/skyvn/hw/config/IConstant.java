@@ -12,15 +12,6 @@ public interface IConstant {
     //语言类型
     String LANGUAGE_TYPE = "language_type";
 
-    /**
-     * 活体检测的key
-     */
-    String LIVE_KEY = "7cec70f1679a5c3c";
-
-    /**
-     * 活体检测的
-     */
-    String Secret_Key = "728e65227bf25507";
 
     /**
      * 界面风格  1 :风格1  2：风格2
@@ -30,7 +21,7 @@ public interface IConstant {
     /**
      * AppId
      */
-    String appId = "1237328537956216833";
+    String appId = "1243535313500131330";
 
     /**
      * 服务器接口地址
