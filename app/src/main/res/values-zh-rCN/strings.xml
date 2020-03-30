@@ -216,7 +216,7 @@
     <string name="fangqishenqing">放弃申请</string>
 
     <string name="jine">金额</string>
-    <string name="yuan">（元）</string>
+    <string name="yuan">（VND）</string>
     <string name="qixian">期限</string>
     <string name="tian">（天）</string>
 
@@ -235,7 +235,7 @@
     <string name="jiekuan_jine">借款金额</string>
     <string name="jiekuan_qixian">借款期限</string>
 
-    <string name="danwei_yuan">元</string>
+    <string name="danwei_yuan">VND</string>
     <string name="danwei_tian">天</string>
 
     <string name="jiekuandaozhang">借款到账</string>
