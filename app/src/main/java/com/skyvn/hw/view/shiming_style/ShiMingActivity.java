@@ -41,6 +41,7 @@ import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AttentionSourrssBO;
+import com.skyvn.hw.bean.IdCardInfoBO;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.PhotoFromPhotoAlbum;
 import com.skyvn.hw.util.TextChangedListener;
@@ -289,7 +290,6 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
     }
 
 
-
     //获取权限
     private boolean getPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -368,7 +368,7 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
             photoPath = PhotoFromPhotoAlbum.getRealPathFromUri(this, data.getData());
             showProgress();
             updateFile(new File(photoPath));
-        }else {
+        } else {
             showToast("图片获取失败！");
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -449,7 +449,36 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
             } else {
                 Glide.with(ShiMingActivity.this).load(idCardBackUrl).into(idCardBack);
             }
+            if (!StringUtils.isEmpty(idCardBackUrl) && !StringUtils.isEmpty(idCardFontUrl)) {
+                getIdcardInfo();
+            }
         }
     };
+
+
+    /**
+     * 识别身份证信息
+     */
+    private void getIdcardInfo() {
+        showProgress();
+        HttpServerImpl.getIdCardInfo(idCardFontUrl, idCardBackUrl).subscribe(new HttpResultSubscriber<IdCardInfoBO>() {
+            @Override
+            public void onSuccess(IdCardInfoBO s) {
+                stopProgress();
+                if(s != null){
+                    editUserName.setText(s.getRealName());
+                    editBirthday.setText(s.getBirthday());
+                    editSex.setText(s.getGender());
+                    editUserIdcard.setText(s.getIdCardNo());
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+                stopProgress();
+            }
+        });
+    }
 
 }

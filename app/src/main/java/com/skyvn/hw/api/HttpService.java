@@ -11,6 +11,7 @@ import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
+import com.skyvn.hw.bean.IdCardInfoBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LiveKeyBO;
@@ -335,5 +336,12 @@ public interface HttpService {
      */
     @GET("/clientUser/getClientInfo")
     Observable<BaseResult<LoginSuressBO>> getUserInfo();
+
+    /**
+     * 获取身份证信息
+     */
+    @GET("/clientUserIdcard/getIdCardInfo")
+    Observable<BaseResult<IdCardInfoBO>> getIdCardInfo(@Query("idCardBackOssUrl") String idCardBackOssUrl,
+                                                       @Query("idCardFrontOssUrl") String idCardFrontOssUrl);
 
 }
