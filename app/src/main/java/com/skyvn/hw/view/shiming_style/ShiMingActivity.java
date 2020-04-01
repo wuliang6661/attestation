@@ -465,10 +465,18 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
             @Override
             public void onSuccess(IdCardInfoBO s) {
                 stopProgress();
-                if(s != null){
+                if (s != null) {
+                    if ("0".equals(s.getGender())) {
+                        editSex.setText(getString(R.string.nan));
+                    } else if ("1".equals(s.getGender())) {
+                        editSex.setText(getString(R.string.nv));
+                    } else if ("2".equals(s.getGender())) {
+                        editSex.setText(getString(R.string.qita));
+                    } else {
+                        editSex.setText("");
+                    }
                     editUserName.setText(s.getRealName());
                     editBirthday.setText(s.getBirthday());
-                    editSex.setText(s.getGender());
                     editUserIdcard.setText(s.getIdCardNo());
                 }
             }
