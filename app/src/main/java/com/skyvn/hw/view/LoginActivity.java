@@ -307,6 +307,7 @@ public class LoginActivity extends BaseActivity {
                 stopProgress();
                 MyApplication.userBO = s;
                 MyApplication.token = s.getToken();
+                MyApplication.spUtils.put("token", s.getToken());
                 gotoActivity(MainActivity.class, true);
             }
 

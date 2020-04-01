@@ -41,7 +41,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.skyvn.hw.view.LoginActivity"
+            android:name="com.skyvn.hw.view.SplashActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +50,11 @@
             </intent-filter>
         </activity>
 
+
+        <!--登录-->
+        <activity
+            android:name=".view.LoginActivity"
+            android:launchMode="singleTask" />
 
         <!--主页-->
         <activity
