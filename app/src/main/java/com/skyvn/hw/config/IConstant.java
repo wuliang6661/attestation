@@ -39,4 +39,5 @@ public interface IConstant {
 //    接口地址：http://tsa.fengyunv40.com
 //    租户app：currentApplicationId：1242353191250165761 ，currentTenantId：1242352620035608577
 //    接口地址：http://tta.fengyunv40.com
+
 }

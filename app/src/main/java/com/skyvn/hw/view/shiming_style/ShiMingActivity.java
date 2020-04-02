@@ -443,6 +443,12 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
         utils.updateFile(0, file.getAbsolutePath());
     }
 
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
 
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {

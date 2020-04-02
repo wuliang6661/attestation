@@ -312,4 +312,10 @@ public class JiaZhaoActivity extends BaseActivity implements ActionSheet.OnActio
         }
     };
 
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
 }
