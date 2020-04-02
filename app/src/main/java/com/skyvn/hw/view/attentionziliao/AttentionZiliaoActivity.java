@@ -161,7 +161,7 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
         adapter.setOnItemClickListener(R.id.item_layout, new LGRecycleViewAdapter.ItemClickListener() {
             @Override
             public void onItemClicked(View view, int position) {
-                if (typeBOS.get(position).getStatus() != 0) {  //已完成
+                if (typeBOS.get(position).getStatus() == 1) {  //已完成
                     return;
                 }
                 if (isFirst(position)) {
