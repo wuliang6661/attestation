@@ -258,6 +258,12 @@ public class FanKuiActivity extends BaseActivity implements ActionSheet.OnAction
     };
 
 
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
     /**
      * 提交反馈
      */

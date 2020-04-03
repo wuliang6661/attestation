@@ -12,6 +12,7 @@ import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
+import com.skyvn.hw.bean.IdCardInfoBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.LablesBO;
 import com.skyvn.hw.bean.LiveKeyBO;
@@ -517,5 +518,12 @@ public class HttpServerImpl {
      */
     public static Observable<LoginSuressBO> getUserInfo() {
         return getService().getUserInfo().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 识别身份证信息
+     */
+    public static Observable<IdCardInfoBO> getIdCardInfo(String zhengmian, String beimian) {
+        return getService().getIdCardInfo(beimian, zhengmian).compose(RxResultHelper.httpRusult());
     }
 }

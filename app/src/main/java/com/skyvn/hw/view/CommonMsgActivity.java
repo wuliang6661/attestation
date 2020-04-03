@@ -401,4 +401,10 @@ public class CommonMsgActivity extends BaseActivity implements ActionSheet.OnAct
             Glide.with(CommonMsgActivity.this).load(gongsiImgUrl).into(gongsiImg);
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
 }

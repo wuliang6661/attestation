@@ -30,6 +30,12 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
 
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name="com.skyvn.hw.base.MyApplication"
@@ -41,7 +47,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.skyvn.hw.view.LoginActivity"
+            android:name="com.skyvn.hw.view.SplashActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +56,11 @@
             </intent-filter>
         </activity>
 
+
+        <!--登录-->
+        <activity
+            android:name=".view.LoginActivity"
+            android:launchMode="singleTask" />
 
         <!--主页-->
         <activity
