@@ -330,4 +330,10 @@ public interface HttpService {
     @GET("/operateApplication/getSaaSActiveKey")
     Observable<BaseResult<LiveKeyBO>> getSaaSActiveKey();
 
+    /**
+     * 获取客户信息
+     */
+    @GET("/clientUser/getClientInfo")
+    Observable<BaseResult<LoginSuressBO>> getUserInfo();
+
 }
