@@ -28,6 +28,16 @@ public interface IConstant {
      */
     String URL = "http://47.96.126.117:9989/";
 
+//    /**
+//     * AppId
+//     */
+//    String appId = "1244526410950463489";
+//
+//    /**
+//     * 服务器接口地址
+//     */
+//    String URL = "http://tsa.fengyunv40.com/saas-app-api/";
+
 //    app打包：
 //    百倍云：
 //    saas-app：currentApplicationId：1237328537956216833

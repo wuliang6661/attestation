@@ -133,6 +133,7 @@ public class UpdateFileUtils {
                     clientException.printStackTrace();
                     if (listener != null) {
                         listener.callError("Internet Error!");
+                        return;
                     }
                 }
                 if (serviceException != null) {
@@ -142,8 +143,13 @@ public class UpdateFileUtils {
                     Log.e("RawMessage", serviceException.getRawMessage());
                     if (listener != null) {
                         listener.callError(serviceException.getRawMessage());
+                        return;
                     }
                 }
+                if (listener != null) {
+                    listener.callError("Internet Error!");
+                }
+
             }
         });
         // 等异步上传过程完成

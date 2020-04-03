@@ -225,10 +225,12 @@ public class JiaZhaoActivity extends BaseActivity implements ActionSheet.OnActio
             }
             Log.d("拍照返回图片路径:", photoPath);
             showProgress();
-            updateFile(new File(Objects.requireNonNull(photoPath)));
+//            showToast(photoPath);
+            updateFile(new File(photoPath));
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             photoPath = PhotoFromPhotoAlbum.getRealPathFromUri(this, data.getData());
             showProgress();
+//            showToast(photoPath);
             updateFile(new File(photoPath));
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -256,26 +258,6 @@ public class JiaZhaoActivity extends BaseActivity implements ActionSheet.OnActio
      * 上传文件
      */
     private void updateFile(File file) {
-//        showProgress();
-//        HttpServerImpl.updateFile(file).subscribe(new HttpResultSubscriber<String>() {
-//            @Override
-//            public void onSuccess(String s) {
-//                stopProgress();
-//                if (imageType == 1) {
-//                    imageUrl1 = s;
-//                    Glide.with(JiaZhaoActivity.this).load(s).into(zhengmianImg);
-//                } else {
-//                    imageUrl2 = s;
-//                    Glide.with(JiaZhaoActivity.this).load(s).into(fanmianImg);
-//                }
-//            }
-//
-//            @Override
-//            public void onFiled(String message) {
-//                stopProgress();
-//                showToast(message);
-//            }
-//        });
         UpdateFileUtils utils = new UpdateFileUtils();
         utils.setListener(new UpdateFileUtils.OnCallBackListener() {
             @Override
