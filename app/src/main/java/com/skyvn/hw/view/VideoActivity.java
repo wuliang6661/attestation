@@ -207,7 +207,7 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
              * 第三个参数 selectionArgs ： 查询条件的参数，相当于 ？。
              * 第四个参数 sortOrder ： 结果排序。
              */
-            if (uri == null){
+            if (uri == null) {
                 showToast(getString(R.string.buzhichigaishipin));
                 return;
             }
@@ -252,7 +252,7 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
             Log.d("path", "path==" + path);
             File file = new File(path);
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();//实例化MediaMetadataRetriever对象
-            mmr.setDataSource(this,Uri.fromFile(file));
+            mmr.setDataSource(this, Uri.fromFile(file));
             bitmap = mmr.getFrameAtTime();//获得视频第一帧的Bitmap对象
             String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);//时长(毫秒)
             Log.d("ddd", "duration==" + duration);
@@ -326,14 +326,13 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
         utils.setListener(new UpdateFileUtils.OnCallBackListener() {
             @Override
             public void call(String s) {
-                stopProgress();
                 videoUrl = s;
                 handler.sendEmptyMessage(0x11);
             }
 
             @Override
             public void callError(String message) {
-                stopProgress();
+                handler.sendEmptyMessage(0x22);
                 showToast(message);
             }
         });
@@ -346,7 +345,15 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            videoImg.setImageBitmap(bitmap);
+            switch (msg.what) {
+                case 0x11:
+                    stopProgress();
+                    videoImg.setImageBitmap(bitmap);
+                    break;
+                case 0x22:
+                    stopProgress();
+                    break;
+            }
         }
     };
 
