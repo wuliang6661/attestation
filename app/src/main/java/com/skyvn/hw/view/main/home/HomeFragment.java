@@ -140,7 +140,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         //设置指示器位置（当banner模式中有指示器时）
         banner.setIndicatorGravity(BannerConfig.CENTER);
         banner.setOnBannerListener(position -> {
-            if (StringUtils.isEmpty(bannerBOS.get(position).getForwardUrl())) {
+            if (bannerBOS == null || StringUtils.isEmpty(bannerBOS.get(position).getForwardUrl())) {
                 return;
             }
             Bundle bundle = new Bundle();

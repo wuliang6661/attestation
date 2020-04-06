@@ -18,25 +18,25 @@ public interface IConstant {
      */
     int STYLE = 1;
 
-    /**
-     * AppId
-     */
-    String appId = "1243535313500131330";
-
-    /**
-     * 服务器接口地址
-     */
-    String URL = "http://47.96.126.117:9989/";
-
 //    /**
 //     * AppId
 //     */
-//    String appId = "1244526410950463489";
+//    String appId = "1243535313500131330";
 //
 //    /**
 //     * 服务器接口地址
 //     */
-//    String URL = "http://tsa.fengyunv40.com/saas-app-api/";
+//    String URL = "http://47.96.126.117:9989/";
+
+    /**
+     * AppId
+     */
+    String appId = "1244526410950463489";
+
+    /**
+     * 服务器接口地址
+     */
+    String URL = "http://tsa.fengyunv40.com/saas-app-api/";
 
 //    app打包：
 //    百倍云：
