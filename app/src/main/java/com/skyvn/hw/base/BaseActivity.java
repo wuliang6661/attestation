@@ -141,41 +141,8 @@ public abstract class BaseActivity extends SupportActivity {
     protected void rightButton() {
         ImageView imageView = findViewById(R.id.right_img);
         imageView.setVisibility(View.VISIBLE);
-        imageView.setOnClickListener(v -> gotoActivity(KefuActivity.class,false));
+        imageView.setOnClickListener(v -> gotoActivity(KefuActivity.class, false));
     }
-
-
-    /**
-     * 设置语言
-     */
-//    private void switchLanguage() {
-//        String local = null;
-//        if (checkPosition.equals(LanguageType.CHINESE.getLanguage())) {
-////            ChangeLanguageUtils.updateLocale(this, Locale.CHINESE);
-//            local = LanguageType.CHINESE.getLanguage();
-//        } else if (checkPosition.equals(LanguageType.ENGLISH.getLanguage())) {
-////            ChangeLanguageUtils.updateLocale(this, Locale.ENGLISH);
-//            local = LanguageType.ENGLISH.getLanguage();
-//        } else if (checkPosition.equals(LanguageType.THAILAND.getLanguage())) {
-//            //ChangeLanguageUtils.updateLocale(this, Locale.ENGLISH);
-//            local = LanguageType.THAILAND.getLanguage();
-////            ChangeLanguageUtils.updateLocale(this, new Locale("es", "ES"));
-//        }
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            LanguageUtil.changeAppLanguage(Utils.getApp(), local);
-//        }
-//        SpUtils.put(IConstant.LANGUAGE_TYPE, local);
-//        //清空任务栈确保当前打开activity为前台任务栈栈顶
-//        Intent it = null;
-//        if (changeType == 1) {
-//            it = new Intent(ChangeLanguageActivity.this, LoginActivity.class);
-//        } else {
-//            it = new Intent(ChangeLanguageActivity.this, MainActivity.class);
-//        }
-//        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        startActivity(it);
-//        finish();
-//    }
 
 
     protected void showToast(String message) {
