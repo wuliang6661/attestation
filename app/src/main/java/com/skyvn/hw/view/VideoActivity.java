@@ -189,7 +189,7 @@ public class VideoActivity extends BaseActivity implements ActionSheet.OnActionS
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
         intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 1);
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
-        intent.putExtra("camerasensortype", 2); // 调用前置摄像头
+        intent.putExtra("android.intent.extras.VIDEO_CAMERA_FACING", 1);
         startActivityForResult(intent, 3);
 
     }
