@@ -82,6 +82,8 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
             jumpSkip.setVisibility(View.GONE);
         }
         TextChangedListener.StringWatcher(editUserName);
+        editUserName.setEnabled(false);
+        getRealName();
     }
 
 
@@ -117,6 +119,27 @@ public class BindBankCardActivity extends MVPBaseActivity<BindBankCardContract.V
             }
         });
     }
+
+
+
+    private void getRealName() {
+        showProgress();
+        HttpServerImpl.getRealName().subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                stopProgress();
+                editUserName.setText(s);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
+            }
+        });
+    }
+
+
 
     @OnClick(R.id.yinghang_name_layout)
     public void clickYinghang() {

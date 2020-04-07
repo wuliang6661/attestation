@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
+import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.AuthStatusBO;
 import com.skyvn.hw.bean.BannerBO;
@@ -26,6 +28,7 @@ import com.skyvn.hw.bean.StatusBO;
 import com.skyvn.hw.mvp.MVPBaseFragment;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.view.KefuActivity;
+import com.skyvn.hw.view.LoginActivity;
 import com.skyvn.hw.view.MessageActivity;
 import com.skyvn.hw.view.WebActivity;
 import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
@@ -110,7 +113,14 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         mPresenter.getHomeBanner();
         mPresenter.getHomeCarses();
         mPresenter.getNoticeList();
-        mPresenter.getMyApply();
+        if (MyApplication.token == null) {
+            statusAllLayout.setVisibility(View.VISIBLE);
+            statusLayout.setVisibility(View.GONE);
+            mPresenter.getPayNumAndDays("saas.app.la", 3);
+            mPresenter.getPayNumAndDays("saas.app.ld", 4);
+        } else {
+            mPresenter.getMyApply();
+        }
     }
 
     private void setBanner() {
@@ -172,13 +182,21 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
     @OnClick(R.id.kefu_layout)
     public void clickKefu() {
+        if (MyApplication.token == null) {
+            gotoActivity(LoginActivity.class, false);
+            return;
+        }
         gotoActivity(KefuActivity.class, false);
     }
 
 
     @OnClick(R.id.bt_login)
     public void clickAddOrder() {
-        getMyAuthStatus();
+        if (MyApplication.token == null) {
+            gotoActivity(LoginActivity.class, false);
+        } else {
+            getMyAuthStatus();
+        }
     }
 
 
@@ -250,9 +268,11 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         this.bannerBO = bannerBO;
         if (bannerBO == null) {
             Glide.with(getActivity()).load("").error(R.drawable.defalt_img)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.defalt_img).into(homeBannerImg);
         } else {
             Glide.with(getActivity()).load(bannerBO.getImageUrl()).error(R.drawable.defalt_img)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.defalt_img).into(homeBannerImg);
         }
     }
@@ -357,6 +377,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
              */
             //Glide 加载图片简单用法
             Glide.with(context).load(path).error(R.drawable.defalt_img)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.defalt_img).into(imageView);
         }
 

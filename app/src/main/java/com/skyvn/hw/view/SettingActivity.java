@@ -137,6 +137,7 @@ public class SettingActivity extends BaseActivity {
             public void onSuccess(String s) {
                 stopProgress();
                 AppManager.getAppManager().finishAllActivity();
+                MyApplication.spUtils.remove("token");
                 gotoActivity(LoginActivity.class, true);
             }
 

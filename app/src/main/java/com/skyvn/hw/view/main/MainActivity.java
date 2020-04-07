@@ -12,6 +12,7 @@ import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.LiveKeyBO;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.UpdateUtils;
+import com.skyvn.hw.view.LoginActivity;
 import com.skyvn.hw.view.main.none.NoneFragment1;
 import com.skyvn.hw.view.main.none.NoneFragment2;
 import com.skyvn.hw.view.main.none.NoneFragment3;
@@ -92,11 +93,19 @@ public class MainActivity extends BaseActivity {
                 setButtom(0);
                 break;
             case R.id.main2:
+                if (MyApplication.token == null) {
+                    gotoActivity(LoginActivity.class, false);
+                    return;
+                }
                 showHideFragment(mFragments[1], mFragments[selectPosition]);
                 selectPosition = 1;
                 setButtom(1);
                 break;
             case R.id.main3:
+                if (MyApplication.token == null) {
+                    gotoActivity(LoginActivity.class, false);
+                    return;
+                }
                 showHideFragment(mFragments[2], mFragments[selectPosition]);
                 selectPosition = 2;
                 setButtom(2);

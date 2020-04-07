@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
+import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.view.main.order.OrderFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;

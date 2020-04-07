@@ -41,11 +41,6 @@ public abstract class BaseActivity extends SupportActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(getLayout());
-        ButterKnife.bind(this);
-        ImmersionBar.with(this).keyboardEnable(true).init();   //解决虚拟按键与状态栏沉浸冲突
-        AppManager.getAppManager().addActivity(this);
-        svProgressHUD = new SVProgressHUD(this);
         // 避免从桌面启动程序后，会重新实例化入口类的activity
         if (!this.isTaskRoot()) {
             Intent intent = getIntent();
@@ -57,6 +52,11 @@ public abstract class BaseActivity extends SupportActivity {
                 }
             }
         }
+        setContentView(getLayout());
+        ButterKnife.bind(this);
+        ImmersionBar.with(this).keyboardEnable(true).init();   //解决虚拟按键与状态栏沉浸冲突
+        AppManager.getAppManager().addActivity(this);
+        svProgressHUD = new SVProgressHUD(this);
     }
 
     @Override
@@ -94,6 +94,14 @@ public abstract class BaseActivity extends SupportActivity {
     protected void showProgress() {
         svProgressHUD.showWithStatus(getString(R.string.jiazaizhong), SVProgressHUD.SVProgressHUDMaskType.Black);
     }
+
+    /**
+     * 显示识别中进度弹窗
+     */
+    protected void showShibieProgress() {
+        svProgressHUD.showWithStatus(getString(R.string.shibiezhong), SVProgressHUD.SVProgressHUDMaskType.Black);
+    }
+
 
     /**
      * 停止弹窗

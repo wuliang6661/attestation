@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity {
                     MyApplication.token = token;
                     getUserInfo();
                 }else{
-                    gotoActivity(LoginActivity.class,true);
+                    gotoActivity(MainActivity.class,true);
                 }
             }
         }, 2000);

@@ -344,4 +344,10 @@ public interface HttpService {
     Observable<BaseResult<IdCardInfoBO>> getIdCardInfo(@Query("idCardBackOssUrl") String idCardBackOssUrl,
                                                        @Query("idCardFrontOssUrl") String idCardFrontOssUrl);
 
+    /**
+     * 获取用户姓名
+     */
+    @GET("clientUserInfo/getRealName")
+    Observable<BaseResult<String>> getRealName();
+
 }

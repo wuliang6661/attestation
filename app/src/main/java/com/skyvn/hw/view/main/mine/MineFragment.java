@@ -60,12 +60,16 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         userPhone.setText(MyApplication.userBO.getPhone());
         Glide.with(getActivity()).load(MyApplication.userBO.getHeadPortrait())
                 .error(R.drawable.person_defalt).
                 placeholder(R.drawable.person_defalt).into(userImg);
     }
-
 
     @OnClick({R.id.layout_yinghangka, R.id.layout_ziliao, R.id.layout_kefu, R.id.layout_fankui})
     public void layoutClick(View view) {
