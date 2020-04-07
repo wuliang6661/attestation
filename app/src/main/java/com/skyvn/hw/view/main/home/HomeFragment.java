@@ -104,14 +104,14 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mPresenter.getHomeBanner();
+        mPresenter.getHomeCarses();
     }
 
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        mPresenter.getHomeBanner();
-        mPresenter.getHomeCarses();
         mPresenter.getNoticeList();
         if (MyApplication.token == null) {
             statusAllLayout.setVisibility(View.VISIBLE);
