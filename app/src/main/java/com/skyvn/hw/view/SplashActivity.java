@@ -35,20 +35,26 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                String token = MyApplication.spUtils.getString("token");
-                if (!StringUtils.isEmpty(token)) {
-                    MyApplication.token = token;
-                    getUserInfo();
-                }else{
-                    gotoActivity(MainActivity.class,true);
-                }
-            }
-        }, 2000);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 2000);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String token = MyApplication.spUtils.getString("token");
+        if (!StringUtils.isEmpty(token)) {
+            MyApplication.token = token;
+            getUserInfo();
+        } else {
+            gotoActivity(MainActivity.class, true);
+        }
+    }
 
     /**
      * 获取用户信息
