@@ -189,6 +189,18 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                             item_btn.setVisibility(View.VISIBLE);
                             item_btn.setText(getResources().getString(R.string.lijitixian));
                             break;
+                        case 2:   //放款中
+                            statusText.setVisibility(View.VISIBLE);
+                            statusText.setTextColor(Color.parseColor("#0077EA"));
+                            statusText.setText(R.string.fangkuanzhong);
+                            item_btn.setVisibility(View.GONE);
+                            break;
+                        case 3:  //放款失败
+                            statusText.setVisibility(View.VISIBLE);
+                            statusText.setTextColor(Color.parseColor("#0077EA"));
+                            statusText.setText(R.string.fangkuanshibai);
+                            item_btn.setVisibility(View.GONE);
+                            break;
                     }
                 } else if (viewInType == 1) {    //待还款
                     holder.setText(R.id.pay_num_text, getResources().getString(R.string.jiekuanjine));
