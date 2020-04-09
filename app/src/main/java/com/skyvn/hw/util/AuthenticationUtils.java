@@ -24,11 +24,11 @@ import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.phone.PhoneDto;
 import com.skyvn.hw.util.phone.PhoneUtil;
 import com.skyvn.hw.view.CommonMsgActivity;
+import com.skyvn.hw.view.DialogAttentionActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.LiveAttentionActivity;
 import com.skyvn.hw.view.Msg14Activity;
 import com.skyvn.hw.view.VideoActivity;
-import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
 import com.skyvn.hw.view.bindbankcard.BindBankCardActivity;
 import com.skyvn.hw.view.emergencycontact.EmergencyContactActivity;
 import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
@@ -153,7 +153,8 @@ public class AuthenticationUtils {
                 gotoActivity(CommonMsgActivity.class, needSourss, true, context);
                 break;
             case "-1":   //认证完成
-                gotoActivity(AttentionZiliaoActivity.class, needSourss, true, context);
+//                gotoActivity(AttentionZiliaoActivity.class, needSourss, true, context);
+                AppManager.getAppManager().goHome();
                 break;
         }
     }
@@ -180,52 +181,60 @@ public class AuthenticationUtils {
 
                 break;
             case PHONE_LIST:
-                if (needSourss == 0) {   //可以跳过
-                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
-                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
-                            .setCancelable(false)
-                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    jump(PHONE_LIST);
-                                }
-                            })
-                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
-                                requestPermission(context);
-                            }).show();
-                } else {// 不能跳过
-                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
-                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
-                            .setCancelable(false)
-                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
-                                    context.finish())
-                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
-                                requestPermission(context);
-                            }).show();
-                }
+//                if (needSourss == 0) {   //可以跳过
+//                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+//                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
+//                            .setCancelable(false)
+//                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    jump(PHONE_LIST);
+//                                }
+//                            })
+//                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+//                                requestPermission(context);
+//                            }).show();
+//                } else {// 不能跳过
+//                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+//                            .setMsg(context.getResources().getString(R.string.contact_aleg_dialog))
+//                            .setCancelable(false)
+//                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
+//                                    context.finish())
+//                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+//                                requestPermission(context);
+//                            }).show();
+//                }
+                Intent intent = new Intent(context, DialogAttentionActivity.class);
+                intent.putExtra("needStatus", needSourss);
+                intent.putExtra("type", 0);
+                context.startActivity(intent);
                 break;
             case BIND_BANK_CARD:
                 gotoActivity(BindBankCardActivity.class, needSourss, isFinish, context);
                 break;
             case SMS__JILU_PAGE:
-                if (needSourss == 0) {   //可以跳过
-                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
-                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
-                            .setCancelable(false)
-                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), view -> jump(SMS__JILU_PAGE))
-                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
-                                requestSmsPermission(context);
-                            }).show();
-                } else {// 不能跳过
-                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
-                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
-                            .setCancelable(false)
-                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
-                                    context.finish())
-                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
-                                requestSmsPermission(context);
-                            }).show();
-                }
+//                if (needSourss == 0) {   //可以跳过
+//                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+//                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
+//                            .setCancelable(false)
+//                            .setNegativeButton(context.getResources().getString(R.string.tiaoguo), view -> jump(SMS__JILU_PAGE))
+//                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+//                                requestSmsPermission(context);
+//                            }).show();
+//                } else {// 不能跳过
+//                    new AlertDialog(context).builder().setGone().setTitle(context.getResources().getString(R.string.tishi))
+//                            .setMsg(context.getResources().getString(R.string.sms_aleg_dialog))
+//                            .setCancelable(false)
+//                            .setNegativeButton(context.getResources().getString(R.string.buyunxu), view ->
+//                                    context.finish())
+//                            .setPositiveButton(context.getResources().getString(R.string.hao), v -> {
+//                                requestSmsPermission(context);
+//                            }).show();
+//                }
+                Intent intent1 = new Intent(context, DialogAttentionActivity.class);
+                intent1.putExtra("needStatus", needSourss);
+                intent1.putExtra("type", 1);
+                context.startActivity(intent1);
                 break;
             case SMS_PAGE:
                 gotoActivity(Msg14Activity.class, needSourss, isFinish, context);
@@ -237,7 +246,8 @@ public class AuthenticationUtils {
                 gotoActivity(CommonMsgActivity.class, needSourss, isFinish, context);
                 break;
             case "-1":   //认证完成
-                gotoActivity(AttentionZiliaoActivity.class, needSourss, isFinish, context);
+//                gotoActivity(AttentionZiliaoActivity.class, needSourss, isFinish, context);
+                AppManager.getAppManager().goHome();
                 break;
         }
     }

@@ -6,10 +6,13 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.ToastUtils;
 
+import com.skyvn.hw.R;
 import com.skyvn.hw.api.DialogCallException;
+import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.view.LoginActivity;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -29,17 +32,29 @@ public class RxResultHelper {
                     if (mDYResponse.surcess()) {
                         return createData(mDYResponse.getData());
                     } else if (mDYResponse.getCode() == 421) {   //重新登录
+                        MyApplication.spUtils.remove("token");
                         Activity activity = AppManager.getAppManager().curremtActivity();
                         if (activity instanceof LoginActivity) {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
                         Intent intent = new Intent(activity, LoginActivity.class);
-                        ToastUtils.showShort("登录已过期，请重新登录！");
+                        ToastUtils.showShort(R.string.dengluguoqi);
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
-                        return Observable.error(new RuntimeException("登录已过期，请重新登录！"));
+                        return Observable.error(new RuntimeException(activity.getString(R.string.dengluguoqi)));
                     } else if (mDYResponse.getCode() == 398) {  //可拨打电话的弹窗
                         return Observable.error(new DialogCallException(mDYResponse.getMsg()));
+                    } else if (mDYResponse.getCode() == 401) {
+                        MyApplication.spUtils.remove("token");
+                        Activity activity = AppManager.getAppManager().curremtActivity();
+                        if (activity instanceof LoginActivity) {
+                            return Observable.error(new RuntimeException(mDYResponse.getMsg()));
+                        }
+                        Intent intent = new Intent(activity, LoginActivity.class);
+                        ToastUtils.showShort(activity.getString(R.string.dengluguoqi));
+                        AppManager.getAppManager().finishAllActivity();
+                        activity.startActivity(intent);
+                        return Observable.error(new RuntimeException(activity.getString(R.string.dengluguoqi)));
                     } else {
                         return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                     }

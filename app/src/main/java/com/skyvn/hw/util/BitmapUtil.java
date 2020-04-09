@@ -140,4 +140,17 @@ public class BitmapUtil {
         out.write(buffer);
         out.close();
     }
+
+    /**
+     * 判断文件是否是图片文件
+     */
+    public static boolean isImageFile(String filePath) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        if (options.outWidth == -1) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -148,6 +148,9 @@
         <!--还款流水页面-->
         <activity android:name=".view.HuanKuanListActivty" />
 
+        <!--弹窗认证界面-->
+        <activity android:name=".view.DialogAttentionActivity"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.skyvn.hw.fileprovider"

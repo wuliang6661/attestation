@@ -358,5 +358,8 @@
     <string name="huotiqueshi">活体认证初始化key缺失！</string>
     <string name="fangkuanzhong">放款中</string>
     <string name="fangkuanshibai">放款失败</string>
+    <string name="lianxirenhaomabunengxiangtong">联系人号码不能相同！</string>
+    <string name="dengluguoqi">登录已过期，请重新登录！</string>
+    <string name="duanxin">短信</string>
 
 </resources>

@@ -39,6 +39,7 @@ import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.util.phone.PhoneDto;
 import com.skyvn.hw.util.phone.PhoneUtil;
 import com.skyvn.hw.view.CommonMsgActivity;
+import com.skyvn.hw.view.DialogAttentionActivity;
 import com.skyvn.hw.view.JiaZhaoActivity;
 import com.skyvn.hw.view.LiveAttentionActivity;
 import com.skyvn.hw.view.Msg14Activity;
@@ -148,17 +149,25 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 int needStatus = authTypeBO.getNeedStatus();
                 int status = authTypeBO.getStatus();
                 if (needStatus == 0) {   //不必填
-                    if (status == 1) {   //已完成
+                    if (status == 0) {   //未完成
+                        item_type.setTextColor(Color.parseColor("#0077EA"));
+                        item_type.setText(getResources().getString(R.string.weiwancheng));
+                        holder.getView(R.id.item_image).setVisibility(View.VISIBLE);
+                    } else if (status == 1) {
                         item_type.setTextColor(Color.parseColor("#666666"));
                         item_type.setText(getResources().getString(R.string.yiwancheng));
                         holder.getView(R.id.item_image).setVisibility(View.INVISIBLE);
                     } else {
-                        item_type.setTextColor(Color.parseColor("#0077EA"));
+                        item_type.setTextColor(Color.parseColor("#FF6860"));
                         item_type.setText(getResources().getString(R.string.weiwancheng));
                         holder.getView(R.id.item_image).setVisibility(View.VISIBLE);
                     }
                 } else {
-                    if (status == 1) {   //已完成
+                    if (status == 0) {   //未完成
+                        item_type.setTextColor(Color.parseColor("#FF6860"));
+                        item_type.setText(getResources().getString(R.string.weiwancheng));
+                        holder.getView(R.id.item_image).setVisibility(View.VISIBLE);
+                    } else if (status == 1) {
                         item_type.setTextColor(Color.parseColor("#666666"));
                         item_type.setText(getResources().getString(R.string.yiwancheng));
                         holder.getView(R.id.item_image).setVisibility(View.INVISIBLE);
@@ -187,14 +196,14 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
 
 
     private boolean isFirst(int position) {
-        for (int i = 0; i < typeBOS.size(); i++) {
-            if (i < position) {
-                if (typeBOS.get(i).getNeedStatus() != 0 && typeBOS.get(i).getStatus() != 1) {   //必填未完成
-                    showToast(getString(R.string.qingxianrenzhengshangyige));
-                    return false;
-                }
-            }
-        }
+//        for (int i = 0; i < typeBOS.size(); i++) {
+//            if (i < position) {
+//                if (typeBOS.get(i).getNeedStatus() != 0 && typeBOS.get(i).getStatus() != 1) {   //必填未完成
+//                    showToast(getString(R.string.qingxianrenzhengshangyige));
+//                    return false;
+//                }
+//            }
+//        }
         return true;
     }
 
@@ -228,13 +237,21 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                 showToast(getString(R.string.wurenzheng));
                 break;
             case AuthenticationUtils.PHONE_LIST:  // 通讯录验证
-                requestPermission();
+//                requestPermission();
+                Intent intent = new Intent(this, DialogAttentionActivity.class);
+                intent.putExtra("needStatus", needStatus);
+                intent.putExtra("type", 0);
+                startActivity(intent);
                 break;
             case AuthenticationUtils.BIND_BANK_CARD:  // 绑定银行卡验证
                 gotoActivity(BindBankCardActivity.class, needStatus);
                 break;
             case AuthenticationUtils.SMS__JILU_PAGE:  //短信记录验证
-                requestSmsPermission();
+//                requestSmsPermission();
+                Intent intent1 = new Intent(this, DialogAttentionActivity.class);
+                intent1.putExtra("needStatus", needStatus);
+                intent1.putExtra("type", 1);
+                startActivity(intent1);
                 break;
             case AuthenticationUtils.SMS_PAGE:   //1414短信验证
                 gotoActivity(Msg14Activity.class, needStatus);

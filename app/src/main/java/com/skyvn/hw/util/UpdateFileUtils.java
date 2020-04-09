@@ -21,10 +21,13 @@ import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.bean.StsTokenBean;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
+import id.zelory.compressor.Compressor;
 
 /**
  * OSS上传文件工具
@@ -100,6 +103,22 @@ public class UpdateFileUtils {
         //事实上，初始化OSS的实例对象，应该具有与整个应用程序相同的生命周期，在应用程序生命周期结束时销毁
         //但这里只是实现功能，若时间紧，你仍然可以按照本文方式先将功能实现，然后优化
         OSS oss = new OSSClient(Utils.getApp(), endpoint, credentialProvider, conf);
+
+        File file = new File(loacalFilePath);
+        if (BitmapUtil.isImageFile(loacalFilePath)) {
+            File compressedImageFile;
+            try {
+                compressedImageFile = new Compressor(Utils.getApp())
+                        .setMaxHeight(4096)
+                        .setMaxWidth(4096)
+                        .setQuality(50)
+                        .compressToFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                compressedImageFile = file;
+            }
+            loacalFilePath = compressedImageFile.getAbsolutePath();
+        }
 
         PutObjectRequest put = new PutObjectRequest(bucket, ossFiles, loacalFilePath);
         //异步上传可以设置进度回调
