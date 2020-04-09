@@ -1,13 +1,11 @@
 package com.skyvn.hw.view;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -18,9 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.Utils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -29,6 +28,7 @@ import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.CodeImgBO;
 import com.skyvn.hw.bean.LoginSuressBO;
 import com.skyvn.hw.util.BitmapUtil;
+import com.skyvn.hw.util.GPSUtils;
 import com.skyvn.hw.view.main.MainActivity;
 
 import butterknife.BindView;
@@ -88,6 +88,7 @@ public class LoginActivity extends BaseActivity {
 //            etVerfication.setText("111111");
 //            etImageVerfication.setText("ffff");
 //        }
+        checkPermissions();
     }
 
 
@@ -204,6 +205,30 @@ public class LoginActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // 权限被用户同意。
+                    // 执形我们想要的操作
+                    checkPermissions();
+                } else {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            || !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        //提示用户前往设置界面自己打开权限
+//                        Toast.makeText(this, "请前往设置界面打开权限", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                }
+            }
+        }
+    }
+
+
     /**
      * 获取图片验证码
      */
@@ -244,16 +269,19 @@ public class LoginActivity extends BaseActivity {
             showToast(getResources().getString(R.string.login_hint));
             return;
         }
+        showProgress();
         HttpServerImpl.getVerificationCode(codeImgBO.getKey(), strPhone, strCodeImg)
                 .subscribe(new HttpResultSubscriber<String>() {
                     @Override
                     public void onSuccess(String s) {
+                        stopProgress();
                         getVerfication.setEnabled(false);
                         timer.start();
                     }
 
                     @Override
                     public void onFiled(String message) {
+                        stopProgress();
                         showToast(message);
                     }
                 });
@@ -330,19 +358,41 @@ public class LoginActivity extends BaseActivity {
      */
     public void checkPermissions() {
         if (allPermissionsGranted()) {
-            LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (mLocation == null) {
-                loginLatitude = 0;
-                loginLongitude = 0;
-            } else {
-                loginLatitude = mLocation.getLatitude();
-                loginLongitude = mLocation.getLongitude();
-            }
+            GPSUtils.getInstance(getApplicationContext()).getLngAndLat(new GPSUtils.OnLocationResultListener() {
+                @Override
+                public void onLocationResult(Location location) {
+                    loginLatitude = location.getLatitude();
+                    loginLongitude = location.getLongitude();
+                    LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
+                }
+
+                @Override
+                public void OnLocationChange(Location location) {
+                    loginLatitude = location.getLatitude();
+                    loginLongitude = location.getLongitude();
+                    LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
+                }
+            });
+//            LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
+//            @SuppressLint("MissingPermission") Location mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            if (mLocation == null) {
+//                loginLatitude = 0;
+//                loginLongitude = 0;
+//            } else {
+//                loginLatitude = mLocation.getLatitude();
+//                loginLongitude = mLocation.getLongitude();
+//            }
         } else {
             loginLatitude = 0;
             loginLongitude = 0;
         }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GPSUtils.getInstance(getApplicationContext()).removeListener();
     }
 
     public String[] getRequiredPermissions() {

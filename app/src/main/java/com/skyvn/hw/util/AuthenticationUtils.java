@@ -9,12 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 
 import com.blankj.utilcode.util.FileUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
-import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.bean.AttentionSourrssBO;
@@ -35,7 +32,6 @@ import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
 import com.skyvn.hw.view.person_msg_style.PersonMsgActivity2;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity2;
-import com.skyvn.hw.widget.AlertDialog;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -283,7 +279,7 @@ public class AuthenticationUtils {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
     }
@@ -391,7 +387,7 @@ public class AuthenticationUtils {
 
             @Override
             public void callError(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
                 handler.sendEmptyMessage(0x22);
             }
         });
@@ -408,7 +404,7 @@ public class AuthenticationUtils {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
                 handler.sendEmptyMessage(0x22);
             }
         });
@@ -447,7 +443,7 @@ public class AuthenticationUtils {
             @Override
             public void callError(String message) {
                 handler.sendEmptyMessage(0x22);
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
         utils.updateFile(3, filePath);
@@ -465,7 +461,7 @@ public class AuthenticationUtils {
             @Override
             public void onFiled(String message) {
                 handler.sendEmptyMessage(0x22);
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
     }

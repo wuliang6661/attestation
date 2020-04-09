@@ -22,7 +22,7 @@ public class EditFilter implements InputFilter {
         if (!matcher.find()) {
             return null;
         } else {
-            ToastUtils.showShort("只能输入汉字,英文，数字");
+            ToastManager.showShort("只能输入汉字,英文，数字");
             return "";
         }
 

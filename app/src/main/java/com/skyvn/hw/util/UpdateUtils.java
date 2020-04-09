@@ -60,7 +60,7 @@ public class UpdateUtils {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
     }

@@ -155,7 +155,7 @@ public abstract class BaseActivity extends SupportActivity {
 
     protected void showToast(String message) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
         toast.setText(message);
         toast.show();
     }

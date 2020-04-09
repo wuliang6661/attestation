@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.blankj.utilcode.util.FileUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
@@ -25,6 +24,7 @@ import com.skyvn.hw.bean.SmsBO;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.util.SMSUtils;
+import com.skyvn.hw.util.ToastManager;
 import com.skyvn.hw.util.UpdateFileUtils;
 import com.skyvn.hw.util.phone.PhoneDto;
 import com.skyvn.hw.util.phone.PhoneUtil;
@@ -253,7 +253,7 @@ public class DialogAttentionActivity extends BaseActivity {
 
             @Override
             public void callError(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
                 handler.sendEmptyMessage(0x22);
             }
         });
@@ -270,7 +270,7 @@ public class DialogAttentionActivity extends BaseActivity {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
                 handler.sendEmptyMessage(0x22);
             }
         });
@@ -309,7 +309,7 @@ public class DialogAttentionActivity extends BaseActivity {
             @Override
             public void callError(String message) {
                 handler.sendEmptyMessage(0x22);
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
         utils.updateFile(3, filePath);
@@ -327,7 +327,7 @@ public class DialogAttentionActivity extends BaseActivity {
             @Override
             public void onFiled(String message) {
                 handler.sendEmptyMessage(0x22);
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
     }
@@ -341,7 +341,7 @@ public class DialogAttentionActivity extends BaseActivity {
 
             @Override
             public void onFiled(String message) {
-                ToastUtils.showShort(message);
+                ToastManager.showShort(message);
             }
         });
     }

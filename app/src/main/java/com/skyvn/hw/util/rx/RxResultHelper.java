@@ -11,6 +11,7 @@ import com.skyvn.hw.api.DialogCallException;
 import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.util.AppManager;
+import com.skyvn.hw.util.ToastManager;
 import com.skyvn.hw.view.LoginActivity;
 
 import rx.Observable;
@@ -38,7 +39,7 @@ public class RxResultHelper {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
                         Intent intent = new Intent(activity, LoginActivity.class);
-                        ToastUtils.showShort(R.string.dengluguoqi);
+                        ToastManager.showShort(activity.getString(R.string.dengluguoqi));
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
                         return Observable.error(new RuntimeException(activity.getString(R.string.dengluguoqi)));
@@ -51,7 +52,7 @@ public class RxResultHelper {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
                         Intent intent = new Intent(activity, LoginActivity.class);
-                        ToastUtils.showShort(activity.getString(R.string.dengluguoqi));
+                        ToastManager.showShort(activity.getString(R.string.dengluguoqi));
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
                         return Observable.error(new RuntimeException(activity.getString(R.string.dengluguoqi)));

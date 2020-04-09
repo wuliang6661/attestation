@@ -90,7 +90,7 @@ public abstract class BaseFragment extends SupportFragment {
 
     protected void showToast(String message) {
 //        ToastUtils.showShort(message);
-        Toast toast = Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getActivity(), null, Toast.LENGTH_SHORT);
         toast.setText(message);
         toast.show();
     }
