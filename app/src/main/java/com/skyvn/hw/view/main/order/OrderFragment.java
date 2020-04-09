@@ -177,6 +177,7 @@ public class OrderFragment extends MVPBaseFragment<OrderContract.View, OrderPres
                 if (viewInType == 0) {  //待确认
                     holder.setText(R.id.create_time, getResources().getString(R.string.shenqing_riqi) + (s.getCreateTime().split(" ")[0]));
                     holder.setText(R.id.pay_num_text, getResources().getString(R.string.shenqingjine));
+                    statusText.setVisibility(View.GONE);
                     switch (s.getStatus()) {
                         case 0:  //审核中
                             statusText.setVisibility(View.VISIBLE);

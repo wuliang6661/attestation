@@ -158,7 +158,7 @@ public class AttentionZiliaoActivity extends MVPBaseActivity<AttentionZiliaoCont
                         item_type.setText(getResources().getString(R.string.yiwancheng));
                         holder.getView(R.id.item_image).setVisibility(View.INVISIBLE);
                     } else {
-                        item_type.setTextColor(Color.parseColor("#FF6860"));
+                        item_type.setTextColor(Color.parseColor("#0077EA"));
                         item_type.setText(getResources().getString(R.string.weiwancheng));
                         holder.getView(R.id.item_image).setVisibility(View.VISIBLE);
                     }

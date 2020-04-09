@@ -128,7 +128,19 @@ public class DialogAttentionActivity extends BaseActivity {
                 new AlertDialog(DialogAttentionActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
                         .setMsg(s)
                         .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
-                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
+                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                switch (code) {
+                                    case AuthenticationUtils.SMS__JILU_PAGE:
+                                        showSms();
+                                        break;
+                                    case AuthenticationUtils.PHONE_LIST:
+                                        showContact();
+                                        break;
+                                }
+                            }
+                        }).show();
             }
 
             @Override

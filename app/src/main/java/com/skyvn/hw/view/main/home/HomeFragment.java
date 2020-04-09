@@ -2,6 +2,7 @@ package com.skyvn.hw.view.main.home;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,7 @@ import com.skyvn.hw.util.AuthenticationUtils;
 import com.skyvn.hw.view.KefuActivity;
 import com.skyvn.hw.view.LoginActivity;
 import com.skyvn.hw.view.MessageActivity;
+import com.skyvn.hw.view.SettingActivity;
 import com.skyvn.hw.view.WebActivity;
 import com.skyvn.hw.view.attentionziliao.AttentionZiliaoActivity;
 import com.skyvn.hw.widget.AlertDialog;
@@ -106,6 +108,14 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
         mPresenter.getHomeBanner();
         mPresenter.getHomeCarses();
+    }
+
+
+    @OnClick(R.id.btn_album)
+    public void right() {
+        Intent intent = new Intent(getActivity(), SettingActivity.class);
+        intent.putExtra("type", 1);
+        startActivity(intent);
     }
 
 

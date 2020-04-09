@@ -65,11 +65,32 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        initAttention();
         userPhone.setText(MyApplication.userBO.getPhone());
         Glide.with(getActivity()).load(MyApplication.userBO.getHeadPortrait())
                 .error(R.drawable.person_defalt).
                 placeholder(R.drawable.person_defalt).into(userImg);
     }
+
+
+    private void initAttention() {
+        HttpServerImpl.getFirstAuth().subscribe(new HttpResultSubscriber<AttentionSourrssBO>() {
+            @Override
+            public void onSuccess(AttentionSourrssBO s) {
+                if ("-1".equals(s.getCode())) {
+                    goAttention.setText(R.string.yirenzheng);
+                } else {
+                    goAttention.setText(R.string.qurenzheng);
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
 
     @OnClick({R.id.layout_yinghangka, R.id.layout_ziliao, R.id.layout_kefu, R.id.layout_fankui})
     public void layoutClick(View view) {
