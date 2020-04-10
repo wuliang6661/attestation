@@ -3,6 +3,8 @@ package com.skyvn.hw.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -38,12 +40,20 @@ public class ZhanQiActivity extends BaseActivity {
 
         goBack();
         setTitleText(getResources().getString(R.string.zhanqi_title));
-        rightButton();
+//        rightButton();
 
         detailsBO = (OrderDetailsBO) getIntent().getExtras().getSerializable("order");
         Glide.with(this).load(detailsBO.getLogoOssUrl())
                 .error(R.drawable.user_img_defalt).placeholder(R.drawable.user_img_defalt).into(userImg);
         userName.setText(detailsBO.getSmsName());
+
+        ImageView imageView = findViewById(R.id.right_img);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(v -> {
+            Intent intent = new Intent(this, KefuActivity.class);
+            intent.putExtra("id", detailsBO.getTenantId());
+            startActivity(intent);
+        });
     }
 
 
