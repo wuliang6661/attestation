@@ -13,6 +13,7 @@ import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.ToastManager;
 import com.skyvn.hw.view.LoginActivity;
+import com.skyvn.hw.view.main.MainActivity;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -38,7 +39,7 @@ public class RxResultHelper {
                         if (activity instanceof LoginActivity) {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
-                        Intent intent = new Intent(activity, LoginActivity.class);
+                        Intent intent = new Intent(activity, MainActivity.class);
                         ToastManager.showShort(activity.getString(R.string.dengluguoqi));
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
@@ -51,7 +52,7 @@ public class RxResultHelper {
                         if (activity instanceof LoginActivity) {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
-                        Intent intent = new Intent(activity, LoginActivity.class);
+                        Intent intent = new Intent(activity, MainActivity.class);
                         ToastManager.showShort(activity.getString(R.string.dengluguoqi));
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
