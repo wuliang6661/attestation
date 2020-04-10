@@ -16,6 +16,7 @@ import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.ContactBO;
+import com.skyvn.hw.bean.GoHomeEvent;
 import com.skyvn.hw.bean.SmsBO;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.phone.PhoneDto;
@@ -32,6 +33,8 @@ import com.skyvn.hw.view.person_msg_style.PersonMsgActivity;
 import com.skyvn.hw.view.person_msg_style.PersonMsgActivity2;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity;
 import com.skyvn.hw.view.shiming_style.ShiMingActivity2;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -158,6 +161,7 @@ public class AuthenticationUtils {
                 break;
             case "-1":   //认证完成
 //                gotoActivity(AttentionZiliaoActivity.class, needSourss, true, context);
+                EventBus.getDefault().post(new GoHomeEvent());
                 AppManager.getAppManager().goHome();
                 break;
         }
@@ -251,6 +255,7 @@ public class AuthenticationUtils {
                 break;
             case "-1":   //认证完成
 //                gotoActivity(AttentionZiliaoActivity.class, needSourss, isFinish, context);
+                EventBus.getDefault().post(new GoHomeEvent());
                 AppManager.getAppManager().goHome();
                 break;
         }

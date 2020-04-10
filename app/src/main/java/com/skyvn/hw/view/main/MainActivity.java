@@ -10,6 +10,7 @@ import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.bean.GoHomeEvent;
 import com.skyvn.hw.bean.LiveKeyBO;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.UpdateUtils;
@@ -18,6 +19,10 @@ import com.skyvn.hw.view.main.none.NoneFragment1;
 import com.skyvn.hw.view.main.none.NoneFragment2;
 import com.skyvn.hw.view.main.none.NoneFragment3;
 import com.xyz.tabitem.BottmTabItem;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import ai.advance.liveness.lib.GuardianLivenessDetectionSDK;
 import ai.advance.liveness.lib.Market;
@@ -47,9 +52,16 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(this);
         buttms = new BottmTabItem[]{main1, main2, main3};
         initFragment();
         getSaasKey();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -116,6 +128,13 @@ public class MainActivity extends BaseActivity {
                 setButtom(2);
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(GoHomeEvent event) {
+        showHideFragment(mFragments[0], mFragments[selectPosition]);
+        selectPosition = 0;
+        setButtom(0);
     }
 
 
