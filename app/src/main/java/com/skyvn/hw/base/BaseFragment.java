@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.gyf.barlibrary.ImmersionBar;
 import com.skyvn.hw.R;
+import com.skyvn.hw.util.ToastManager;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -90,9 +90,10 @@ public abstract class BaseFragment extends SupportFragment {
 
     protected void showToast(String message) {
 //        ToastUtils.showShort(message);
-        Toast toast = Toast.makeText(getActivity(), null, Toast.LENGTH_SHORT);
-        toast.setText(message);
-        toast.show();
+//        Toast toast = Toast.makeText(getActivity(), null, Toast.LENGTH_SHORT);
+//        toast.setText(message);
+//        toast.show();
+        ToastManager.showShort(message);
     }
 
     public void onRequestEnd() {

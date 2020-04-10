@@ -12,7 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.blankj.utilcode.util.KeyboardUtils;
@@ -20,6 +19,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.skyvn.hw.R;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AppManager;
+import com.skyvn.hw.util.ToastManager;
 import com.skyvn.hw.util.language.LanguageUtil;
 import com.skyvn.hw.view.KefuActivity;
 
@@ -155,9 +155,10 @@ public abstract class BaseActivity extends SupportActivity {
 
     protected void showToast(String message) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        Toast toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
-        toast.setText(message);
-        toast.show();
+//        Toast toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
+//        toast.setText(message);
+//        toast.show();
+        ToastManager.showShort(message);
     }
 
 
