@@ -40,6 +40,7 @@ public class RxResultHelper {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
                         Intent intent = new Intent(activity, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         ToastManager.showShort(activity.getString(R.string.dengluguoqi));
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
@@ -53,6 +54,7 @@ public class RxResultHelper {
                             return Observable.error(new RuntimeException(mDYResponse.getMsg()));
                         }
                         Intent intent = new Intent(activity, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         ToastManager.showShort(activity.getString(R.string.dengluguoqi));
                         AppManager.getAppManager().finishAllActivity();
                         activity.startActivity(intent);
