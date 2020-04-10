@@ -363,7 +363,7 @@
     <string name="yuyan">ngôn ngữ</string>
     <string name="yirenzheng">phê duyệt</string>
     <string name="weidenglu">Chưa đăng nhập</string>
-    <string name="gpsshangchuanshibai">GPS上传失败!</string>
-    <string name="qingdakaigps">请前往设置界面打开GPS权限</string>
+    <string name="gpsshangchuanshibai">Lỗi tải GPS!</string>
+    <string name="qingdakaigps">Xin hãy đến giao diện thiết lập để mở quyền GPS</string>
 
 </resources>
