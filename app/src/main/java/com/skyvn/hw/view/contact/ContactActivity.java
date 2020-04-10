@@ -66,7 +66,7 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        goBack();
+        goBack();
         LinearLayout imageView = findViewById(R.id.back);
         imageView.setVisibility(View.VISIBLE);
         setTitleText(getResources().getString(R.string.contact));
@@ -78,25 +78,6 @@ public class ContactActivity extends MVPBaseActivity<ContactContract.View, Conta
         recycleView.setLayoutManager(manager);
         requestPermission();
         initView();
-    }
-
-
-    @OnClick(R.id.back)
-    public void back() {
-        HttpServerImpl.getBackMsg(AuthenticationUtils.PHONE_LIST).subscribe(new HttpResultSubscriber<String>() {
-            @Override
-            public void onSuccess(String s) {
-                new AlertDialog(ContactActivity.this).builder().setGone().setTitle(getResources().getString(R.string.tishi))
-                        .setMsg(s)
-                        .setNegativeButton(getResources().getString(R.string.fangqishenqing), view -> finish())
-                        .setPositiveButton(getResources().getString(R.string.jixurenzheng), null).show();
-            }
-
-            @Override
-            public void onFiled(String message) {
-                showToast(message);
-            }
-        });
     }
 
 

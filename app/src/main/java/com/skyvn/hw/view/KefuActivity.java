@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -49,8 +50,38 @@ public class KefuActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recycleView.setLayoutManager(manager);
-        getKeFu();
+        String id = getIntent().getStringExtra("id");
+        if(!StringUtils.isEmpty(id)){
+            getUserKeFu(id);
+        }else{
+            getKeFu();
+        }
     }
+
+
+
+    /**
+     * 获取全部客服
+     */
+    private void getUserKeFu(String id) {
+        HttpServerImpl.getUserContact(id).subscribe(new HttpResultSubscriber<List<KeFuBO>>() {
+            @Override
+            public void onSuccess(List<KeFuBO> strings) {
+                if (strings == null) {
+                    return;
+                }
+                kefus = strings;
+                showKeFu();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+
 
 
     /**

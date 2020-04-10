@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
@@ -21,7 +22,6 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.base.MyApplication;
 import com.skyvn.hw.bean.AttentionSourrssBO;
 import com.skyvn.hw.bean.LiveKeyBO;
-import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AuthenticationUtils;
 
 import ai.advance.liveness.lib.GuardianLivenessDetectionSDK;
@@ -70,6 +70,32 @@ public class LiveAttentionActivity extends BaseActivity {
         } else {
             jumpSkip.setVisibility(View.GONE);
         }
+        getSaasKey();
+    }
+
+
+    /**
+     * 获取活体检测的key
+     */
+    private void getSaasKey() {
+        HttpServerImpl.getSaaSActiveKey().subscribe(new HttpResultSubscriber<LiveKeyBO>() {
+            @Override
+            public void onSuccess(LiveKeyBO s) {
+                if (s == null || StringUtils.isEmpty(s.getSdkKey()) || StringUtils.isEmpty(s.getSecretKey())) {
+                    showToast(getString(R.string.huotiqueshi));
+                    return;
+                }
+                MyApplication.LIVE_KEY = s.getSdkKey();
+                MyApplication.Secret_Key = s.getSecretKey();
+                GuardianLivenessDetectionSDK.init(getApplication(), MyApplication.LIVE_KEY, MyApplication.Secret_Key,
+                        Market.Vietnam);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
     @OnClick(R.id.jump_skip)
@@ -107,6 +133,10 @@ public class LiveAttentionActivity extends BaseActivity {
 
     @OnClick(R.id.bt_login)
     public void goLive() {
+        if (StringUtils.isEmpty(MyApplication.LIVE_KEY) || StringUtils.isEmpty(MyApplication.Secret_Key)) {
+            showToast(getString(R.string.huotiqueshi));
+            return;
+        }
         checkPermissions();
     }
 
@@ -115,7 +145,6 @@ public class LiveAttentionActivity extends BaseActivity {
         Intent intent = new Intent(this, LivenessActivity.class);
         startActivityForResult(intent, REQUEST_CODE_LIVENESS);
     }
-
 
 
     @Override

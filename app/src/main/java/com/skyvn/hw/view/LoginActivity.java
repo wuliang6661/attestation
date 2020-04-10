@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -330,7 +329,6 @@ public class LoginActivity extends BaseActivity {
             inputLayoutVerfication.setError(getResources().getString(R.string.input_verfication_error));
             inputLayoutVerfication.setErrorEnabled(true);
         }
-        checkPermissions();
         showProgress();
         HttpServerImpl.loginUser(loginLatitude, loginLongitude, strPhone, strVersition).subscribe(new HttpResultSubscriber<LoginSuressBO>() {
             @Override
@@ -371,6 +369,11 @@ public class LoginActivity extends BaseActivity {
                     loginLatitude = location.getLatitude();
                     loginLongitude = location.getLongitude();
                     LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
+                }
+
+                @Override
+                public void OnLocationError() {
+
                 }
             });
 //            LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);

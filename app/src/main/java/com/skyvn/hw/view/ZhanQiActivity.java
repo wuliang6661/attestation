@@ -1,5 +1,6 @@
 package com.skyvn.hw.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class ZhanQiActivity extends BaseActivity {
     @BindView(R.id.user_name)
     TextView userName;
 
+    OrderDetailsBO detailsBO;
+
     @Override
     protected int getLayout() {
         return R.layout.act_zhanqi;
@@ -37,7 +40,7 @@ public class ZhanQiActivity extends BaseActivity {
         setTitleText(getResources().getString(R.string.zhanqi_title));
         rightButton();
 
-        OrderDetailsBO detailsBO = (OrderDetailsBO) getIntent().getExtras().getSerializable("order");
+        detailsBO = (OrderDetailsBO) getIntent().getExtras().getSerializable("order");
         Glide.with(this).load(detailsBO.getLogoOssUrl())
                 .error(R.drawable.user_img_defalt).placeholder(R.drawable.user_img_defalt).into(userImg);
         userName.setText(detailsBO.getSmsName());
@@ -46,6 +49,9 @@ public class ZhanQiActivity extends BaseActivity {
 
     @OnClick(R.id.kefu_layout)
     public void clickKefu() {
-        gotoActivity(KefuActivity.class, false);
+        Intent intent = new Intent(this, KefuActivity.class);
+        intent.putExtra("id", detailsBO.getTenantId());
+        startActivity(intent);
+//        gotoActivity(KefuActivity.class, false);
     }
 }

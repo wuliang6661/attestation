@@ -3,10 +3,11 @@ package com.skyvn.hw.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +20,8 @@ import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.widget.MyDialog;
+import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
+import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -57,14 +60,16 @@ public class ConfirmationActivity extends BaseActivity {
     RoundedImageView personImg;
     @BindView(R.id.person_name)
     TextView personName;
-    @BindView(R.id.kefu_num1)
-    TextView kefuNum1;
-    @BindView(R.id.kefu_layout)
-    LinearLayout kefuLayout;
-    @BindView(R.id.kefu_num2)
-    TextView kefuNum2;
+    //    @BindView(R.id.kefu_num1)
+//    TextView kefuNum1;
+//    @BindView(R.id.kefu_layout)
+//    LinearLayout kefuLayout;
+//    @BindView(R.id.kefu_num2)
+//    TextView kefuNum2;
     @BindView(R.id.id_flowlayout)
     TagFlowLayout idFlowlayout;
+    @BindView(R.id.recycle_view)
+    RecyclerView recycleView;
 
     private String orderId;
     private OrderDetailsBO orderDetailsBO;
@@ -84,6 +89,10 @@ public class ConfirmationActivity extends BaseActivity {
         rightButton();
 
 
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recycleView.setLayoutManager(manager);
+        recycleView.setNestedScrollingEnabled(false);
         orderId = getIntent().getExtras().getString("id");
         getOrderDetails();
         setFlow();
@@ -203,12 +212,7 @@ public class ConfirmationActivity extends BaseActivity {
                 if (kefus == null) {
                     return;
                 }
-                if (kefus.size() >= 1) {
-                    kefuNum1.setText(kefus.get(0).getContact());
-                }
-                if (kefus.size() >= 2) {
-                    kefuNum2.setText(kefus.get(1).getContact());
-                }
+                setAdapter(kefus);
             }
 
             @Override
@@ -216,6 +220,23 @@ public class ConfirmationActivity extends BaseActivity {
                 showToast(message);
             }
         });
+    }
+
+
+    private void setAdapter(List<KeFuBO> kefus) {
+        LGRecycleViewAdapter<KeFuBO> adapter = new LGRecycleViewAdapter<KeFuBO>(kefus) {
+            @Override
+            public int getLayoutId(int viewType) {
+                return R.layout.item_confirmation_kefu;
+            }
+
+            @Override
+            public void convert(LGViewHolder holder, KeFuBO keFuBO, int position) {
+                holder.setText(R.id.kefu_name, keFuBO.getName());
+                holder.setText(R.id.kefu_num1, keFuBO.getContact());
+            }
+        };
+        recycleView.setAdapter(adapter);
     }
 
 

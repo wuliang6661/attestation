@@ -249,6 +249,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
                                     clickGoAttention()
                             ).show();
                 }
+//                requestPermission();
             }
 
             @Override
@@ -328,6 +329,11 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
                 GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
                 LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
+            }
+
+            @Override
+            public void OnLocationError() {
+                stopProgress();
             }
         });
     }
