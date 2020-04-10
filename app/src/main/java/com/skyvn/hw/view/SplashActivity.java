@@ -72,7 +72,8 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFiled(String message) {
-                gotoActivity(LoginActivity.class, true);
+                MyApplication.spUtils.remove("token");
+                gotoActivity(MainActivity.class, true);
             }
         });
     }
