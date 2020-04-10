@@ -202,10 +202,10 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
     @OnClick(R.id.kefu_layout)
     public void clickKefu() {
-        if (MyApplication.token == null) {
-            gotoActivity(LoginActivity.class, false);
-            return;
-        }
+//        if (MyApplication.token == null) {
+//            gotoActivity(LoginActivity.class, false);
+//            return;
+//        }
         gotoActivity(KefuActivity.class, false);
     }
 
