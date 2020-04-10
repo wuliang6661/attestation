@@ -364,5 +364,7 @@
     <string name="yuyan">语言</string>
     <string name="yirenzheng">已认证</string>
     <string name="weidenglu">未登录</string>
+    <string name="gpsshangchuanshibai">GPS上传失败!</string>
+    <string name="qingdakaigps">请前往设置界面打开GPS权限</string>
 
 </resources>

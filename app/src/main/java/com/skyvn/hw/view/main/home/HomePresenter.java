@@ -127,6 +127,28 @@ public class HomePresenter extends BasePresenterImpl<HomeContract.View> implemen
 
 
     /**
+     * 上传GPS
+     */
+    public void updateLocation(String longation, String langation) {
+        HttpServerImpl.updateLocation(longation, langation).subscribe(new HttpResultSubscriber<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (mView != null) {
+                    mView.updateGpsSource();
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                if (mView != null) {
+                    mView.onRequestError(message);
+                }
+            }
+        });
+    }
+
+
+    /**
      * 提交客户申请
      */
     public void addMyApply(String days, String endAmount, String startAmount) {

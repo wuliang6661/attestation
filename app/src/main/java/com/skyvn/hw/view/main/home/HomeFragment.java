@@ -1,11 +1,16 @@
 package com.skyvn.hw.view.main.home;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,6 +34,7 @@ import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.StatusBO;
 import com.skyvn.hw.mvp.MVPBaseFragment;
 import com.skyvn.hw.util.AuthenticationUtils;
+import com.skyvn.hw.util.GPSUtils;
 import com.skyvn.hw.view.KefuActivity;
 import com.skyvn.hw.view.LoginActivity;
 import com.skyvn.hw.view.MessageActivity;
@@ -233,16 +240,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             @Override
             public void onSuccess(AuthStatusBO s) {
                 if ("2".equals(s.getStatus())) {  //认证通过
-                    String amounts = payNum.getText().toString().trim();
-                    if (StringUtils.isEmpty(amounts)) {
-                        return;
-                    }
-                    String days = daysText.getText().toString().trim();
-                    if (StringUtils.isEmpty(days)) {
-                        return;
-                    }
-                    String[] paynums = amounts.split("~");
-                    mPresenter.addMyApply(days, paynums[1], paynums[0]);
+                    requestPermission();
                 } else {
                     new AlertDialog(getActivity()).builder().setGone().setTitle(getResources().getString(R.string.tishi))
                             .setMsg(getString(R.string.renzheng_hint))
@@ -261,10 +259,85 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     }
 
 
+    private void requestPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                ) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    }, 1);
+
+        } else {
+            checkPermissions();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // 权限被用户同意。
+                    // 执形我们想要的操作
+                    checkPermissions();
+                } else {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                            || !ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        //提示用户前往设置界面自己打开权限
+//                        Toast.makeText(this, "请前往设置界面打开权限", Toast.LENGTH_SHORT).show();
+                        showToast(getString(R.string.qingdakaigps));
+                        return;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    private double loginLatitude;
+    private double loginLongitude;
+
+    /**
+     * Detect camera authorization
+     */
+    public void checkPermissions() {
+        showProgress();
+        GPSUtils.getInstance(getActivity().getApplicationContext()).getLngAndLat(new GPSUtils.OnLocationResultListener() {
+            @Override
+            public void onLocationResult(Location location) {
+                loginLatitude = location.getLatitude();
+                loginLongitude = location.getLongitude();
+                GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
+                mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
+                LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
+            }
+
+            @Override
+            public void OnLocationChange(Location location) {
+                loginLatitude = location.getLatitude();
+                loginLongitude = location.getLongitude();
+                GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
+                mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
+                LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
+            }
+        });
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
     }
 
 
@@ -322,6 +395,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
     @Override
     public void getStatus(StatusBO statusBO) {
+        stopProgress();
         switch (statusBO.getStatus()) {  // 0-可申请，1-审核中，2-审核完成
             case 0:
                 statusAllLayout.setVisibility(View.VISIBLE);
@@ -372,6 +446,26 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             }
         });
         popXingZhi.showAtLocation(getActivity().getWindow().getDecorView());
+    }
+
+    @Override
+    public void updateGpsSource() {
+        String amounts = payNum.getText().toString().trim();
+        if (StringUtils.isEmpty(amounts)) {
+            return;
+        }
+        String days = daysText.getText().toString().trim();
+        if (StringUtils.isEmpty(days)) {
+            return;
+        }
+        String[] paynums = amounts.split("~");
+        mPresenter.addMyApply(days, paynums[1], paynums[0]);
+    }
+
+    @Override
+    public void updateGpsError() {
+        stopProgress();
+        showToast(getString(R.string.gpsshangchuanshibai));
     }
 
 

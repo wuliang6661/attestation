@@ -25,6 +25,10 @@ public class HomeContract {
         void getStatus(StatusBO statusBO);
 
         void getPayNumOrDays(List<String> list, int type);
+
+        void updateGpsSource();
+
+        void updateGpsError();
     }
 
     interface Presenter extends BasePresenter<View> {
