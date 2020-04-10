@@ -366,5 +366,6 @@
     <string name="weidenglu">未登录</string>
     <string name="gpsshangchuanshibai">GPS上传失败!</string>
     <string name="qingdakaigps">请前往设置界面打开GPS权限</string>
+    <string name="gpshuoqushibai">GPS获取失败！</string>
 
 </resources>

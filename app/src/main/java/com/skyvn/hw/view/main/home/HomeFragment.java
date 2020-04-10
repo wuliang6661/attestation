@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -312,11 +314,13 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
      */
     public void checkPermissions() {
         showProgress();
+        timer.start();
         GPSUtils.getInstance(getActivity().getApplicationContext()).getLngAndLat(new GPSUtils.OnLocationResultListener() {
             @Override
             public void onLocationResult(Location location) {
                 loginLatitude = location.getLatitude();
                 loginLongitude = location.getLongitude();
+                timer.cancel();
                 GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
                 LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
@@ -326,6 +330,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             public void OnLocationChange(Location location) {
                 loginLatitude = location.getLatitude();
                 loginLongitude = location.getLongitude();
+                timer.cancel();
                 GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
                 LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
@@ -333,16 +338,35 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
             @Override
             public void OnLocationError() {
+                timer.cancel();
                 stopProgress();
             }
         });
     }
 
 
+    CountDownTimer timer = new CountDownTimer(10000, 1000) {
+        @Override
+        public void onTick(long l) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            stopProgress();
+            GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
+            showToast(getString(R.string.gpshuoqushibai));
+        }
+    };
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (timer != null) {
+            timer.cancel();
+        }
         GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
     }
 
