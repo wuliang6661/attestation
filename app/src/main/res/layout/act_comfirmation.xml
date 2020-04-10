@@ -71,6 +71,7 @@
                             android:id="@+id/jine_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textSize="23sp"
                             android:textStyle="bold"
@@ -370,6 +371,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="19dp"
                     android:layout_marginTop="15dp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/user_img_defalt"
                     app:riv_corner_radius="360dp" />
 
@@ -390,9 +392,9 @@
                     android:id="@+id/recycle_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_below="@+id/person_name"
-                    android:layout_alignLeft="@+id/person_name" />
+                    android:layout_alignLeft="@+id/person_name"
+                    android:layout_marginBottom="10dp" />
 
 
             </RelativeLayout>

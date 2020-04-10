@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -125,6 +124,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra("type", 1);
         startActivity(intent);
+//        gotoActivity(ConfirmationActivity.class,false);
     }
 
 
@@ -174,6 +174,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             }
             Bundle bundle = new Bundle();
             bundle.putString("url", bannerBOS.get(position).getForwardUrl());
+            bundle.putString("title", getString(R.string.guanggao));
             gotoActivity(WebActivity.class, bundle, false);
         });
         //banner设置方法全部调用完毕时最后调用
@@ -398,6 +399,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         }
         Bundle bundle = new Bundle();
         bundle.putString("url", bannerBO.getForwardUrl());
+        bundle.putString("title", getString(R.string.guanggao));
         gotoActivity(WebActivity.class, bundle, false);
     }
 

@@ -9,6 +9,7 @@ import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.BaseResult;
 import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.ContaceBO;
 import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.IdCardInfoBO;
@@ -355,4 +356,10 @@ public interface HttpService {
      */
     @POST("clientUser/updateLocation")
     Observable<BaseResult<String>> updateLocation(@Body Map<String,Object> params);
+
+    /**
+     * 获取协议地址
+     */
+    @GET("sysSetting/getContract")
+    Observable<BaseResult<ContaceBO>> getContract();
 }

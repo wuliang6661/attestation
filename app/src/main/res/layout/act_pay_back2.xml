@@ -94,6 +94,7 @@
                         android:id="@+id/user_img"
                         android:layout_width="27dp"
                         android:layout_height="27dp"
+                        android:scaleType="fitXY"
                         android:src="@drawable/user_img_defalt"
                         app:riv_corner_radius="360dp" />
 

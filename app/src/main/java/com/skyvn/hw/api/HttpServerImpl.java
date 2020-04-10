@@ -10,6 +10,7 @@ import com.skyvn.hw.bean.BankBO;
 import com.skyvn.hw.bean.BankCardBO;
 import com.skyvn.hw.bean.BannerBO;
 import com.skyvn.hw.bean.CodeImgBO;
+import com.skyvn.hw.bean.ContaceBO;
 import com.skyvn.hw.bean.GongGaoBO;
 import com.skyvn.hw.bean.HuanKuanBO;
 import com.skyvn.hw.bean.IdCardInfoBO;
@@ -533,8 +534,12 @@ public class HttpServerImpl {
 
     public static Observable<String> updateLocation(String longation, String langation) {
         Map<String, Object> params = new HashMap<>();
-        params.put("localGpsLat", langation);
-        params.put("localGpsLong", longation);
+        params.put("localGpsLat", longation);
+        params.put("localGpsLong", langation);
         return getService().updateLocation(params).compose(RxResultHelper.httpRusult());
+    }
+
+    public static Observable<ContaceBO> getContract() {
+        return getService().getContract().compose(RxResultHelper.httpRusult());
     }
 }

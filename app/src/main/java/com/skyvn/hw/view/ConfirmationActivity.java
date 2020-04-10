@@ -1,5 +1,7 @@
 package com.skyvn.hw.view;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,9 +18,15 @@ import com.skyvn.hw.R;
 import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
+import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.bean.ContaceBO;
 import com.skyvn.hw.bean.KeFuBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
+import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AppManager;
+import com.skyvn.hw.util.PhoneUtils;
+import com.skyvn.hw.util.language.LanguageType;
+import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.MyDialog;
 import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
 import com.skyvn.hw.widget.lgrecycleadapter.LGViewHolder;
@@ -116,6 +124,56 @@ public class ConfirmationActivity extends BaseActivity {
                     tv.setTextColor(Color.parseColor("#888888"));
                 }
                 return tv;
+            }
+        });
+        idFlowlayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if (position == 1 || position == 3) {
+                    getContact(position);
+                }
+                return false;
+            }
+        });
+    }
+
+
+    private void getContact(int position) {
+        showProgress();
+        HttpServerImpl.getContract().subscribe(new HttpResultSubscriber<ContaceBO>() {
+            @Override
+            public void onSuccess(ContaceBO s) {
+                stopProgress();
+                if (s == null) {
+                    showToast(getString(R.string.huoquxieyishibai));
+                    return;
+                }
+                String url;
+                String title;
+                if (position == 1) {
+                    url = s.getLoanContractUrl();
+                    title = getResources().getString(R.string.jiekuan_hint2);
+                } else {
+                    url = s.getServiceContractUrl();
+                    title = getResources().getString(R.string.jiekuan_hint4);
+                }
+                if (url.contains("?")) {
+                    url += "&loanId=" + orderId + "&tenantId=" + orderDetailsBO.getTenantId() + "&language=" +
+                            MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage());
+                } else {
+                    url += "?loanId=" + orderId + "&tenantId=" + orderDetailsBO.getTenantId() + "&language=" +
+                            MyApplication.spUtils.getString(IConstant.LANGUAGE_TYPE, LanguageType.CHINESE.getLanguage());
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("url", url);
+                bundle.putString("title",title);
+                gotoActivity(WebActivity.class, bundle, false);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                stopProgress();
+                showToast(message);
             }
         });
     }
@@ -232,13 +290,38 @@ public class ConfirmationActivity extends BaseActivity {
 
             @Override
             public void convert(LGViewHolder holder, KeFuBO keFuBO, int position) {
-                holder.setText(R.id.kefu_name, keFuBO.getName());
+                holder.setText(R.id.kefu_name, keFuBO.getName() + "：");
                 holder.setText(R.id.kefu_num1, keFuBO.getContact());
             }
         };
+        adapter.setOnItemClickListener(R.id.kefu_num1, (view, position) -> {
+            switch (kefus.get(position).getType()) {
+                case 0:   //电话
+                    new AlertDialog(ConfirmationActivity.this).builder().setGone().setTitle(kefus.get(position).getName())
+                            .setMsg(kefus.get(position).getContact())
+                            .setNegativeButton(getResources().getString(R.string.cancle), null)
+                            .setPositiveButton(getResources().getString(R.string.call), v -> PhoneUtils.callPhone(kefus.get(position).getContact())).show();
+                    break;
+                default:
+                    new AlertDialog(ConfirmationActivity.this).builder().setGone().setTitle(kefus.get(position).getName())
+                            .setMsg(kefus.get(position).getContact())
+                            .setNegativeButton(getResources().getString(R.string.cancle), null)
+                            .setPositiveButton(getResources().getString(R.string.copy), v -> copyText(kefus.get(position).getContact())).show();
+                    break;
+            }
+        });
         recycleView.setAdapter(adapter);
     }
 
+
+    private void copyText(String text) {
+        // 从API11开始android推荐使用android.content.ClipboardManager
+        // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setText(text);
+        showToast(getResources().getString(R.string.copy_sourss));
+    }
 
     private void showTiXianSourss() {
         View view = getLayoutInflater().inflate(R.layout.dialog_jiekuan_souress, null);

@@ -66,6 +66,9 @@ public class MineFragment extends MVPBaseFragment<MineContract.View, MinePresent
     public void onSupportVisible() {
         super.onSupportVisible();
         initAttention();
+        if (MyApplication.userBO == null) {
+            return;
+        }
         userPhone.setText(MyApplication.userBO.getPhone());
         Glide.with(getActivity()).load(MyApplication.userBO.getHeadPortrait())
                 .error(R.drawable.person_defalt).
