@@ -125,7 +125,6 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra("type", 1);
         startActivity(intent);
-        showToast("hhhhhhhhhhh");
     }
 
 
