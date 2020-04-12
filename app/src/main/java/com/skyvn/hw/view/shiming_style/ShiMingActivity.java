@@ -320,7 +320,8 @@ public class ShiMingActivity extends BaseActivity implements ActionSheet.OnActio
 
     public String[] getRequiredPermissions() {
         return new String[]{Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA};
     }
 
     @Override

@@ -31,7 +31,7 @@ public interface IConstant {
     /**
      * AppId
      */
-    String appId = "1247544669295562754";
+    String appId = "1247464144912388097";
 
     /**
      * 服务器接口地址

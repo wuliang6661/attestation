@@ -348,10 +348,10 @@
     <string name="yinghangkaleixing">Thẻ ngân hàng</string>
     <string name="yinghangzhanghao">Tài khoản ngân hàng</string>
     <string name="qingxianrenzhengshangyige">Xin kiểm tra mục chứng nhận cuối trước</string>
-    <string name="tongxunluquanxian">Bạn chưa bật quyền sử dụng sổ địa chỉ. Hãy đến thiết lập để tự kích hoạt sự cho phép.</string>
-    <string name="duanxinhuotongxunluquanxian">Chưa bật quyền cho bạn dùng từ quyền nhắn tin hay sách địa chỉ. Xin hãy tự kích hoạt thiết lập để cấp phép.</string>
+    <string name="tongxunluquanxian">Bạn cần phải mở quyền hạn liên quan. Hãy đặt nó để mở!</string>
+    <string name="duanxinhuotongxunluquanxian">Bạn cần phải mở quyền hạn liên quan. Hãy đặt nó để mở!</string>
     <string name="buzhichigaishipin">Đoạn phim này không được hỗ trợ, xin hãy quay lại!</string>
-    <string name="weikaiqishexiangtouquanxian">Quyền được bật máy ảnh hay tập ảnh. Xin hãy đến thiết lập để tự bật quyền truy cập vào máy ảnh.</string>
+    <string name="weikaiqishexiangtouquanxian">Bạn cần phải mở quyền hạn liên quan. Hãy đặt nó để mở!</string>
     <string name="jiazaizhong">Nạp...</string>
     <string name="shibiezhong">Để thừa nhận...</string>
     <string name="huotiqueshi">Đang mất chìa khóa khởi tạo xác thực.</string>
@@ -364,8 +364,9 @@
     <string name="yirenzheng">phê duyệt</string>
     <string name="weidenglu">Chưa đăng nhập</string>
     <string name="gpsshangchuanshibai">Lỗi tải GPS!</string>
-    <string name="qingdakaigps">Xin hãy đến giao diện thiết lập để mở quyền GPS</string>
+    <string name="qingdakaigps">Bạn cần phải mở quyền hạn liên quan. Hãy đặt nó để mở!</string>
     <string name="gpshuoqushibai">Lỗi mua GPS</string>
     <string name="huoquxieyishibai">Lỗi đạt được thỏa thuận！</string>
+    <string name="yinghangkahaoxu">Số thẻ ngân hàng cần tới số 9 đến 16!</string>
 
 </resources>

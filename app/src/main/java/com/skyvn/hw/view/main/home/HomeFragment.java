@@ -226,7 +226,9 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
             @Override
             public void onSuccess(AttentionSourrssBO s) {
                 stopProgress();
-                gotoActivity(AttentionZiliaoActivity.class, false);
+                if (!"-1".equals(s.getCode())) {
+                    gotoActivity(AttentionZiliaoActivity.class, false);
+                }
                 AuthenticationUtils.goAuthNextPageByHome(s.getCode(), s.getNeedStatus(), false, getActivity());
             }
 
@@ -324,6 +326,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
                 timer.cancel();
                 GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
+                GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
             }
 
@@ -334,12 +337,14 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
                 timer.cancel();
                 GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 mPresenter.updateLocation(loginLatitude + "", loginLongitude + "");
+                GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 LogUtils.e("loginLatitude == " + loginLatitude + "   loginLongitude ==  " + loginLongitude);
             }
 
             @Override
             public void OnLocationError() {
                 timer.cancel();
+                GPSUtils.getInstance(getActivity().getApplicationContext()).removeListener();
                 stopProgress();
             }
         });

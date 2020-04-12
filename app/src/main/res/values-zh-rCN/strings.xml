@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">小胖墩</string>
+    <string name="app_name">大闸蟹</string>
 
     <string name="login_txt">登录</string>
     <string name="photo_hint">手机号</string>
@@ -349,10 +349,10 @@
     <string name="yinghangkaleixing">银行卡类型</string>
     <string name="yinghangzhanghao">银行账号</string>
     <string name="qingxianrenzhengshangyige">请先认证上一个认证项</string>
-    <string name="tongxunluquanxian">未开启通讯录权限,请手动到设置去开启权限</string>
-    <string name="duanxinhuotongxunluquanxian">未开启短信权限或通讯录权限,请手动到设置去开启权限</string>
+    <string name="tongxunluquanxian">需要开启相关权限，请去设置开启！</string>
+    <string name="duanxinhuotongxunluquanxian">需要开启相关权限，请去设置开启！</string>
     <string name="buzhichigaishipin">不支持该视频，请重新拍摄！</string>
-    <string name="weikaiqishexiangtouquanxian">未开启摄像头或相册权限,请手动到设置去开启权限</string>
+    <string name="weikaiqishexiangtouquanxian">需要开启相关权限，请去设置开启！</string>
     <string name="jiazaizhong">加载中...</string>
     <string name="shibiezhong">识别中...</string>
     <string name="huotiqueshi">活体认证初始化key缺失！</string>
@@ -365,8 +365,9 @@
     <string name="yirenzheng">已认证</string>
     <string name="weidenglu">未登录</string>
     <string name="gpsshangchuanshibai">GPS上传失败!</string>
-    <string name="qingdakaigps">请前往设置界面打开GPS权限</string>
+    <string name="qingdakaigps">需要开启相关权限，请去设置开启！</string>
     <string name="gpshuoqushibai">GPS获取失败！</string>
     <string name="huoquxieyishibai">获取协议失败！</string>
+    <string name="yinghangkahaoxu">银行卡号需9到16位数字！</string>
 
 </resources>
