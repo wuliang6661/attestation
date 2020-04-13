@@ -16,6 +16,7 @@ import com.skyvn.hw.api.HttpResultSubscriber;
 import com.skyvn.hw.api.HttpServerImpl;
 import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.base.MyApplication;
+import com.skyvn.hw.bean.GoHomeEvent;
 import com.skyvn.hw.config.IConstant;
 import com.skyvn.hw.util.AppManager;
 import com.skyvn.hw.util.language.LanguageType;
@@ -23,6 +24,8 @@ import com.skyvn.hw.util.language.LanguageUtil;
 import com.skyvn.hw.view.main.MainActivity;
 import com.skyvn.hw.widget.AlertDialog;
 import com.skyvn.hw.widget.PopXingZhi;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,8 +152,9 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onSuccess(String s) {
                 stopProgress();
-                AppManager.getAppManager().finishAllActivity();
                 MyApplication.spUtils.remove("token");
+                MyApplication.token = null;
+                EventBus.getDefault().post(new GoHomeEvent());
                 gotoActivity(LoginActivity.class, true);
             }
 
