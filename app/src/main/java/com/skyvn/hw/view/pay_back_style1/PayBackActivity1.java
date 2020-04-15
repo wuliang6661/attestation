@@ -1,5 +1,6 @@
 package com.skyvn.hw.view.pay_back_style1;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.skyvn.hw.base.BaseActivity;
 import com.skyvn.hw.bean.AccountBO;
 import com.skyvn.hw.bean.OrderDetailsBO;
 import com.skyvn.hw.util.OtherUtils;
+import com.skyvn.hw.view.KefuActivity;
 import com.skyvn.hw.view.ZhanQiActivity;
 import com.skyvn.hw.view.borrow_style1.BorrowActivity1;
 import com.skyvn.hw.widget.lgrecycleadapter.LGRecycleViewAdapter;
@@ -70,7 +72,7 @@ public class PayBackActivity1 extends BaseActivity {
 
         goBack();
         setTitleText(getResources().getString(R.string.huankuanxiangqing));
-        rightButton();
+//        rightButton();
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -80,6 +82,13 @@ public class PayBackActivity1 extends BaseActivity {
         type = getIntent().getExtras().getInt("type", 1);
         orderId = getIntent().getExtras().getString("id");
         getOrderDetails();
+        ImageView imageView = findViewById(R.id.right_img);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(v -> {
+            Intent intent = new Intent(this, KefuActivity.class);
+            intent.putExtra("id", orderDetailsBO.getTenantId());
+            startActivity(intent);
+        });
     }
 
 
